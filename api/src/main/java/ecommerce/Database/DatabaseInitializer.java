@@ -43,28 +43,27 @@ public class DatabaseInitializer implements ServletContextListener {
   }
 
   @Override
-  public void contextDestroyed(ServletContextEvent sce) {
+  public void contextDestroyed(ServletContextEvent sce) {}
+
+  private String[] getSqlFilePaths() {
+    List<String> sqlFiles = new ArrayList<>();
+    String basePath = "ecommerce/Database/Tables/";
+    String[] tableFiles = {"category.sql", "users.sql", "product.sql", "sales.sql"};
+    String[] relationshipFiles = {"relationships/product-sales.sql"};
+    String[] indexFiles = {"indexes/indexes.sql"};
+
+    for (String file : tableFiles) {
+      sqlFiles.add(basePath + file);
+    }
+    for (String file : relationshipFiles) {
+      sqlFiles.add(basePath + file);
+    }
+    for (String file : indexFiles) {
+      sqlFiles.add(basePath + file);
+    }
+
+    return sqlFiles.toArray(new String[0]);
   }
-
-	private String[] getSqlFilePaths() {
-		List<String> sqlFiles = new ArrayList<>();
-		String basePath = "ecommerce/Database/Tables/";
-		String[] tableFiles = {"category.sql", "users.sql", "product.sql", "sales.sql"};
-		String[] relationshipFiles = {"relationships/product-sales.sql"};
-		String[] indexFiles = {"indexes/indexes.sql"};
-
-		for (String file : tableFiles) {
-			sqlFiles.add(basePath + file);
-		}
-		for (String file : relationshipFiles) {
-			sqlFiles.add(basePath + file);
-		}
-		for (String file : indexFiles) {
-			sqlFiles.add(basePath + file);
-		}
-
-		return sqlFiles.toArray(new String[0]);
-	}
 
   private String loadSqlFile(String path) {
     try (InputStream is = getClass().getClassLoader().getResourceAsStream(path)) {
