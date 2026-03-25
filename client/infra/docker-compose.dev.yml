@@ -1,0 +1,14 @@
+services:
+  client-dev:
+    build:
+      context: ..
+      dockerfile: infra/Dockerfile.dev
+    container_name: ecommerce-client-dev
+    ports:
+      - "3000:3000"
+    volumes:
+      - ..:/app
+      - /app/node_modules
+    environment:
+      - VITE_API_BASE_URL=${VITE_API_BASE_URL:-http://localhost:8081}
+    restart: unless-stopped

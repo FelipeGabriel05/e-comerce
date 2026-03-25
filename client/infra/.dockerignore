@@ -1,0 +1,13 @@
+node_modules
+dist
+.git
+.github
+.vite-hooks
+README.md
+Dockerfile
+docker-compose.yml
+.npmrc
+.nvmrc
+package-lock.json
+npm-debug.log
+error-log

@@ -1,0 +1,9 @@
+CREATE TABLE usuario (
+    id SERIAL PRIMARY KEY,
+    nome VARCHAR(255) NOT NULL,
+    endereco TEXT,
+    email VARCHAR(255) UNIQUE NOT NULL,
+    login VARCHAR(100) UNIQUE NOT NULL,
+    senha TEXT NOT NULL,
+    administrador BOOLEAN NOT NULL DEFAULT FALSE
+);

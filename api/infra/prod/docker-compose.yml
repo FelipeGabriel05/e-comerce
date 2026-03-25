@@ -1,0 +1,27 @@
+services:
+  postgres:
+    image: postgres:15
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: ecommerce_secret_password_123
+      POSTGRES_DB: ecommerceproject
+    volumes:
+      - postgres_data_prod:/var/lib/postgresql/data
+    restart: always
+
+  ecommerce-api:
+    build:
+      context: ../../
+      dockerfile: infra/prod/Dockerfile
+    ports:
+      - "80:8080"
+    depends_on:
+      - postgres
+    environment:
+      DB_URL: jdbc:postgresql://postgres:5432/ecommerceproject
+      DB_USER: postgres
+      DB_PASSWORD: ecommerce_secret_password_123
+    restart: always
+
+volumes:
+  postgres_data_prod:
