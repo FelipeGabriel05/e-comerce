@@ -1,4 +1,4 @@
-CREATE TABLE venda_produto (
+CREATE TABLE IF NOT EXISTS venda_produto (
     venda_id INTEGER NOT NULL,
     produto_id INTEGER NOT NULL,
     preco NUMERIC(10,2) NOT NULL,
