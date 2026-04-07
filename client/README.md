@@ -1,6 +1,6 @@
 # Ecommerce client
 
-## Architecture
+## 🏗️ Architecture
 
 ```mermaid
 graph TB
@@ -35,7 +35,7 @@ graph TB
     C --> G
 ```
 
-### Core Modules
+### 🫀 Core Modules
 
 | Module | Location | Responsibility |
 |--------|----------|----------------|
@@ -47,22 +47,22 @@ graph TB
 | **Utils** | `src/lib/utils/` | Pure utility functions |
 | **Styles** | `src/lib/styles/` | Global CSS and Tailwind configuration |
 
-## Tech Stack
+## 🚀 Tech Stack
 
 ### Core Dependencies
 
-- **React 19.2.0**: UI library
-- **Vite 7.1.20** (rolldown-vite): Build tool and dev server
-- **TypeScript 5.9.3**: Type system
-- **Tailwind CSS 4.1.17**: Utility-first CSS framework
-- **TanStack Router 1.135.2**: Type-safe file-based routing
-- **TanStack Query 5.90.7**: Server state management
-- **Zod 4.1.12**: Runtime type validation
+- **React**: UI library
+- **Vite** (rolldown-vite): Build tool and dev server
+- **TypeScript**: Type system
+- **Tailwind CSS**: Utility-first CSS framework
+- **TanStack Router**: Type-safe file-based routing
+- **TanStack Query**: Server state management
+- **Zod**: Runtime type validation
 
 ### Development Tools
 
-- **Biome 2.3.4**: Linter and formatter
-- **Husky 9.1.7**: Git hooks
+- **Biome**: Linter and formatter
+- **Husky**: Git hooks
 
 ### Build Plugins
 
@@ -72,15 +72,18 @@ graph TB
 - `@julr/vite-plugin-validate-env`: Environment variable validation
 - `vite-plugin-checker`: TypeScript checking in dev mode
 
-## Repository Structure
+## 🏗️ Repository Structure
 
 ```
 client/
 ├── infra/                        # Docker & Infrastructure configuration
-│   ├── Dockerfile                # Production Dockerfile (Nginx)
-│   ├── Dockerfile.dev            # Development Dockerfile (HMR)
-│   ├── docker-compose.yml        # Production-like compose
-│   └── docker-compose.dev.yml    # Development compose
+│   ├── dev/                      # Development configuration
+│   │   ├── Dockerfile            # Development Dockerfile (HMR)
+│   │   └── docker-compose.yml    # Development compose
+│   ├── prod/                     # Production configuration
+│   │   ├── Dockerfile            # Production Dockerfile (Nginx)
+│   │   └── docker-compose.yml    # Production-like compose
+│   └── .dockerignore             # Docker ignore file
 ├── src/
 │   ├── lib/
 │   │   ├── components/          # Reusable UI components
@@ -117,7 +120,7 @@ client/
 └── package.json
 ```
 
-## Getting Started
+## 👣 Getting Started
 
 ### Prerequisites
 
@@ -130,7 +133,7 @@ client/
 Start the dev environment with hot-reloading:
 
 ```bash
-docker compose -f infra/docker-compose.dev.yml up -d --build
+docker compose -f infra/dev/docker-compose.yml up -d --build
 ```
 
 Available at `http://localhost:3000`.
@@ -189,31 +192,55 @@ Routes are defined as files in `src/routes/`. TanStack Router automatically gene
 Start the production build served by Nginx:
 
 ```bash
-docker compose -f infra/docker-compose.yml up -d --build
+docker compose -f infra/prod/docker-compose.yml up -d --build
 ```
 Available at `http://localhost:8080`.
 
-## Development Workflows
+## 👩‍🍳 Development Recipes
 
-### Adding a New Route
+### 🔀 Adding a New Route
 
-1. Create a file in `src/routes/` (e.g., `src/routes/about.tsx`)
-2. Export a `Route` using `createFileRoute`
-3. The route tree will auto-regenerate
+```mermaid
+flowchart TD
+    A[Create file in src/routes] --> B[Export Route with createFileRoute]
+    B --> C[Route tree auto-regenerates]
+    C --> D[Route available in app]
+```
 
-### Adding a New Page Component
+1. You create a file inside `src/routes/` (e.g., `about.tsx`)
+2. In this file, you export a route using `createFileRoute.ts`
+3. The system automatically updates the route tree
+4. The new route is then available in the application
 
-1. Create directory in `src/lib/pages/` (e.g., `src/lib/pages/about/`)
-2. Create `index.tsx` with your page component
+### 📄 Adding a New Page Component
+
+```mermaid
+flowchart TD
+    A[Create folder in src/lib/pages] --> B[Create index.tsx]
+    B --> C[Implement page component]
+    C --> D[Import in route file]
+    D --> E[Render page via route]
+```
+
+1. The page is created in `src/lib/pages/`
+2. The main component is located in `index.tsx`
 3. Import and use in the corresponding route file
 
-### Adding Environment Variables
+### 🌱 Adding Environment Variables
+
+```mermaid
+flowchart TD
+    A[Define schema in env.ts] --> B[Create .env file]
+    B --> C[Prefix variables with VITE_]
+    C --> D[Access via import.meta.env]
+    D --> E[Type-safe usage in app]
+```
 
 1. Add schema definition in `env.ts`
 2. Create `.env` file with your variables (prefixed with `VITE_`)
 3. Access via `import.meta.env.VITE_*` with full type safety
 
-### Git Workflow
+### 🔧 Git Workflow
 
 - **Pre-commit**: Runs Biome formatting/linting on staged files
 - **Pre-push**: Runs full check suite (biome, type-check, tests)

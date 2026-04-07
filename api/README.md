@@ -1,6 +1,6 @@
 # Ecommerce API
 
-## Architecture
+## 🏗️ Architecture
 
 ```mermaid
 graph TB
@@ -33,21 +33,21 @@ graph TB
     Q --> M
 ```
 
-### Core Modules
+### 🫀 Core Modules
 
-| Module | Location | Responsibility |
-|--------|----------|----------------|
-| **Controllers** | `src/main/java/ecommerce/Http/Controller/` | HTTP servlet handlers |
-| **Validators** | `src/main/java/ecommerce/Http/Validators/` | Request input validation |
-| **Use Cases** | `src/main/java/ecommerce/UseCases/` | Business logic orchestration |
-| **Repositories** | `src/main/java/ecommerce/Database/Repositories/` | Database queries |
-| **Entities** | `src/main/java/ecommerce/Database/Entites/` | Domain models |
-| **Queries** | `src/main/java/ecommerce/Database/Queries/` | Raw SQL statements |
-| **Database** | `src/main/java/ecommerce/Database/DBConnection.java` | Singleton JDBC connection |
-| **Exceptions** | `src/main/java/ecommerce/Exceptions/` | Custom exception types |
-| **Tables** | `src/main/java/ecommerce/Database/Tables/` | SQL table definitions |
+| Module           | Location                                             | Responsibility               |
+| ---------------- | ---------------------------------------------------- | ---------------------------- |
+| **Controllers**  | `src/main/java/ecommerce/Http/Controller/`           | HTTP servlet handlers        |
+| **Validators**   | `src/main/java/ecommerce/Http/Validators/`           | Request input validation     |
+| **Use Cases**    | `src/main/java/ecommerce/UseCases/`                  | Business logic orchestration |
+| **Repositories** | `src/main/java/ecommerce/Database/Repositories/`     | Database queries             |
+| **Entities**     | `src/main/java/ecommerce/Database/Entites/`          | Domain models                |
+| **Queries**      | `src/main/java/ecommerce/Database/Queries/`          | Raw SQL statements           |
+| **Database**     | `src/main/java/ecommerce/Database/DBConnection.java` | Singleton JDBC connection    |
+| **Exceptions**   | `src/main/java/ecommerce/Exceptions/`                | Custom exception types       |
+| **Tables**       | `src/main/java/ecommerce/Database/Tables/`           | SQL table definitions        |
 
-## Tech Stack
+## 🚀 Tech Stack
 
 ### Core Dependencies
 
@@ -62,7 +62,7 @@ graph TB
 - **Maven 3.9.6**: Build and dependency management
 - **fmt-maven-plugin 2.25**: Google Java Format enforcement
 
-## Repository Structure
+## 🏗️ Repository Structure
 
 ```
 api/
@@ -95,7 +95,7 @@ api/
 └── README.md
 ```
 
-## Getting Started
+## 👣 Getting Started
 
 ### Prerequisites
 
@@ -113,14 +113,6 @@ docker compose -f infra/dev/docker-compose.yml up --build
 
 Available at `http://localhost:8080`.
 
-### Environment Variables
-
-| Variable | Default | Description |
-|----------|---------|-------------|
-| `DB_URL` | `jdbc:postgresql://postgres:5432/ecommerceproject` | JDBC connection URL |
-| `DB_USER` | `postgres` | Database user |
-| `DB_PASSWORD` | `ecommerce_secret_password_123` | Database password |
-
 ### Code Quality
 
 ```bash
@@ -129,44 +121,62 @@ mvn fmt:format   # Auto-format all Java source files
 mvn package      # Build WAR (runs format check)
 ```
 
-## API Endpoints
+### Environment Variables
 
-| Method | Path | Description |
-|--------|------|-------------|
-| `GET` | `/` | Health check — returns `{"message": "Hello, World!"}` |
-| `POST` | `/` | Create a user |
+| Variable      | Default                                            | Description         |
+| ------------- | -------------------------------------------------- | ------------------- |
+| `DB_URL`      | `jdbc:postgresql://postgres:5432/ecommerceproject` | JDBC connection URL |
+| `DB_USER`     | `postgres`                                         | Database user       |
+| `DB_PASSWORD` | `ecommerce_secret_password_123`                    | Database password   |
 
-### POST `/` — Create User
+## 🗄️ Database
 
-**Request params (form-encoded):**
+```mermaid
+erDiagram
+    USUARIO {
+        int id PK
+        string nome
+        string endereco
+        string email
+        string login
+        string senha
+        boolean administrador
+    }
 
-| Field | Required | Description |
-|-------|----------|-------------|
-| `name` | yes | User full name |
-| `address` | yes | User address |
-| `email` | yes | User email (unique) |
-| `login` | yes | Username (unique) |
-| `password` | yes | Plain-text password |
+    CATEGORIA {
+        int id PK
+        string descricao
+    }
 
-**Response:** JSON representation of the created user.
+    PRODUTO {
+        int id PK
+        string descricao
+        double preco
+        string foto
+        int quantidade
+        int categoria_id FK
+    }
 
-## Database
+    VENDA {
+        int id PK
+        timestamp data_hora
+        int usuario_id FK
+    }
 
-### Users Table
+    VENDA_PRODUTO {
+        int venda_id PK, FK
+        int produto_id PK, FK
+        double preco
+        int quantidade
+    }
 
-```sql
-CREATE TABLE usuario (
-    id            SERIAL PRIMARY KEY,
-    nome          VARCHAR(255) NOT NULL,
-    endereco      TEXT,
-    email         VARCHAR(255) UNIQUE NOT NULL,
-    login         VARCHAR(100) UNIQUE NOT NULL,
-    senha         TEXT NOT NULL,
-    administrador BOOLEAN NOT NULL DEFAULT FALSE
-);
+    USUARIO ||--o{ VENDA : "realiza"
+    CATEGORIA ||--o{ PRODUTO : "possui"
+    VENDA ||--|{ VENDA_PRODUTO : "possui"
+    PRODUTO ||--|{ VENDA_PRODUTO : "possui"
 ```
 
-## Deployment
+## 🛫 Deployment
 
 ### Production
 
@@ -175,3 +185,41 @@ docker compose -f infra/prod/docker-compose.yml up -d --build
 ```
 
 Available at `http://localhost:80`.
+
+## 👩‍🍳 Development Recipes
+
+### Adding a New Feature
+
+```mermaid
+flowchart TD
+    A[1. Controller] -->|Define doGet/doPost| B[2. Validator]
+    B -->|Validate Request| C[3. Use Case]
+    C -->|Business Logic| D[4. Repository]
+    D -->|JDBC Execution| E[5. Query]
+    E -->|SQL Definition| F[6. Table]
+    F -->|Domain Model| G[7. Entity]
+```
+
+To implement a new feature or endpoint, follow this structured process:
+
+1.  **Controller** (`ecommerce.Http.Controller`): Create or update a servlet.
+    - Annotate with `@WebServlet("/path")`.
+    - Implement `doGet`, `doPost`, `doPut`, or `doDelete`.
+2.  **Validator** (`ecommerce.Http.Validators`): Create an input validator if needed.
+    - Extract parameters from `HttpServletRequest`.
+    - Throw `ValidationException` for invalid data.
+    - Return a clean object or the original data if valid.
+3.  **Use Case** (`ecommerce.UseCases`): Define the business logic.
+    - Orchestrate calls between repositories.
+    - Handle complex logic that doesn't belong in the controller or repository.
+4.  **Repository** (`ecommerce.Database.Repositories`): Create a data access class.
+    - Use `DBConnection.getConnection()` to interact with the database.
+    - Map ResultSet rows to Entity objects.
+5.  **Query** (`ecommerce.Database.Queries`): Define raw SQL constants.
+    - Keep SQL strings centralized in dedicated query classes.
+6.  **Table** (`ecommerce.Database.Tables`): Create the `.sql` file for the table.
+    - Define the schema (schema, types, constraints).
+7.  **Entity** (`ecommerce.Database.Entites`): Create the Java representation of the data.
+    - Include getters/setters and JSON serialization logic (e.g., `toJson()` method).
+8.  **Initialization**: Ensure the new table is registered in `Database.DatabaseInitializer.java` to be created on startup if it doesn't exist.
+

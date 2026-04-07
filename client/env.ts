@@ -5,6 +5,6 @@ export default defineConfig({
   validator: 'standard',
   schema: {
     VITE_API_BASE_URL: z.string().optional(),
-    VITE_PLUGIN_REACT_COMPILER: z.stringbool().optional(),
+    VITE_PLUGIN_REACT_COMPILER: z.string().optional().transform((value) => Boolean(value)),
   },
 });
