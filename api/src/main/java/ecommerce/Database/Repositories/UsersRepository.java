@@ -15,34 +15,92 @@ public class UsersRepository {
     con = dbConnection;
   }
 
-  public User createUser(User userInput) throws SQLException {
-    String query = UsersQueries.insertUserQuery;
-    PreparedStatement ps = con.prepareStatement(query, Statement.RETURN_GENERATED_KEYS);
+  public User createUser(User userInput) {
+    try {
+      String query = UsersQueries.insertUserQuery;
+      PreparedStatement ps = con.prepareStatement(query, Statement.RETURN_GENERATED_KEYS);
 
-    ps.setString(1, userInput.getNome());
-    ps.setString(2, userInput.getEndereco());
-    ps.setString(3, userInput.getEmail());
-    ps.setString(4, userInput.getLogin());
-    ps.setString(5, userInput.getSenha());
-    ps.setBoolean(6, userInput.isAdministrador());
+      ps.setString(1, userInput.getNome());
+      ps.setString(2, userInput.getEndereco());
+      ps.setString(3, userInput.getEmail());
+      ps.setString(4, userInput.getLogin());
+      ps.setString(5, userInput.getSenha());
+      ps.setBoolean(6, userInput.isAdministrador());
 
-    ps.executeUpdate();
+      ps.executeUpdate();
 
-    ResultSet rs = ps.getGeneratedKeys();
+      ResultSet rs = ps.getGeneratedKeys();
 
-    User user = new User();
+      User user = new User();
 
-    if (rs.next()) {
-      user.setId(rs.getInt(1));
+      if (rs.next()) {
+        user.setId(rs.getInt(1));
+      }
+
+      user.setNome(userInput.getNome());
+      user.setEndereco(userInput.getEndereco());
+      user.setEmail(userInput.getEmail());
+      user.setLogin(userInput.getLogin());
+      user.setSenha(userInput.getSenha());
+      user.setAdministrador(userInput.isAdministrador());
+
+      return user;
+    } catch (SQLException e) {
+      e.printStackTrace();
+      return null;
     }
+  }
 
-    user.setNome(userInput.getNome());
-    user.setEndereco(userInput.getEndereco());
-    user.setEmail(userInput.getEmail());
-    user.setLogin(userInput.getLogin());
-    user.setSenha(userInput.getSenha());
-    user.setAdministrador(userInput.isAdministrador());
+  public User findUserByLoginAndSenha(String login, String senha) {
+    try {
+      String query = UsersQueries.selectUserQuery;
+      PreparedStatement ps = con.prepareStatement(query);
 
-    return user;
+      ps.setString(1, login);
+      ps.setString(2, senha);
+
+      ResultSet rs = ps.executeQuery();
+
+      if (rs.next()) {
+        User user = new User();
+        user.setId(rs.getInt("id"));
+        user.setNome(rs.getString("nome"));
+        user.setEndereco(rs.getString("endereco"));
+        user.setEmail(rs.getString("email"));
+        user.setLogin(rs.getString("login"));
+        user.setSenha(rs.getString("senha"));
+        user.setAdministrador(rs.getBoolean("administrador"));
+        return user;
+      }
+    } catch (SQLException e) {
+      e.printStackTrace();
+    }
+    return null;
+  }
+
+  public User findUserById(int id) {
+    try {
+      String query = UsersQueries.selectUserByIdQuery;
+      PreparedStatement ps = con.prepareStatement(query);
+
+      ps.setInt(1, id);
+
+      ResultSet rs = ps.executeQuery();
+
+      if (rs.next()) {
+        User user = new User();
+        user.setId(rs.getInt("id"));
+        user.setNome(rs.getString("nome"));
+        user.setEndereco(rs.getString("endereco"));
+        user.setEmail(rs.getString("email"));
+        user.setLogin(rs.getString("login"));
+        user.setSenha(rs.getString("senha"));
+        user.setAdministrador(rs.getBoolean("administrador"));
+        return user;
+      }
+    } catch (SQLException e) {
+      e.printStackTrace();
+    }
+    return null;
   }
 }
