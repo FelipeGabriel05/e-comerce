@@ -111,7 +111,8 @@ Start the dev environment:
 docker compose -f infra/dev/docker-compose.yml up --build
 ```
 
-Available at `http://localhost:8080`.
+- Api is available at `http://localhost:8080`.
+- PgAdmin is available at `http://localhost:5050`.
 
 ### Code Quality
 
