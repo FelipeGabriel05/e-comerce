@@ -99,9 +99,10 @@ api/
 
 ### Prerequisites
 
+- **Java 17** + **Maven 3.9.6**: Only if running locally without Docker
+- **WLS2**: For Windows users only. Required to run Docker.
 - **Docker**: For containerized development and deployment
 - **Docker Compose**: For managing multi-container setups
-- **Java 17** + **Maven 3.9.6**: Only if running locally without Docker
 
 ### Development
 
