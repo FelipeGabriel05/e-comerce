@@ -4,7 +4,6 @@
 <img src="https://masterbundles.com/wp-content/uploads/2023/02/p-679-2048x2048.jpg" width="200" />
 </center>
 
-
 ## 💪 Equipe
 
 | Foto                                                                                                                                                                                                                                        | Nome                               | Perfis profissionais                                                                               |
@@ -15,7 +14,6 @@
 | <img src="https://static.vecteezy.com/system/resources/thumbnails/036/885/313/small_2x/blue-profile-icon-free-png.png" width="20" />                                                                                                        | JOÃO VICTOR ALVES APRIGIO          |                                                                                                    |
 | <img src="https://static.vecteezy.com/system/resources/thumbnails/036/885/313/small_2x/blue-profile-icon-free-png.png" width="20" />                                                                                                        | PAULO VICTOR RIBEIRO NOGUEIRA LIMA |                                                                                                    |
 | <img src="https://media.licdn.com/dms/image/v2/C5603AQHccUNcRCFgEQ/profile-displayphoto-shrink_200_200/profile-displayphoto-shrink_200_200/0/1620948917401?e=1776902400&v=beta&t=BmZp7BDhuLUcDNCHw7bKzC3axMNv2t1DzmiutalbuLc" width="20" /> | WESLEY ALVES ROLIM                 | [https://www.linkedin.com/in/wesley-alves-rolim/](https://www.linkedin.com/in/wesley-alves-rolim/) |
-
 
 ## 📋 Requisitos Funcionais
 
@@ -68,7 +66,6 @@
 
 ## 🗄️ Banco de Dados
 
-
 ```mermaid
 erDiagram
     USUARIO {
@@ -120,18 +117,18 @@ erDiagram
 
 | ID   | Atividade                     | Descrição                                       | RF Relacionado | Responsável |
 | ---- | ----------------------------- | ----------------------------------------------- | -------------- | ----------- |
-| FE01 | Tela de Login                 | Criar formulário de login (email/login + senha) | RF02           |             |
-| FE02 | Validação de Login            | Validar campos com JavaScript                   | RF02           |             |
-| FE03 | Tela de Cadastro              | Criar formulário de cadastro de cliente         | RF01           |             |
-| FE04 | Validação de Cadastro         | Validar campos obrigatórios antes do envio      | RF01           |             |
-| FE05 | Tela de Perfil                | Exibir e editar dados do usuário                | RF04           |             |
-| FE06 | Botão Logout                  | Implementar botão de logout                     | RF03           |             |
-| FE07 | Listagem de Produtos          | Exibir produtos na página inicial               | RF06           |             |
-| FE08 | Card de Produto               | Mostrar descrição, preço e imagem               | RF07           |             |
-| FE09 | Botão "Adicionar ao Carrinho" | Permitir adicionar produto                      | RF17           |             |
-| FE10 | Interface de Admin (Produtos) | Tela de CRUD de produtos                        | RF08–RF10      |             |
-| FE11 | Upload de Imagem              | Interface para envio de imagem                  | RF12           |             |
-| FE12 | Tela de Categorias            | Interface de CRUD de categorias                 | RF13–RF16      |             |
+| FE01 | Tela de Login                 | Criar formulário de login (email/login + senha) | RF02           | Felipe      |
+| FE02 | Validação de Login            | Validar campos com JavaScript                   | RF02           | Felipe      |
+| FE03 | Tela de Cadastro              | Criar formulário de cadastro de cliente         | RF01           | Felipe      |
+| FE04 | Validação de Cadastro         | Validar campos obrigatórios antes do envio      | RF01           | Felipe      |
+| FE05 | Tela de Perfil                | Exibir e editar dados do usuário                | RF04           | xCaio       |
+| FE06 | Botão Logout                  | Implementar botão de logout                     | RF03           | xCaio       |
+| FE07 | Listagem de Produtos          | Exibir produtos na página inicial               | RF06           | João Victor |
+| FE08 | Card de Produto               | Mostrar descrição, preço e imagem               | RF07           | João Victor |
+| FE09 | Botão "Adicionar ao Carrinho" | Permitir adicionar produto                      | RF17           | João Victor |
+| FE10 | Interface de Admin (Produtos) | Tela de CRUD de produtos                        | RF08–RF10      | João Victor |
+| FE11 | Upload de Imagem              | Interface para envio de imagem                  | RF12           | xCaio       |
+| FE12 | Tela de Categorias            | Interface de CRUD de categorias                 | RF13–RF16      | xCaio       |
 | FE13 | Tela de Carrinho              | Exibir itens adicionados                        | RF17           |             |
 | FE14 | Atualizar Quantidade          | Permitir alterar quantidade                     | RF19           |             |
 | FE15 | Remover Item                  | Permitir remover item                           | RF18           |             |
@@ -144,33 +141,32 @@ erDiagram
 
 ### 🔌 2. Atividades de Backend
 
-| ID   | Atividade                     | Descrição                         | RF Relacionado | Responsável |
-| ---- | ----------------------------- | --------------------------------- | -------------- | ----------- |
-| BE01 | Endpoint de Cadastro          | Criar API para cadastrar cliente  | RF01           |             |
-| BE02 | Endpoint de Login             | Autenticar usuário                | RF02           |             |
-| BE03 | Gerenciamento de Sessão       | Criar e validar sessão            | RF02, RF23     |             |
-| BE04 | Endpoint de Logout            | Encerrar sessão                   | RF03           |             |
-| BE05 | Atualizar Usuário             | Editar dados do cliente           | RF04           |             |
-| BE06 | Excluir Usuário               | Remover conta                     | RF05           |             |
-| BE07 | Listar Produtos               | Retornar produtos com estoque > 0 | RF06           |             |
-| BE08 | Buscar Produto                | Retornar detalhes do produto      | RF07           |             |
-| BE09 | Criar Produto                 | Inserir produto no banco          | RF08           |             |
-| BE10 | Atualizar Produto             | Editar produto                    | RF09           |             |
-| BE11 | Deletar Produto               | Remover produto                   | RF10           |             |
-| BE12 | Controle de Estoque           | Atualizar quantidade              | RF11           |             |
-| BE13 | Upload de Imagem              | Salvar imagem no servidor         | RF12           |             |
-| BE14 | CRUD Categorias               | Criar endpoints de categorias     | RF13–RF16      |             |
-| BE15 | Gerenciar Carrinho            | API para adicionar/remover itens  | RF17–RF19      |             |
-| BE16 | Calcular Total                | Calcular valor total              | RF20           |             |
-| BE17 | Persistência (Cookie/Session) | Manter estado do carrinho         | RF21           |             |
-| BE18 | Finalizar Compra              | Processar compra                  | RF22           |             |
-| BE19 | Validar Estoque               | Verificar disponibilidade         | RF24           |             |
-| BE20 | Atualizar Estoque             | Reduzir estoque após compra       | RF25           |             |
-| BE21 | Registrar Venda               | Salvar venda e itens              | RF26           |             |
-| BE22 | Listar Compras do Cliente     | Retornar histórico                | RF27           |             |
-| BE23 | Listar Compras Gerais         | Retornar todas as compras         | RF29           |             |
-| BE24 | Excluir Compra                | Remover compra                    | RF30           |             |
-| BE25 | Relatório por Cliente         | Consultar compras por cliente     | RF32           |             |
-| BE26 | Produtos Sem Estoque          | Consultar produtos zerados        | RF33           |             |
-| BE27 | Faturamento Diário            | Calcular vendas por dia           | RF34           |             |
-
+| ID   | Atividade                     | Descrição                         | RF Relacionado | Responsável  |
+| ---- | ----------------------------- | --------------------------------- | -------------- | ------------ |
+| BE01 | Endpoint de Cadastro          | Criar API para cadastrar cliente  | RF01           | Paulo Victor |
+| BE02 | Endpoint de Login             | Autenticar usuário                | RF02           | Wesley       |
+| BE03 | Gerenciamento de Sessão       | Criar e validar sessão            | RF02, RF23     | Wesley       |
+| BE04 | Endpoint de Logout            | Encerrar sessão                   | RF03           | Paulo Victor |
+| BE05 | Atualizar Usuário             | Editar dados do cliente           | RF04           | Derik        |
+| BE06 | Excluir Usuário               | Remover conta                     | RF05           | Derik        |
+| BE07 | Listar Produtos               | Retornar produtos com estoque > 0 | RF06           | Derik        |
+| BE08 | Buscar Produto                | Retornar detalhes do produto      | RF07           | Paulo Victor |
+| BE09 | Criar Produto                 | Inserir produto no banco          | RF08           | Wesley       |
+| BE10 | Atualizar Produto             | Editar produto                    | RF09           | Derik        |
+| BE11 | Deletar Produto               | Remover produto                   | RF10           | Paulo        |
+| BE12 | Controle de Estoque           | Atualizar quantidade              | RF11           |              |
+| BE13 | Upload de Imagem              | Salvar imagem no servidor         | RF12           |              |
+| BE14 | CRUD Categorias               | Criar endpoints de categorias     | RF13–RF16      |              |
+| BE15 | Gerenciar Carrinho            | API para adicionar/remover itens  | RF17–RF19      |              |
+| BE16 | Calcular Total                | Calcular valor total              | RF20           |              |
+| BE17 | Persistência (Cookie/Session) | Manter estado do carrinho         | RF21           |              |
+| BE18 | Finalizar Compra              | Processar compra                  | RF22           |              |
+| BE19 | Validar Estoque               | Verificar disponibilidade         | RF24           |              |
+| BE20 | Atualizar Estoque             | Reduzir estoque após compra       | RF25           |              |
+| BE21 | Registrar Venda               | Salvar venda e itens              | RF26           |              |
+| BE22 | Listar Compras do Cliente     | Retornar histórico                | RF27           |              |
+| BE23 | Listar Compras Gerais         | Retornar todas as compras         | RF29           |              |
+| BE24 | Excluir Compra                | Remover compra                    | RF30           |              |
+| BE25 | Relatório por Cliente         | Consultar compras por cliente     | RF32           |              |
+| BE26 | Produtos Sem Estoque          | Consultar produtos zerados        | RF33           |              |
+| BE27 | Faturamento Diário            | Calcular vendas por dia           | RF34           |              |

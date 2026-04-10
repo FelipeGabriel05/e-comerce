@@ -125,6 +125,7 @@ client/
 ### Prerequisites
 
 - **Node.js**: ^24.14.x (specified in `engines`)
+- **WLS2**: For Windows users only. Required to run Docker.
 - **Docker**: For containerized development and deployment
 - **Docker Compose**: For managing multi-container setups
 
