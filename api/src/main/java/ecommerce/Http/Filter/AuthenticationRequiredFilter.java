@@ -21,7 +21,7 @@ public class AuthenticationRequiredFilter implements Filter {
 
   private record Route(String method, String path) {}
 
-  private static final List<Route> adminRoutes =
+  private static final List<Route> protectedRoutes =
       List.of(
           new Route("POST", "/admin/category"),
           new Route("POST", "/admin/products"),
