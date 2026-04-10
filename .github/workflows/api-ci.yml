@@ -1,0 +1,33 @@
+name: API CI
+
+on:
+  pull_request:
+    branches: ["**"]
+    paths:
+      - 'api/**'
+      - '.github/workflows/api-ci.yml'
+  push:
+    branches: ["main"]
+    paths:
+      - 'api/**'
+      - '.github/workflows/api-ci.yml'
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-java@v4
+        with:
+          distribution: 'temurin'
+          java-version: '17'
+          cache: 'maven'
+
+      - name: Build and Verify
+        run: mvn verify
+        working-directory: api
