@@ -1,3 +1,4 @@
+
 # Ecommerce API
 
 ## 🏗️ Architecture
@@ -224,3 +225,105 @@ To implement a new feature or endpoint, follow this structured process:
     - Include getters/setters and JSON serialization logic (e.g., `toJson()` method).
 8.  **Initialization**: Ensure the new table is registered in `Database.DatabaseInitializer.java` to be created on startup if it doesn't exist.
 
+
+### Protect Routes from Unauthenticated Users
+
+```mermaid
+flowchart TD
+    A[Incoming HTTP Request] --> B[AuthenticationRequiredFilter]
+
+    B --> C{Is route in\nprotectedRoutes?}
+
+    C -- No --> D[Allow Request → Continue to Controller]
+
+    C -- Yes --> E{User Authenticated?}
+
+    E -- Yes --> D
+    E -- No --> F[Return 401 Unauthorized]
+
+    D --> G[Controller Handles Request]
+```
+
+To protect an endpoint and restrict access to authenticated users, follow the steps below:
+
+#### 1. Update the Authentication Filter
+
+Modify the filter responsible for handling authentication:
+
+* Open `ecommerce.http.filter.AuthenticationRequiredFilter.java`
+* This filter intercepts incoming requests and checks whether authentication is required.
+
+#### 2. Register the Protected Route
+
+Define which routes should require authentication:
+
+* Locate the `protectedRoutes` list inside the filter.
+* Add a new route entry specifying the HTTP method and path.
+
+**Example:**
+
+If you want to protect a `GET` endpoint at `/admin/dashboard`, add:
+
+```java
+new Route("GET", "/admin/dashboard")
+```
+
+#### 3. Done
+
+Once the route is added to `protectedRoutes`, the filter will automatically enforce authentication for that endpoint.
+
+
+### Protect Routes with Admin Role Permission
+
+```mermaid
+flowchart TD
+    A[Incoming HTTP Request] --> B[AdminRolePermissionRequiredFilter]
+
+    B --> C{Is route in\nadminRoutes?}
+
+    C -- No --> D[Allow Request → Continue]
+
+    C -- Yes --> E{User Authenticated?}
+
+    E -- No --> F[Return 401 Unauthorized]
+
+    E -- Yes --> G{User has ADMIN role?}
+
+    G -- No --> H[Return 403 Forbidden]
+
+    G -- Yes --> D
+
+    D --> I[Controller Handles Request]
+```
+
+To restrict access to endpoints that require **administrator privileges**, follow the steps below:
+
+#### 1. Update the Admin Role Filter
+
+Modify the filter responsible for enforcing admin permissions:
+
+* Open `ecommerce.Http.Filter.AdminRolePermissionRequiredFilter.java`
+* This filter intercepts incoming requests and validates:
+
+  * If the route requires admin access
+  * If the user is authenticated
+  * If the user has the `administrator=true`
+
+#### 2. Register Admin-Protected Routes
+
+Define which routes should only be accessible by admin users:
+
+* Locate the `adminRoutes` list inside the filter
+* Add a new route entry specifying the HTTP method and path
+
+**Example:**
+
+To protect a `POST` endpoint at `/admin/products`, add:
+
+```java
+new Route("POST", "/admin/products")
+```
+
+#### 3. Done
+
+Once configured, the filter ensures that the user has `administrador = true` in the database to access this endpoint.
