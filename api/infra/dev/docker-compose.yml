@@ -24,6 +24,8 @@ services:
       DB_URL: jdbc:postgresql://postgres:5432/ecommerceproject
       DB_USER: postgres
       DB_PASSWORD: ecommerce_secret_password_123
+    volumes:
+      - ../../public:/var/lib/jetty/public
 
   pgadmin:
     image: dpage/pgadmin4
