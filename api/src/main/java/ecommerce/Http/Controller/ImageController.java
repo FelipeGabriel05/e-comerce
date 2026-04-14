@@ -1,7 +1,10 @@
 package ecommerce.Http.Controller;
 
+import ecommerce.Http.IO.Requests.ImageBodyRequest;
 import ecommerce.Http.IO.Responses.JsonResponse;
+import ecommerce.Http.Validators.HttpImageValidators;
 import ecommerce.UseCases.GetImageUseCase;
+import ecommerce.UseCases.UploadImageUseCase;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
@@ -49,5 +52,39 @@ public class ImageController extends HttpServlet {
     }
     response.getOutputStream().flush();
     response.setHeader("Cache-Control", "public, max-age=86400");
+  }
+
+  protected void doPost(HttpServletRequest request, HttpServletResponse response)
+      throws ServletException, IOException {
+    String pathInfo = request.getPathInfo();
+    if (pathInfo == null || !pathInfo.equals("/upload")) {
+      response.setStatus(HttpServletResponse.SC_NOT_FOUND);
+      return;
+    }
+
+    HttpImageValidators validators = new HttpImageValidators();
+    UploadImageUseCase uploadImageUseCase = new UploadImageUseCase();
+    response.setContentType("application/json");
+
+    try {
+      ImageBodyRequest body = validators.validateCreateImage(request);
+      String filepath = uploadImageUseCase.execute(body.image);
+
+      if (filepath == null) {
+        JsonResponse jsonRes =
+            new JsonResponse(HttpServletResponse.SC_BAD_REQUEST, "Not a valid file", filepath);
+        response.getWriter().write(jsonRes.toJson());
+        return;
+      }
+
+      JsonResponse jsonRes =
+          new JsonResponse(
+              HttpServletResponse.SC_CREATED, "Image uploaded successfully!", filepath);
+      response.getWriter().write(jsonRes.toJson());
+    } catch (Exception e) {
+      JsonResponse jsonRes = new JsonResponse(HttpServletResponse.SC_BAD_REQUEST, e.getMessage());
+      response.setStatus(jsonRes.getStatus());
+      response.getWriter().write(jsonRes.toJson());
+    }
   }
 }
