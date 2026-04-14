@@ -155,7 +155,7 @@ erDiagram
 | BE10 | Atualizar Produto             | Editar produto                    | RF09           | Derik        |
 | BE11 | Deletar Produto               | Remover produto                   | RF10           | Paulo        |
 | BE12 | Controle de Estoque           | Atualizar quantidade              | RF11           |              |
-| BE13 | Upload de Imagem              | Salvar imagem no servidor         | RF12           |              |
+| BE13 | Upload de Imagem              | Salvar imagem no servidor         | RF12           | Wesley       |
 | BE14 | CRUD Categorias               | Criar endpoints de categorias     | RF13–RF16      |              |
 | BE15 | Gerenciar Carrinho            | API para adicionar/remover itens  | RF17–RF19      |              |
 | BE16 | Calcular Total                | Calcular valor total              | RF20           |              |
