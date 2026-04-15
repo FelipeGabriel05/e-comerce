@@ -2,7 +2,7 @@ package ecommerce.Http.Validators;
 
 import ecommerce.Database.Entites.Product;
 import ecommerce.Exceptions.ValidationException;
-import ecommerce.Http.IO.BodyJsonToObject;
+import ecommerce.Http.IO.BodyFormDataToObject;
 import ecommerce.Http.IO.Requests.ProductBodyRequest;
 import java.util.ArrayList;
 import java.util.List;
@@ -16,13 +16,18 @@ public class HttpProductValidators {
     ProductBodyRequest body = null;
 
     try {
-      body = BodyJsonToObject.parse(request, ProductBodyRequest.class);
+      body = BodyFormDataToObject.parse(request, ProductBodyRequest.class);
     } catch (Exception e) {
+      e.printStackTrace();
       throw new ValidationException("Invalid body data");
     }
 
     if (body.descricao == null || body.descricao.isEmpty()) {
       errors.add("Description is required");
+    }
+
+    if (body.quantidade <= 0) {
+      errors.add("Quantity must be greater than zero");
     }
 
     if (body.preco <= 0) {
