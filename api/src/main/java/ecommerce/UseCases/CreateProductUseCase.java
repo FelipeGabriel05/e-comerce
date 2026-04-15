@@ -13,6 +13,9 @@ public class CreateProductUseCase {
     try {
       Connection dbConnection = DBConnection.getConnection();
       ProductRepository productRepository = new ProductRepository(dbConnection);
+      UploadImageUseCase imageUseCase = new UploadImageUseCase();
+      String savedFilename = imageUseCase.execute(product.getFoto());
+      product.setFoto(savedFilename);
       return productRepository.createProduct(product);
     } catch (Exception e) {
       e.printStackTrace();
