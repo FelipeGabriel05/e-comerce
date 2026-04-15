@@ -82,6 +82,7 @@ public class ImageController extends HttpServlet {
               HttpServletResponse.SC_CREATED, "Image uploaded successfully!", filepath);
       response.getWriter().write(jsonRes.toJson());
     } catch (Exception e) {
+      e.printStackTrace();
       JsonResponse jsonRes = new JsonResponse(HttpServletResponse.SC_BAD_REQUEST, e.getMessage());
       response.setStatus(jsonRes.getStatus());
       response.getWriter().write(jsonRes.toJson());

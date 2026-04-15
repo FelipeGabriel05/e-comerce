@@ -18,7 +18,6 @@ public class HttpProductValidators {
     try {
       body = BodyFormDataToObject.parse(request, ProductBodyRequest.class);
     } catch (Exception e) {
-      e.printStackTrace();
       throw new ValidationException("Invalid body data");
     }
 

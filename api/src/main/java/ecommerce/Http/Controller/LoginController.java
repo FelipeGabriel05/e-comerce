@@ -50,6 +50,7 @@ public class LoginController extends HttpServlet {
         response.getWriter().write(jsonRes.toJson());
       }
     } catch (Exception e) {
+      e.printStackTrace();
       JsonResponse jsonRes = new JsonResponse(HttpServletResponse.SC_BAD_REQUEST, e.getMessage());
       response.setStatus(jsonRes.getStatus());
       response.getWriter().write(jsonRes.toJson());
