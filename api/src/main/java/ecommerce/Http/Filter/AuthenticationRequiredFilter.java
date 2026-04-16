@@ -52,30 +52,16 @@ public class AuthenticationRequiredFilter implements Filter {
       return;
     }
 
-    Cookie[] cookies = req.getCookies();
-    String userId = null;
+    String sessionToken = extractSessionToken(req);
 
-    if (cookies != null) {
-      for (Cookie cookie : cookies) {
-        if (cookie.getName().equals("user_id")) {
-          userId = cookie.getValue();
-          break;
-        }
-      }
-    }
+    if (sessionToken != null) {
+      LoginUseCase loginUseCase = new LoginUseCase();
+      User user = loginUseCase.findUserBySessionToken(sessionToken);
 
-    if (userId != null) {
-      try {
-        int id = Integer.parseInt(userId);
-        LoginUseCase loginUseCase = new LoginUseCase();
-        User user = loginUseCase.findUserById(id);
-
-        if (user != null) {
-          req.setAttribute("user", user);
-          chain.doFilter(request, response);
-          return;
-        }
-      } catch (NumberFormatException e) {
+      if (user != null) {
+        req.setAttribute("user", user);
+        chain.doFilter(request, response);
+        return;
       }
     }
 
@@ -84,6 +70,15 @@ public class AuthenticationRequiredFilter implements Filter {
         new JsonResponse(HttpServletResponse.SC_UNAUTHORIZED, "Authentication required");
     res.setStatus(jsonRes.getStatus());
     res.getWriter().write(jsonRes.toJson());
+  }
+
+  private String extractSessionToken(HttpServletRequest req) {
+    Cookie[] cookies = req.getCookies();
+    if (cookies == null) return null;
+    for (Cookie cookie : cookies) {
+      if (cookie.getName().equals("session_token")) return cookie.getValue();
+    }
+    return null;
   }
 
   @Override

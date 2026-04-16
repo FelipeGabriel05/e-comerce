@@ -1,0 +1,5 @@
+CREATE TABLE IF NOT EXISTS sessions (
+    token VARCHAR(64) PRIMARY KEY,
+    user_id INT NOT NULL REFERENCES usuario(id) ON DELETE CASCADE,
+    expires_at BIGINT NOT NULL
+);

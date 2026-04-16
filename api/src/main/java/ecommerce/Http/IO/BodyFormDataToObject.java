@@ -26,7 +26,6 @@ public class BodyFormDataToObject {
       try {
         Part part = request.getPart(fieldName);
         if (part == null) {
-          field.set(instance, null);
           continue;
         }
 

@@ -2,7 +2,7 @@ CREATE TABLE IF NOT EXISTS produto (
     id SERIAL PRIMARY KEY,
     descricao TEXT NOT NULL,
     preco NUMERIC(10,2) NOT NULL,
-    foto TEXT,
+    foto VARCHAR(40),
     quantidade INTEGER NOT NULL DEFAULT 0,
     categoria_id INTEGER NOT NULL,
     CONSTRAINT fk_produto_categoria
