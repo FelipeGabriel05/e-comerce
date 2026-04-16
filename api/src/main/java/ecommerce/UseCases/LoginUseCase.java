@@ -25,7 +25,7 @@ public class LoginUseCase {
       String token = generateToken();
       long expiresAt = (System.currentTimeMillis() / 1000) + SESSION_TTL_SECONDS;
       new SessionsRepository(dbConnection).createSession(token, user.getId(), expiresAt);
-			user.setSenha(null);
+      user.setSenha(null);
       return new LoginResult(token, user);
     } catch (Exception e) {
       e.printStackTrace();
