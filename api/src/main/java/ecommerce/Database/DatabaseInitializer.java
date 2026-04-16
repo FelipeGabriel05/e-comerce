@@ -48,7 +48,7 @@ public class DatabaseInitializer implements ServletContextListener {
   private String[] getSqlFilePaths() {
     List<String> sqlFiles = new ArrayList<>();
     String basePath = "ecommerce/Database/Tables/";
-    String[] tableFiles = {"category.sql", "users.sql", "product.sql", "sales.sql"};
+    String[] tableFiles = {"category.sql", "users.sql", "sessions.sql", "product.sql", "sales.sql"};
     String[] relationshipFiles = {"relationships/product-sales.sql"};
     String[] indexFiles = {"indexes/indexes.sql"};
 
