@@ -173,6 +173,13 @@ erDiagram
         int quantidade
     }
 
+    SESSIONS {
+        string token PK
+        int user_id FK
+        bigint expires_at
+    }
+
+    USUARIO ||--o{ SESSIONS : "possui"
     USUARIO ||--o{ VENDA : "realiza"
     CATEGORIA ||--o{ PRODUTO : "possui"
     VENDA ||--|{ VENDA_PRODUTO : "possui"
