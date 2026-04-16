@@ -2,7 +2,6 @@ package ecommerce.Http.Filter;
 
 import ecommerce.Database.Entites.User;
 import ecommerce.Http.IO.Responses.JsonResponse;
-import ecommerce.UseCases.LoginUseCase;
 import java.io.IOException;
 import java.util.List;
 import javax.servlet.Filter;
@@ -12,7 +11,6 @@ import javax.servlet.ServletException;
 import javax.servlet.ServletRequest;
 import javax.servlet.ServletResponse;
 import javax.servlet.annotation.WebFilter;
-import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
@@ -54,13 +52,6 @@ public class AdminRolePermissionRequiredFilter implements Filter {
 
     User user = (User) req.getAttribute("user");
 
-    if (user == null) {
-      user = findUserFromCookie(req);
-      if (user != null) {
-        req.setAttribute("user", user);
-      }
-    }
-
     if (user != null && user.isAdministrador()) {
       chain.doFilter(request, response);
       return;
@@ -71,24 +62,6 @@ public class AdminRolePermissionRequiredFilter implements Filter {
         new JsonResponse(HttpServletResponse.SC_FORBIDDEN, "Admin permission required");
     res.setStatus(jsonRes.getStatus());
     res.getWriter().write(jsonRes.toJson());
-  }
-
-  private User findUserFromCookie(HttpServletRequest req) {
-    Cookie[] cookies = req.getCookies();
-    if (cookies != null) {
-      for (Cookie cookie : cookies) {
-        if (cookie.getName().equals("user_id")) {
-          try {
-            int id = Integer.parseInt(cookie.getValue());
-            LoginUseCase loginUseCase = new LoginUseCase();
-            return loginUseCase.findUserById(id);
-          } catch (NumberFormatException e) {
-            return null;
-          }
-        }
-      }
-    }
-    return null;
   }
 
   @Override

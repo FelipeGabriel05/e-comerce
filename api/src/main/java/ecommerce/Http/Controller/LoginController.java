@@ -28,20 +28,19 @@ public class LoginController extends HttpServlet {
     try {
       User credentials = validators.validateLogin(request);
       LoginUseCase loginUseCase = new LoginUseCase();
-      User user = loginUseCase.execute(credentials.getLogin(), credentials.getSenha());
+      LoginUseCase.LoginResult result =
+          loginUseCase.execute(credentials.getLogin(), credentials.getSenha());
 
-      response.setContentType("application/json");
-      if (user != null) {
-        int EXPIRATION_IN_ONE_DAY = 60 * 60 * 24;
-        Cookie authCookie = new Cookie("user_id", String.valueOf(user.getId()));
-        authCookie.setMaxAge(EXPIRATION_IN_ONE_DAY);
-        authCookie.setPath("/");
-        authCookie.setHttpOnly(true);
-        authCookie.setSecure(true);
-        response.addCookie(authCookie);
+      if (result != null) {
+        Cookie sessionCookie = new Cookie("session_token", result.token());
+        sessionCookie.setMaxAge(LoginUseCase.ONE_DAY);
+        sessionCookie.setPath("/");
+        sessionCookie.setHttpOnly(true);
+        sessionCookie.setSecure(true);
+        response.addCookie(sessionCookie);
 
         JsonResponse jsonRes =
-            new JsonResponse(HttpServletResponse.SC_OK, "Login successful", user);
+            new JsonResponse(HttpServletResponse.SC_OK, "Login successful", result.user());
         response.getWriter().write(jsonRes.toJson());
       } else {
         JsonResponse jsonRes =
