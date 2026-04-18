@@ -1,9 +1,15 @@
-// import { Button } from '@/components/ui/button';
+import { Button } from '@/components/ui/button';
 
-// import { CTASection } from './components/cta-section';
+import { CTASection } from './components/cta-section';
 
 const Home = () => {
-  return <div>My home</div>;
+  return (
+    <div>
+      <CTASection />
+      My home
+      <Button />
+    </div>
+  );
 };
 
 export default Home;
