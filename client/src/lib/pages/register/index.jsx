@@ -1,24 +1,63 @@
-import { useState } from 'react';
+import { zodResolver } from '@hookform/resolvers/zod';
+import { Link } from '@tanstack/react-router';
+import { Controller, useForm } from 'react-hook-form';
+import { toast } from 'sonner';
+import * as z from 'zod';
+
+import { Button } from '@/components/ui/button';
+import {
+  Field,
+  FieldError,
+  FieldGroup,
+  FieldLabel,
+} from '@/components/ui/field';
+import { Input } from '@/components/ui/input';
 
 const Register = () => {
-  const [nome, setNome] = useState('');
-  const [endereco, setEndereco] = useState('');
-  const [email, setEmail] = useState('');
-  const [senha, setSenha] = useState('');
+  const formSchema = z.object({
+    nome: z
+      .string()
+      .min(5, 'O nome deve ter no mínimo 5 caracteres')
+      .max(80, 'O nome deve ter no máximo 80 caracteres'),
+    endereco: z
+      .string()
+      .min(10, 'Informe um endereço mais completo')
+      .max(120, 'Endereço muito longo'),
+    email: z.string().email('Digite um email válido'),
+    senha: z
+      .string()
+      .min(8, 'Mínimo de 8 caracteres')
+      .max(12, 'Máximo de 12 caracteres')
+      .regex(/[A-Z]/, 'Sua senha deve conter pelo menos uma letra maiúscula')
+      .regex(/[a-z]/, 'Sua senha deve conter pelo menos uma letra minúscula')
+      .regex(/[0-9]/, 'Sua senha deve conter pelo menos um número')
+      .regex(
+        /[^A-Za-z0-9]/,
+        'Sua senha deve conter pelo menos um caractere especial',
+      ),
+  });
 
-  function handleSubmit(event) {
-    event.preventDefault();
-    console.log(nome);
-    console.log(endereco);
-    console.log(email);
-    console.log(senha);
+  const form = useForm({
+    resolver: zodResolver(formSchema),
+    mode: 'onChange',
+    defaultValues: {
+      nome: '',
+      endereco: '',
+      email: '',
+      senha: '',
+    },
+  });
 
-    const novoCadastro = { nome, endereco, email, senha };
-    console.log(novoCadastro);
+  function onSubmit(data) {
+    console.log(data);
+    alert('Cadastro realizado com sucesso');
+    toast('Cadastro realizado!', {
+      description: JSON.stringify(data, null, 2),
+    });
   }
 
   return (
-    <div className="bg-[#1A1B2F] text-white pt-6 px-12 pb-12 flex min-h-full w-125 flex-col justify-center rounded-2xl shadow-lg mx-auto">
+    <div className="bg-formblack text-white pt-6 px-12 pb-12 flex min-h-full w-125 flex-col justify-center rounded-2xl shadow-lg mx-auto">
       <div className="text-center">
         <img
           src="https://tailwindcss.com/plus-assets/img/logos/mark.svg?color=indigo&shade=500"
@@ -30,77 +69,123 @@ const Register = () => {
         </h2>
       </div>
 
-      <form onSubmit={handleSubmit} className="mt-8 space-y-5">
-        <div>
-          <label
-            htmlFor="nome"
-            className="block text-sm font-medium text-gray-100"
-          >
-            Nome Completo
-          </label>
-          <input
-            id="nome"
-            type="text"
-            onChange={(event) => setNome(event.target.value)}
-            required
-            className="mt-2 block w-full rounded-md bg-white/5 px-3 py-2 text-white outline outline-1 outline-white/10 focus:outline-2 focus:outline-indigo-500"
+      <form
+        onSubmit={(e) => {
+          e.preventDefault();
+          form.handleSubmit(onSubmit)(e);
+        }}
+        className="mt-8 space-y-5"
+      >
+        <FieldGroup>
+          {/* Campo nome */}
+          <Controller
+            name="nome"
+            control={form.control}
+            render={({ field, fieldState }) => (
+              <Field data-invalid={fieldState.invalid}>
+                <FieldLabel htmlFor="form-name">
+                  Nome <span className="text-destructive">*</span>
+                </FieldLabel>
+                <Input
+                  {...field}
+                  id="form-name"
+                  type="text"
+                  placeholder="Nome completo"
+                  aria-invalid={fieldState.invalid}
+                  required
+                />
+                {fieldState.invalid && (
+                  <FieldError errors={[fieldState.error]} />
+                )}
+              </Field>
+            )}
           />
-        </div>
-
-        <div>
-          <label
-            htmlFor="endereco"
-            className="block text-sm font-medium text-gray-100"
-          >
-            Endereço residencial
-          </label>
-          <input
-            id="endereco"
-            type="text"
-            onChange={(event) => setEndereco(event.target.value)}
-            required
-            className="mt-2 block w-full rounded-md bg-white/5 px-3 py-2 text-white outline outline-1 outline-white/10 focus:outline-2 focus:outline-indigo-500"
+          {/* Campo Endereço */}
+          <Controller
+            name="endereco"
+            control={form.control}
+            render={({ field, fieldState }) => (
+              <Field data-invalid={fieldState.invalid}>
+                <FieldLabel htmlFor="form-address">
+                  Endereço <span className="text-destructive">*</span>
+                </FieldLabel>
+                <Input
+                  {...field}
+                  id="form-address"
+                  type="text"
+                  placeholder="rua fulano, nome do bairro, 123"
+                  aria-invalid={fieldState.invalid}
+                  required
+                />
+                {fieldState.invalid && (
+                  <FieldError errors={[fieldState.error]} />
+                )}
+              </Field>
+            )}
           />
-        </div>
-
-        <div>
-          <label
-            htmlFor="email"
-            className="block text-sm font-medium text-gray-100"
-          >
-            E-mail
-          </label>
-          <input
-            id="email"
-            type="email"
-            onChange={(event) => setEmail(event.target.value)}
-            required
-            className="mt-2 block w-full rounded-md bg-white/5 px-3 py-2 text-white outline outline-1 outline-white/10 focus:outline-2 focus:outline-indigo-500"
+          {/* Campo email */}
+          <Controller
+            name="email"
+            control={form.control}
+            render={({ field, fieldState }) => (
+              <Field data-invalid={fieldState.invalid}>
+                <FieldLabel htmlFor="form-email">
+                  Email <span className="text-destructive">*</span>
+                </FieldLabel>
+                <Input
+                  {...field}
+                  id="form-email"
+                  type="email"
+                  placeholder="nome@exemplo.com"
+                  aria-invalid={fieldState.invalid}
+                  required
+                />
+                {fieldState.invalid && (
+                  <FieldError errors={[fieldState.error]} />
+                )}
+              </Field>
+            )}
           />
-        </div>
-
-        <div>
-          <label
-            htmlFor="password"
-            className="block text-sm font-medium text-gray-100"
-          >
-            Senha
-          </label>
-          <input
-            id="password"
-            type="password"
-            onChange={(event) => setSenha(event.target.value)}
-            required
-            className="mt-2 block w-full rounded-md bg-white/5 px-3 py-2 text-white outline outline-1 outline-white/10 focus:outline-2 focus:outline-indigo-500"
+          {/* Campo Senha */}
+          <Controller
+            name="senha"
+            control={form.control}
+            render={({ field, fieldState }) => (
+              <Field data-invalid={fieldState.invalid}>
+                <FieldLabel htmlFor="form-password">
+                  Senha <span className="text-destructive">*</span>
+                </FieldLabel>
+                <Input
+                  {...field}
+                  id="form-password"
+                  type="password"
+                  placeholder="senha de no mínimo 8 caracteres"
+                  aria-invalid={fieldState.invalid}
+                  required
+                />
+                {fieldState.invalid && (
+                  <FieldError errors={[fieldState.error]} />
+                )}
+              </Field>
+            )}
           />
-        </div>
-
-        <button
-          type="submit"
-          className="mt-4 w-full rounded-md bg-indigo-500 py-2 font-semibold hover:bg-indigo-400"
-        >
-          Cadastrar
-        </button>
+          <Field orientation="horizontal">
+            <Button
+              asChild
+              className="mt-4 w-48 rounded-md bg-indigo-500 font-semibold hover:bg-indigo-400"
+            >
+              <Link to="/" className="block w-full text-center">
+                Voltar
+              </Link>
+            </Button>
+            <Button
+              type="submit"
+              className="mt-4 w-48 rounded-md bg-indigo-500 py-2 font-semibold hover:bg-indigo-400"
+            >
+              Cadastrar
+            </Button>
+          </Field>
+        </FieldGroup>
       </form>
     </div>
   );
