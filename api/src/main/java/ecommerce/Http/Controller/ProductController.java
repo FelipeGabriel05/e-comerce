@@ -4,7 +4,13 @@ import ecommerce.Database.Entites.Product;
 import ecommerce.Http.IO.Responses.JsonResponse;
 import ecommerce.Http.Validators.HttpProductValidators;
 import ecommerce.UseCases.CreateProductUseCase;
+import ecommerce.UseCases.ListAvailableProductsUseCase;
+import ecommerce.Database.Repositories.ProductRepository;
+
 import java.io.IOException;
+import java.sql.Connection;
+import java.util.List;
+
 import javax.servlet.ServletException;
 import javax.servlet.annotation.MultipartConfig;
 import javax.servlet.annotation.WebServlet;
@@ -15,37 +21,79 @@ import javax.servlet.http.HttpServletResponse;
 @WebServlet("/admin/products")
 @MultipartConfig
 public class ProductController extends HttpServlet {
+
   private static final long serialVersionUID = 1L;
 
-  public ProductController() {
-    super();
+  private Connection con;
+
+  @Override
+  public void init() {
+    con = (Connection) getServletContext().getAttribute("DB_CONNECTION");
   }
 
   protected void doPost(HttpServletRequest request, HttpServletResponse response)
       throws ServletException, IOException {
+
     HttpProductValidators validators = new HttpProductValidators();
     response.setContentType("application/json");
 
     try {
       Product productInput = validators.validateCreateProduct(request);
+
       CreateProductUseCase createProductUseCase = new CreateProductUseCase();
       Product createdProduct = createProductUseCase.execute(productInput);
 
       if (createdProduct != null) {
         JsonResponse jsonRes =
             new JsonResponse(HttpServletResponse.SC_CREATED, "Product created", createdProduct);
+
         response.setStatus(jsonRes.getStatus());
         response.getWriter().write(jsonRes.toJson());
       } else {
         JsonResponse jsonRes =
-            new JsonResponse(
-                HttpServletResponse.SC_INTERNAL_SERVER_ERROR, "Failed to create product");
+            new JsonResponse(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, "Failed to create product");
+
         response.setStatus(jsonRes.getStatus());
         response.getWriter().write(jsonRes.toJson());
       }
+
     } catch (Exception e) {
       e.printStackTrace();
-      JsonResponse jsonRes = new JsonResponse(HttpServletResponse.SC_BAD_REQUEST, e.getMessage());
+
+      JsonResponse jsonRes =
+          new JsonResponse(HttpServletResponse.SC_BAD_REQUEST, e.getMessage());
+
+      response.setStatus(jsonRes.getStatus());
+      response.getWriter().write(jsonRes.toJson());
+    }
+  }
+
+  @Override
+  protected void doGet(HttpServletRequest request, HttpServletResponse response)
+      throws IOException {
+
+    response.setContentType("application/json");
+
+    try {
+      HttpProductValidators.validateListAvailableProducts();
+
+      ProductRepository repository = new ProductRepository(con);
+      ListAvailableProductsUseCase useCase = new ListAvailableProductsUseCase(repository);
+
+      List<Product> products = useCase.execute();
+
+      JsonResponse jsonRes =
+          new JsonResponse(HttpServletResponse.SC_OK, "Products listed", products);
+
+      response.setStatus(jsonRes.getStatus());
+      response.getWriter().write(jsonRes.toJson());
+
+    } catch (Exception e) {
+      e.printStackTrace();
+
+      JsonResponse jsonRes =
+          new JsonResponse(HttpServletResponse.SC_BAD_REQUEST, e.getMessage());
+
       response.setStatus(jsonRes.getStatus());
       response.getWriter().write(jsonRes.toJson());
     }
