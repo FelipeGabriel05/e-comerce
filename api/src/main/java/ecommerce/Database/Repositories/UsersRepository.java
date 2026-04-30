@@ -103,4 +103,22 @@ public class UsersRepository {
     }
     return null;
   }
+
+  public boolean deleteUserById(int id) {
+    try{
+      String query = UsersQueries.selectdeleteUserQuery;
+      PreparedStatement ps = con.prepareStatement(query);
+
+      ps.setInt(1, id);
+      
+      int rowsAffected = ps.executeUpdate();
+
+      return rowsAffected > 0;
+      
+    } catch (SQLException e){
+      e.printStackTrace();
+    }
+    return false;
+  }
+      
 }
