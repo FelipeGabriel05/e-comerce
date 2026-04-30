@@ -44,4 +44,36 @@ public class HttpUserValidators {
     user.setSenha(request.getParameter("password"));
     return user;
   }
+
+  public int validateDeleteUser(HttpServletRequest request) throws ValidationException {
+    List<String> errors = new ArrayList<String>();
+
+    String idParam = request.getParameter("id");
+
+    if (idParam == null || idParam.isEmpty()) {
+      errors.add("ID is required");
+    }
+
+    int id = 0;
+
+    if (errors.isEmpty()) {
+      try {
+        id = Integer.parseInt(idParam);
+
+        if (id <= 0) {
+          errors.add("ID must be greater than zero");
+        }
+
+      } catch (NumberFormatException e) {
+        errors.add("ID must be a valid number");
+      }
+    }
+
+    String errorMessage = String.join(", ", errors);
+    if (!errorMessage.isEmpty()) {
+      throw new ValidationException(errorMessage);
+    }
+
+    return id;
+  }
 }
