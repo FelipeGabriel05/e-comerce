@@ -3,7 +3,7 @@ package ecommerce.UseCases;
 import ecommerce.Database.Repositories.UserRepository;
 import ecommerce.Exceptions.ValidationException;
 
-public class DeleteUserUseCase {
+public class deleteUserUseCase {
 
   private UserRepository userRepository = new UserRepository();
 
