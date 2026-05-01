@@ -76,4 +76,54 @@ public class HttpUserValidators {
 
     return id;
   }
+
+  public User validateUpdateUser(HttpServletRequest request) throws ValidationException {
+    List<String> errors = new ArrayList<>();
+
+    String idParam = request.getParameter("id");
+    int id = 0;
+
+    if (idParam == null || idParam.isEmpty()) {
+        errors.add("Id is required");
+    } else {
+        try {
+            id = Integer.parseInt(idParam);
+            if (id <= 0) {
+                errors.add("Id is not valid");
+            }
+        } catch (NumberFormatException e) {
+            errors.add("Id must be a number");
+        }
+    }
+
+    String errorMessage = String.join(", ", errors);
+    if (!errorMessage.isEmpty()) {
+        throw new ValidationException(errorMessage);
+    }
+
+    User user = new User();
+    user.setId(id); 
+
+    if (request.getParameter("name") != null && !request.getParameter("name").isEmpty()) {
+        user.setNome(request.getParameter("name"));
+    }
+
+    if (request.getParameter("address") != null && !request.getParameter("address").isEmpty()) {
+        user.setEndereco(request.getParameter("address"));
+    }
+
+    if (request.getParameter("email") != null && !request.getParameter("email").isEmpty()) {
+        user.setEmail(request.getParameter("email"));
+    }
+
+    if (request.getParameter("login") != null && !request.getParameter("login").isEmpty()) {
+        user.setLogin(request.getParameter("login"));
+    }
+
+    if (request.getParameter("password") != null && !request.getParameter("password").isEmpty()) {
+        user.setSenha(request.getParameter("password"));
+    }
+
+    return user;
+}
 }
