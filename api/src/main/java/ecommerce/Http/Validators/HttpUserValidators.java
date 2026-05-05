@@ -80,42 +80,49 @@ public class HttpUserValidators {
   public User validateUpdateUser(HttpServletRequest request) throws ValidationException {
   List<String> errors = new ArrayList<>();
 
-  String idParam = request.getParameter("id");
+  int id = validateId(request, errors);
 
-  if (idParam == null || idParam.isEmpty()) {
-    errors.add("Id is required");
-  }
-
-  int id = 0;
-  if (errors.isEmpty()) {
-    try {
-      id = Integer.parseInt(idParam);
-      if (id <= 0) {
-        errors.add("Id is not valid");
-      }
-    } catch (NumberFormatException e) {
-      errors.add("Id must be a number");
-    }
-  }
-
-  if (request.getParameter("name") == null || request.getParameter("name").isEmpty()) {
+  String name = request.getParameter("name");
+  if (name == null || name.isEmpty()) {
     errors.add("Name is required");
+  } else if (name.length() < 3) {
+    errors.add("Name must have at least 3 characters");
   }
 
-  if (request.getParameter("address") == null || request.getParameter("address").isEmpty()) {
+  String address = request.getParameter("address");
+  if (address == null || address.isEmpty()) {
     errors.add("Address is required");
+  } else if (address.split(" ").length < 3) {
+    errors.add("Address must contain at least 3 words");
   }
 
-  if (request.getParameter("email") == null || request.getParameter("email").isEmpty()) {
+  String email = request.getParameter("email");
+  if (email == null || email.isEmpty()) {
     errors.add("Email is required");
+  } else if (!isValidEmail(email)) {
+    errors.add("Email is not valid");
   }
 
-  if (request.getParameter("login") == null || request.getParameter("login").isEmpty()) {
+  String login = request.getParameter("login");
+  if (login == null || login.isEmpty()) {
     errors.add("Login is required");
+  } else if (login.length() < 4) {
+    errors.add("Login must have at least 4 characters");
   }
 
-  if (request.getParameter("password") == null || request.getParameter("password").isEmpty()) {
+  String password = request.getParameter("password");
+  if (password == null || password.isEmpty()) {
     errors.add("Password is required");
+  } else {
+    if (password.length() < 6) {
+      errors.add("Password must have at least 6 characters");
+    }
+    if (!password.matches(".*[A-Z].*")) {
+      errors.add("Password must contain at least one uppercase letter");
+    }
+    if (!password.matches(".*\\d.*")) {
+      errors.add("Password must contain at least one number");
+    }
   }
 
   String errorMessage = String.join(", ", errors);
@@ -125,11 +132,12 @@ public class HttpUserValidators {
 
   User user = new User();
   user.setId(id);
-  user.setNome(request.getParameter("name"));
-  user.setEndereco(request.getParameter("address"));
-  user.setEmail(request.getParameter("email"));
-  user.setLogin(request.getParameter("login"));
-  user.setSenha(request.getParameter("password"));
+  user.setNome(name);
+  user.setEndereco(address);
+  user.setEmail(email);
+  user.setLogin(login);
+  user.setSenha(password);
 
   return user;
+  }
 }
