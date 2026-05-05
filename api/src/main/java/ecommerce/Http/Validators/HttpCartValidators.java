@@ -35,4 +35,31 @@ public class HttpCartValidators {
 
     return body;
   }
+
+  public CartItemBodyRequest validateUpdateCart(HttpServletRequest request)
+      throws ValidationException {
+    List<String> errors = new ArrayList<>();
+
+    CartItemBodyRequest body = null;
+    try {
+      body = BodyJsonToObject.parse(request, CartItemBodyRequest.class);
+    } catch (Exception e) {
+      throw new ValidationException("Invalid body data");
+    }
+
+    if (body.productId == null) {
+      errors.add("Product ID is required");
+    }
+
+    if (body.quantity == null || body.quantity < 0) {
+      errors.add("Quantity must be greater than or equal to zero");
+    }
+
+    String errorMessage = String.join(", ", errors);
+    if (!errorMessage.isEmpty()) {
+      throw new ValidationException(errorMessage);
+    }
+
+    return body;
+  }
 }
