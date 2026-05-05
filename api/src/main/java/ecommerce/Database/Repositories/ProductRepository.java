@@ -20,9 +20,6 @@ public class ProductRepository {
     con = dbConnection;
   }
 
-  // =========================
-  // CREATE PRODUCT
-  // =========================
   public Product createProduct(Product productInput) {
     try {
       String query = ProductQueries.insertProductQuery;
@@ -58,15 +55,12 @@ public class ProductRepository {
     }
   }
 
-  // =========================
-  // LIST AVAILABLE PRODUCTS (STOCK > 0)
-  // =========================
   public List<Product> listAvailableProducts() {
     try {
       String query = ProductQueries.listAvailableProductsQuery;
 
-      PreparedStatement ps = con.prepareStatement(query);
-      ResultSet rs = ps.executeQuery();
+      Statement stmt = con.createStatement();
+      ResultSet rs = stmt.executeQuery(query);
 
       List<Product> products = new ArrayList<>();
 
