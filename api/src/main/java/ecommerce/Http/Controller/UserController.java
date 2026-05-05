@@ -4,30 +4,41 @@ import ecommerce.Http.Validators.HttpUserValidators;
 import ecommerce.UseCases.DeleteUserUseCase;
 import ecommerce.Exceptions.ValidationException;
 
+import javax.servlet.ServletException;
+import javax.servlet.annotation.WebServlet;
+import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
-public class DeleteUserController {
+@WebServlet("/users/delete")
+public class UserController extends HttpServlet {
+
+  private static final long serialVersionUID = 1L;
 
   private HttpUserValidators validator = new HttpUserValidators();
   private DeleteUserUseCase useCase = new DeleteUserUseCase();
 
-  public void handle(HttpServletRequest request, HttpServletResponse response) throws IOException {
+  protected void doDelete(HttpServletRequest request, HttpServletResponse response)
+      throws ServletException, IOException {
+
+    response.setContentType("application/json");
 
     try {
       int id = validator.validateDeleteUser(request);
 
       useCase.execute(id);
 
-      response.getWriter().write("User deleted successfully");
+      response.setStatus(200);
+      response.getWriter().write("{\"message\": \"User deleted successfully\"}");
 
     } catch (ValidationException e) {
       response.setStatus(400);
-      response.getWriter().write(e.getMessage());
+      response.getWriter().write("{\"error\": \"" + e.getMessage() + "\"}");
     } catch (Exception e) {
+      e.printStackTrace();
       response.setStatus(500);
-      response.getWriter().write("Internal server error");
+      response.getWriter().write("{\"error\": \"Internal server error\"}");
     }
   }
 }
