@@ -7,6 +7,7 @@ import ecommerce.Http.IO.Requests.CartItemBodyRequest;
 import ecommerce.Http.IO.Responses.JsonResponse;
 import ecommerce.Http.Validators.HttpCartValidators;
 import ecommerce.UseCases.AddItemToCartUseCase;
+import ecommerce.UseCases.UpdateCartUseCase;
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.util.Base64;
@@ -63,6 +64,34 @@ public class CartController extends HttpServlet {
       }
 
       throw new Exception("Failed to add item to cart");
+    } catch (ValidationException e) {
+      response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
+      response
+          .getWriter()
+          .write(new JsonResponse(HttpServletResponse.SC_BAD_REQUEST, e.getMessage()).toJson());
+    } catch (Exception e) {
+      handleError(response, e);
+    }
+  }
+
+  protected void doPut(HttpServletRequest request, HttpServletResponse response)
+      throws ServletException, IOException {
+    response.setContentType("application/json");
+    HttpCartValidators httpCartValidator = new HttpCartValidators();
+    UpdateCartUseCase updateCartUsecase = new UpdateCartUseCase();
+
+    try {
+      CartItemBodyRequest body = httpCartValidator.validateUpdateCart(request);
+      Cart rawCart = getCartFromCookie(request);
+      Cart cart = updateCartUsecase.execute(rawCart, body);
+
+      if (cart != null) {
+        saveCartToCookie(response, cart);
+        JsonResponse jsonRes = new JsonResponse(HttpServletResponse.SC_OK, "Cart updated", cart);
+        response.getWriter().write(jsonRes.toJson());
+        return;
+      }
+      throw new Exception("Failed to update cart");
     } catch (ValidationException e) {
       response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
       response
