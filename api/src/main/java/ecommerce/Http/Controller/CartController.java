@@ -7,6 +7,7 @@ import ecommerce.Http.IO.Requests.CartItemBodyRequest;
 import ecommerce.Http.IO.Responses.JsonResponse;
 import ecommerce.Http.Validators.HttpCartValidators;
 import ecommerce.UseCases.AddItemToCartUseCase;
+import ecommerce.UseCases.RemoveItemFromCartUseCase;
 import ecommerce.UseCases.UpdateCartUseCase;
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
@@ -97,6 +98,36 @@ public class CartController extends HttpServlet {
       response
           .getWriter()
           .write(new JsonResponse(HttpServletResponse.SC_BAD_REQUEST, e.getMessage()).toJson());
+    } catch (Exception e) {
+      handleError(response, e);
+    }
+  }
+
+  protected void doDelete(HttpServletRequest request, HttpServletResponse response)
+      throws ServletException, IOException {
+    response.setContentType("application/json");
+    RemoveItemFromCartUseCase removeItemFromCartUseCase = new RemoveItemFromCartUseCase();
+
+    try {
+      String pathInfo = request.getPathInfo();
+      if (pathInfo == null || pathInfo.equals("/")) {
+        response.setStatus(HttpServletResponse.SC_NOT_FOUND);
+        return;
+      }
+
+      int productId = Integer.parseInt(pathInfo.substring(1));
+      Cart rawCart = getCartFromCookie(request);
+      Cart cart = removeItemFromCartUseCase.execute(rawCart, productId);
+
+      if (cart != null) {
+        saveCartToCookie(response, cart);
+        JsonResponse jsonRes =
+            new JsonResponse(HttpServletResponse.SC_OK, "Item removed from cart", cart);
+        response.getWriter().write(jsonRes.toJson());
+        return;
+      }
+
+      throw new Exception("Failed to remove item from cart");
     } catch (Exception e) {
       handleError(response, e);
     }
