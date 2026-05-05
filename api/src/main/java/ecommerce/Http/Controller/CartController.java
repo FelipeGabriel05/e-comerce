@@ -2,7 +2,11 @@ package ecommerce.Http.Controller;
 
 import com.google.gson.Gson;
 import ecommerce.Database.Entites.Cart;
+import ecommerce.Exceptions.ValidationException;
+import ecommerce.Http.IO.Requests.CartItemBodyRequest;
 import ecommerce.Http.IO.Responses.JsonResponse;
+import ecommerce.Http.Validators.HttpCartValidators;
+import ecommerce.UseCases.AddItemToCartUseCase;
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.util.Base64;
@@ -19,6 +23,7 @@ public class CartController extends HttpServlet {
   private final Gson gson = new Gson();
 
   private static final String CART_COOKIE_NAME = "cart";
+  private static final int ONE_MONTH_FOR_COOKIE_EXPIRATION = 30 * 24 * 60 * 60;
 
   protected void doGet(HttpServletRequest request, HttpServletResponse response)
       throws ServletException, IOException {
@@ -33,6 +38,36 @@ public class CartController extends HttpServlet {
       }
       throw new Exception("Failed to retrieve cart");
 
+    } catch (Exception e) {
+      handleError(response, e);
+    }
+  }
+
+  protected void doPost(HttpServletRequest request, HttpServletResponse response)
+      throws ServletException, IOException {
+    response.setContentType("application/json");
+    HttpCartValidators httpCartValidator = new HttpCartValidators();
+    AddItemToCartUseCase addItemToCartUseCase = new AddItemToCartUseCase();
+
+    try {
+      CartItemBodyRequest body = httpCartValidator.validateAddItem(request);
+      Cart rawCart = getCartFromCookie(request);
+      Cart cart = addItemToCartUseCase.execute(rawCart, body);
+
+      if (cart != null) {
+        saveCartToCookie(response, cart);
+        JsonResponse jsonRes =
+            new JsonResponse(HttpServletResponse.SC_OK, "Item added to cart", cart);
+        response.getWriter().write(jsonRes.toJson());
+        return;
+      }
+
+      throw new Exception("Failed to add item to cart");
+    } catch (ValidationException e) {
+      response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
+      response
+          .getWriter()
+          .write(new JsonResponse(HttpServletResponse.SC_BAD_REQUEST, e.getMessage()).toJson());
     } catch (Exception e) {
       handleError(response, e);
     }
@@ -56,6 +91,16 @@ public class CartController extends HttpServlet {
     }
 
     return new Cart();
+  }
+
+  private void saveCartToCookie(HttpServletResponse response, Cart cart) {
+    String json = gson.toJson(cart);
+    String encoded = Base64.getEncoder().encodeToString(json.getBytes(StandardCharsets.UTF_8));
+    Cookie cookie = new Cookie(CART_COOKIE_NAME, encoded);
+    cookie.setPath("/");
+    cookie.setMaxAge(ONE_MONTH_FOR_COOKIE_EXPIRATION);
+    cookie.setHttpOnly(true);
+    response.addCookie(cookie);
   }
 
   private void handleError(HttpServletResponse response, Exception e) throws IOException {
