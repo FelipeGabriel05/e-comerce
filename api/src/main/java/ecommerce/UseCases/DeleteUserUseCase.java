@@ -1,18 +1,25 @@
 package ecommerce.UseCases;
 
+import ecommerce.Database.DBConnection;
 import ecommerce.Database.Repositories.UserRepository;
 import ecommerce.Exceptions.ValidationException;
+import java.sql.Connection;
 
-public class deleteUserUseCase {
-
-  private UserRepository userRepository = new UserRepository();
+public class DeleteUserUseCase {
 
   public void execute(int id) throws ValidationException {
 
-    boolean deleted = userRepository.deleteUserById(id);
+    try {
+      Connection con = DBConnection.getConnection();
+      UserRepository userRepository = new UserRepository(con);
+      boolean deleted = userRepository.deleteUserById(id);
 
-    if (!deleted) {
-      throw new ValidationException("User not found or could not be deleted");
+      if (!deleted) {
+        throw new ValidationException("User not found or could not be deleted");
+      }
+    } catch (Exception e) {
+      e.printStackTrace();
+      throw new ValidationException("Internal error while deleting user");
     }
   }
 }
