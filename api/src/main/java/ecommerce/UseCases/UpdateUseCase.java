@@ -2,7 +2,7 @@ package ecommerce.UseCases;
 
 import ecommerce.Database.DBConnection;
 import ecommerce.Database.Entites.User;
-import ecommerce.Database.Repositories.UserRepository;
+import ecommerce.Database.Repositories.UsersRepository;
 import ecommerce.Exceptions.ValidationException;
 import java.sql.Connection;
 
@@ -10,7 +10,7 @@ public class UpdateUseCase {
   public void execute(User user) throws ValidationException {
     try {
       Connection con = DBConnection.getConnection();
-      UserRepository userRepository = new UserRepository(con);
+      UsersRepository userRepository = new UsersRepository(con);
       boolean updated = userRepository.updateUser(user);
 
       if (!updated) {

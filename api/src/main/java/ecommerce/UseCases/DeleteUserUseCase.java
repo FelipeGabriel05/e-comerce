@@ -11,7 +11,7 @@ public class DeleteUserUseCase {
 
     try {
       Connection con = DBConnection.getConnection();
-      UserRepository userRepository = new UserRepository(con);
+      UsersRepository userRepository = new UsersRepository(con);
       boolean deleted = userRepository.deleteUserById(id);
 
       if (!deleted) {
