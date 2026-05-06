@@ -1,7 +1,7 @@
 package ecommerce.UseCases;
 
 import ecommerce.Database.DBConnection;
-import ecommerce.Database.Repositories.UserRepository;
+import ecommerce.Database.Repositories.UsersRepository;
 import ecommerce.Exceptions.ValidationException;
 import java.sql.Connection;
 

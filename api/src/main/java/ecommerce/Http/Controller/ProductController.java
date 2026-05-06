@@ -4,7 +4,7 @@ import ecommerce.Database.Entites.Product;
 import ecommerce.Http.IO.Responses.JsonResponse;
 import ecommerce.Http.Validators.HttpProductValidators;
 import ecommerce.UseCases.CreateProductUseCase;
-import ecommerce.UseCases.ListAvailableProductsUseCase;
+import ecommerce.UseCases.ListProductsUseCase;
 import ecommerce.Database.Repositories.ProductRepository;
 
 import java.io.IOException;
@@ -68,7 +68,7 @@ protected void doGet(HttpServletRequest request, HttpServletResponse response)
   response.setContentType("application/json");
 
   try {
-    ListAvailableProductsUseCase useCase = new ListAvailableProductsUseCase();
+    ListProductsUseCase useCase = new ListProductsUseCase();
 
     List<Product> products = useCase.execute();
 
