@@ -1,15 +1,14 @@
 package ecommerce.Http.Controllers;
 
+import ecommerce.Exceptions.ValidationException;
 import ecommerce.Http.Validators.HttpUserValidators;
 import ecommerce.UseCases.DeleteUserUseCase;
-import ecommerce.Exceptions.ValidationException;
-
+import java.io.IOException;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import java.io.IOException;
 
 @WebServlet("/users/delete")
 public class UserController extends HttpServlet {

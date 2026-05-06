@@ -105,24 +105,24 @@ public class UsersRepository {
   }
 
   public boolean deleteUserById(int id) {
-    try{
+    try {
       String query = UsersQueries.deleteUserQuery;
       PreparedStatement ps = con.prepareStatement(query);
 
       ps.setInt(1, id);
-      
+
       int rowsAffected = ps.executeUpdate();
 
       return rowsAffected > 0;
-      
-    } catch (SQLException e){
+
+    } catch (SQLException e) {
       e.printStackTrace();
     }
     return false;
   }
 
   public boolean updateUser(User user) {
-    try{
+    try {
       String query = UsersQueries.updateUserQuery;
       PreparedStatement ps = con.prepareStatement(query);
 
@@ -132,12 +132,12 @@ public class UsersRepository {
       ps.setString(4, user.getLogin());
       ps.setString(5, user.getSenha());
       ps.setInt(6, user.getId());
-        
+
       int rowsAffected = ps.executeUpdate();
 
       return rowsAffected > 0;
-      
-    } catch (SQLException e){
+
+    } catch (SQLException e) {
       e.printStackTrace();
     }
     return false;

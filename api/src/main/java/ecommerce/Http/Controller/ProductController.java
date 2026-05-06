@@ -5,12 +5,8 @@ import ecommerce.Http.IO.Responses.JsonResponse;
 import ecommerce.Http.Validators.HttpProductValidators;
 import ecommerce.UseCases.CreateProductUseCase;
 import ecommerce.UseCases.ListProductsUseCase;
-import ecommerce.Database.Repositories.ProductRepository;
-
 import java.io.IOException;
-import java.sql.Connection;
 import java.util.List;
-
 import javax.servlet.ServletException;
 import javax.servlet.annotation.MultipartConfig;
 import javax.servlet.annotation.WebServlet;
@@ -44,7 +40,8 @@ public class ProductController extends HttpServlet {
         response.getWriter().write(jsonRes.toJson());
       } else {
         JsonResponse jsonRes =
-            new JsonResponse(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, "Failed to create product");
+            new JsonResponse(
+                HttpServletResponse.SC_INTERNAL_SERVER_ERROR, "Failed to create product");
 
         response.setStatus(jsonRes.getStatus());
         response.getWriter().write(jsonRes.toJson());
@@ -53,8 +50,7 @@ public class ProductController extends HttpServlet {
     } catch (Exception e) {
       e.printStackTrace();
 
-      JsonResponse jsonRes =
-          new JsonResponse(HttpServletResponse.SC_BAD_REQUEST, e.getMessage());
+      JsonResponse jsonRes = new JsonResponse(HttpServletResponse.SC_BAD_REQUEST, e.getMessage());
 
       response.setStatus(jsonRes.getStatus());
       response.getWriter().write(jsonRes.toJson());
@@ -62,30 +58,29 @@ public class ProductController extends HttpServlet {
   }
 
   @Override
-protected void doGet(HttpServletRequest request, HttpServletResponse response)
-    throws IOException {
+  protected void doGet(HttpServletRequest request, HttpServletResponse response)
+      throws IOException {
 
-  response.setContentType("application/json");
+    response.setContentType("application/json");
 
-  try {
-    ListProductsUseCase useCase = new ListProductsUseCase();
+    try {
+      ListProductsUseCase useCase = new ListProductsUseCase();
 
-    List<Product> products = useCase.execute();
+      List<Product> products = useCase.execute();
 
-    JsonResponse jsonRes =
-        new JsonResponse(HttpServletResponse.SC_OK, "Products listed", products);
+      JsonResponse jsonRes =
+          new JsonResponse(HttpServletResponse.SC_OK, "Products listed", products);
 
-    response.setStatus(jsonRes.getStatus());
-    response.getWriter().write(jsonRes.toJson());
+      response.setStatus(jsonRes.getStatus());
+      response.getWriter().write(jsonRes.toJson());
 
-  } catch (Exception e) {
-    e.printStackTrace();
+    } catch (Exception e) {
+      e.printStackTrace();
 
-    JsonResponse jsonRes =
-        new JsonResponse(HttpServletResponse.SC_BAD_REQUEST, e.getMessage());
+      JsonResponse jsonRes = new JsonResponse(HttpServletResponse.SC_BAD_REQUEST, e.getMessage());
 
-    response.setStatus(jsonRes.getStatus());
-    response.getWriter().write(jsonRes.toJson());
-      }
+      response.setStatus(jsonRes.getStatus());
+      response.getWriter().write(jsonRes.toJson());
+    }
   }
 }
