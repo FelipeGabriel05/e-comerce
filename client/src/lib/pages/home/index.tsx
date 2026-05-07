@@ -1,6 +1,7 @@
 import { useQuery } from '@tanstack/react-query';
 import { fetchProducts } from '@/lib/services/products';
 import type { Product } from '@/lib/types/product';
+import { ProductCard } from '@/lib/components/product-card';
 
 const mockProducts: Array<Product> = [
   { id: 1, descricao: 'God of War', preco: 199.90, foto: '', quantidade: 10, categoriaId: 1 },
@@ -23,10 +24,7 @@ const Home = () => {
       <h1>Produtos</h1>
       <div style={{ display: 'flex', gap: '1rem', flexWrap: 'wrap' }}>
         {products.map((product) => (
-          <div key={product.id} style={{ border: '1px solid white', padding: '1rem', borderRadius: '8px' }}>
-            <p>{product.descricao}</p>
-            <p>R$ {product.preco}</p>
-          </div>
+          <ProductCard key={product.id} product={product} />
         ))}
       </div>
     </div>
