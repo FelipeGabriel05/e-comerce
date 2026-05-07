@@ -149,7 +149,7 @@ erDiagram
 ### 🔌 2. Atividades de Backend
 
 | ID   | Atividade                     | Descrição                         | RF Relacionado | Responsável  |
-| ---- | ----------------------------- | --------------------------------- | -------------- | ------------ |
+|------|-------------------------------|-----------------------------------|----------------|--------------|
 | BE01 | Endpoint de Cadastro          | Criar API para cadastrar cliente  | RF01           | Paulo Victor |
 | BE02 | Endpoint de Login             | Autenticar usuário                | RF02           | Wesley       |
 | BE03 | Gerenciamento de Sessão       | Criar e validar sessão            | RF02, RF23     | Wesley       |
@@ -161,19 +161,19 @@ erDiagram
 | BE09 | Criar Produto                 | Inserir produto no banco          | RF08           | Wesley       |
 | BE10 | Atualizar Produto             | Editar produto                    | RF09           | Derik        |
 | BE11 | Deletar Produto               | Remover produto                   | RF10           | Paulo        |
-| BE12 | Controle de Estoque           | Atualizar quantidade              | RF11           |              |
+| BE12 | Controle de Estoque           | Atualizar quantidade              | RF11           | Derik        |
 | BE13 | Upload de Imagem              | Salvar imagem no servidor         | RF12           | Wesley       |
-| BE14 | CRUD Categorias               | Criar endpoints de categorias     | RF13–RF16      |              |
-| BE15 | Gerenciar Carrinho            | API para adicionar/remover itens  | RF17–RF19      |              |
-| BE16 | Calcular Total                | Calcular valor total              | RF20           |              |
-| BE17 | Persistência (Cookie/Session) | Manter estado do carrinho         | RF21           |              |
-| BE18 | Finalizar Compra              | Processar compra                  | RF22           |              |
-| BE19 | Validar Estoque               | Verificar disponibilidade         | RF24           |              |
-| BE20 | Atualizar Estoque             | Reduzir estoque após compra       | RF25           |              |
-| BE21 | Registrar Venda               | Salvar venda e itens              | RF26           |              |
-| BE22 | Listar Compras do Cliente     | Retornar histórico                | RF27           |              |
-| BE23 | Listar Compras Gerais         | Retornar todas as compras         | RF29           |              |
-| BE24 | Excluir Compra                | Remover compra                    | RF30           |              |
-| BE25 | Relatório por Cliente         | Consultar compras por cliente     | RF32           |              |
-| BE26 | Produtos Sem Estoque          | Consultar produtos zerados        | RF33           |              |
-| BE27 | Faturamento Diário            | Calcular vendas por dia           | RF34           |              |
+| BE14 | CRUD Categorias               | Criar endpoints de categorias     | RF13–RF16      | Paulo Victor |
+| BE15 | Gerenciar Carrinho            | API para adicionar/remover itens  | RF17–RF19      | Wesley       |
+| BE16 | Calcular Total                | Calcular valor total              | RF20           | Paulo Victor |
+| BE17 | Persistência (Cookie/Session) | Manter estado do carrinho         | RF21           | Wesley       |
+| BE18 | Finalizar Compra              | Processar compra                  | RF22           | Derik        |
+| BE19 | Validar Estoque               | Verificar disponibilidade         | RF24           | Derik        |
+| BE20 | Atualizar Estoque             | Reduzir estoque após compra       | RF25           | Derik        |
+| BE21 | Registrar Venda               | Salvar venda e itens              | RF26           | Wesley       |
+| BE22 | Listar Compras do Cliente     | Retornar histórico                | RF27           | Paulo Victor |
+| BE23 | Listar Compras Gerais         | Retornar todas as compras         | RF29           | Paulo Victor |
+| BE24 | Excluir Compra                | Remover compra                    | RF30           | Derik        |
+| BE25 | Relatório por Cliente         | Consultar compras por cliente     | RF32           | Paulo Victor |
+| BE26 | Produtos Sem Estoque          | Consultar produtos zerados        | RF33           | Derik        |
+| BE27 | Faturamento Diário            | Calcular vendas por dia           | RF34           | Paulo Victor |

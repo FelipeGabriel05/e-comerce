@@ -48,4 +48,30 @@ public class ProductRepository {
       return null;
     }
   }
+
+  public Product findById(int id) {
+    try {
+      String query = ProductQueries.selectProductByIdQuery;
+      PreparedStatement ps = con.prepareStatement(query);
+      ps.setInt(1, id);
+
+      ResultSet rs = ps.executeQuery();
+
+      if (rs.next()) {
+        Product product = new Product();
+        product.setId(rs.getInt("id"));
+        product.setDescricao(rs.getString("descricao"));
+        product.setPreco(rs.getDouble("preco"));
+        product.setFoto(rs.getString("foto"));
+        product.setQuantidade(rs.getInt("quantidade"));
+        product.setCategoriaId(rs.getInt("categoria_id"));
+        return product;
+      }
+
+      return null;
+    } catch (SQLException e) {
+      e.printStackTrace();
+      return null;
+    }
+  }
 }
