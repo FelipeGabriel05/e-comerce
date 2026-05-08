@@ -1,10 +1,11 @@
-import { createContext, useContext, useState, type ReactNode } from 'react';
+import { createContext, type ReactNode, useContext, useState } from 'react';
+
 import type { Product } from '@/lib/types/product';
 
 export type CartItem = Product & { cartQuantity: number };
 
 type CartContextType = {
-  items: CartItem[];
+  items: Array<CartItem>;
   addToCart: (product: Product) => void;
   totalItems: number;
 };
@@ -12,7 +13,7 @@ type CartContextType = {
 const CartContext = createContext<CartContextType | null>(null);
 
 export const CartProvider = ({ children }: { children: ReactNode }) => {
-  const [items, setItems] = useState<CartItem[]>([]);
+  const [items, setItems] = useState<Array<CartItem>>([]);
 
   const addToCart = (product: Product) => {
     setItems((prev) => {

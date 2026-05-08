@@ -1,5 +1,5 @@
-import type { Product } from '@/lib/types/product';
 import { useCart } from '@/lib/context/cart-context';
+import type { Product } from '@/lib/types/product';
 
 type ProductCardProps = {
   product: Product;
