@@ -1,0 +1,64 @@
+package ecommerce.Http.Controller;                    
+
+import ecommerce.Database.Entites.User;               
+import ecommerce.Http.IO.Responses.JsonResponse;      
+import ecommerce.Http.Validators.HttpUserValidators;  
+import ecommerce.UseCases.CreateUserUseCase;          
+
+import java.io.IOException;                           
+import javax.servlet.ServletException;                
+import javax.servlet.annotation.WebServlet;
+import javax.servlet.http.HttpServlet;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+
+
+@WebServlet("/users")                                    
+
+
+public class UsersController extends HttpServlet {
+    protected void doPost(HttpServletRequest request, HttpServletResponse response)
+           throws ServletException, IOException {
+
+        response.setContentType("application/json");
+
+        HttpUserValidators validators = new HttpUserValidators();
+       
+        try{
+            //cria o input com dados validados
+            User userInput = validators.validateCreateUser(request);
+
+            CreateUserUseCase useCase = new CreateUserUseCase();
+
+            //manda pro useCase o input validado
+            User createdUser = useCase.execute(userInput);
+
+            if (createdUser != null){
+                JsonResponse jsonRes =
+                  new JsonResponse(HttpServletResponse.SC_CREATED, "User created", createdUser);
+       
+                response.setStatus(jsonRes.getStatus());
+                response.getWriter().write(jsonRes.toJson());
+
+            }else{
+
+                JsonResponse jsonRes =
+                  new JsonResponse(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, "Failed to create user");
+             
+                response.setStatus(jsonRes.getStatus());
+                response.getWriter().write(jsonRes.toJson());
+            }
+    
+        } catch (Exception e){ 
+            
+            e.printStackTrace(); 
+             
+            JsonResponse jsonRes =
+              new JsonResponse(HttpServletResponse.SC_BAD_REQUEST, e.getMessage());
+                
+            response.setStatus(jsonRes.getStatus());
+            response.getWriter().write(jsonRes.toJson());
+        }
+    }
+}
+
