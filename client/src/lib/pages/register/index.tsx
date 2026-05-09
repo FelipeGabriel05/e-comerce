@@ -2,7 +2,7 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import { Link } from '@tanstack/react-router';
 import { Controller, useForm } from 'react-hook-form';
 import { toast } from 'sonner';
-import * as z from 'zod';
+import type * as z from 'zod';
 
 import { Button } from '@/components/ui/button';
 import {
@@ -13,42 +13,23 @@ import {
 } from '@/components/ui/field';
 import { Input } from '@/components/ui/input';
 
-const Register = () => {
-  const formSchema = z.object({
-    nome: z
-      .string()
-      .min(5, 'O nome deve ter no mínimo 5 caracteres')
-      .max(80, 'O nome deve ter no máximo 80 caracteres'),
-    endereco: z
-      .string()
-      .min(10, 'Informe um endereço mais completo')
-      .max(120, 'Endereço muito longo'),
-    email: z.string().email('Digite um email válido'),
-    senha: z
-      .string()
-      .min(8, 'Mínimo de 8 caracteres')
-      .max(12, 'Máximo de 12 caracteres')
-      .regex(/[A-Z]/, 'Sua senha deve conter pelo menos uma letra maiúscula')
-      .regex(/[a-z]/, 'Sua senha deve conter pelo menos uma letra minúscula')
-      .regex(/[0-9]/, 'Sua senha deve conter pelo menos um número')
-      .regex(
-        /[^A-Za-z0-9]/,
-        'Sua senha deve conter pelo menos um caractere especial',
-      ),
-  });
+import { RegisterValidationSchema } from './schema';
 
-  const form = useForm({
-    resolver: zodResolver(formSchema),
+const Register = () => {
+  const RegisterForm = useForm({
+    resolver: zodResolver(RegisterValidationSchema),
     mode: 'onChange',
     defaultValues: {
       nome: '',
       endereco: '',
       email: '',
+      username: '',
       senha: '',
     },
   });
 
-  function onSubmit(data) {
+  type FormData = z.infer<typeof RegisterValidationSchema>;
+  function onSubmit(data: FormData) {
     console.log(data);
     alert('Cadastro realizado com sucesso');
     toast('Cadastro realizado!', {
@@ -72,7 +53,7 @@ const Register = () => {
       <form
         onSubmit={(e) => {
           e.preventDefault();
-          form.handleSubmit(onSubmit)(e);
+          RegisterForm.handleSubmit(onSubmit)(e);
         }}
         className="mt-8 space-y-5"
       >
@@ -80,7 +61,7 @@ const Register = () => {
           {/* Campo nome */}
           <Controller
             name="nome"
-            control={form.control}
+            control={RegisterForm.control}
             render={({ field, fieldState }) => (
               <Field data-invalid={fieldState.invalid}>
                 <FieldLabel htmlFor="form-name">
@@ -103,7 +84,7 @@ const Register = () => {
           {/* Campo Endereço */}
           <Controller
             name="endereco"
-            control={form.control}
+            control={RegisterForm.control}
             render={({ field, fieldState }) => (
               <Field data-invalid={fieldState.invalid}>
                 <FieldLabel htmlFor="form-address">
@@ -126,7 +107,7 @@ const Register = () => {
           {/* Campo email */}
           <Controller
             name="email"
-            control={form.control}
+            control={RegisterForm.control}
             render={({ field, fieldState }) => (
               <Field data-invalid={fieldState.invalid}>
                 <FieldLabel htmlFor="form-email">
@@ -146,10 +127,33 @@ const Register = () => {
               </Field>
             )}
           />
+          {/* Campo Username */}
+          <Controller
+            name="username"
+            control={RegisterForm.control}
+            render={({ field, fieldState }) => (
+              <Field data-invalid={fieldState.invalid}>
+                <FieldLabel htmlFor="form-username">
+                  Username <span className="text-destructive">*</span>
+                </FieldLabel>
+                <Input
+                  {...field}
+                  id="form-username"
+                  type="text"
+                  placeholder="Fulanim"
+                  aria-invalid={fieldState.invalid}
+                  required
+                />
+                {fieldState.invalid && (
+                  <FieldError errors={[fieldState.error]} />
+                )}
+              </Field>
+            )}
+          />
           {/* Campo Senha */}
           <Controller
             name="senha"
-            control={form.control}
+            control={RegisterForm.control}
             render={({ field, fieldState }) => (
               <Field data-invalid={fieldState.invalid}>
                 <FieldLabel htmlFor="form-password">
@@ -170,14 +174,11 @@ const Register = () => {
             )}
           />
           <Field orientation="horizontal">
-            <Button
-              asChild
-              className="mt-4 w-48 rounded-md bg-indigo-500 font-semibold hover:bg-indigo-400"
-            >
-              <Link to="/" className="block w-full text-center">
+            <Link to="/" className="block w-full text-center">
+              <Button className="mt-4 w-48 rounded-md bg-indigo-500 font-semibold hover:bg-indigo-400">
                 Voltar
-              </Link>
-            </Button>
+              </Button>
+            </Link>
             <Button
               type="submit"
               className="mt-4 w-48 rounded-md bg-indigo-500 py-2 font-semibold hover:bg-indigo-400"

@@ -1,7 +1,8 @@
 import { zodResolver } from '@hookform/resolvers/zod';
 import { Link } from '@tanstack/react-router';
 import { Controller, useForm } from 'react-hook-form';
-import * as z from 'zod';
+import { toast } from 'sonner';
+import type * as z from 'zod';
 
 import { Button } from '@/components/ui/button';
 import {
@@ -12,27 +13,25 @@ import {
 } from '@/components/ui/field';
 import { Input } from '@/components/ui/input';
 
-const Login = () => {
-  const formSchema = z.object({
-    email: z.string().email('Digite um email válido'),
-    senha: z
-      .string()
-      .min(8, 'Mínimo de 8 caracteres')
-      .max(12, 'Máximo de 12 caracteres'),
-  });
+import { LoginValidationSchema } from './schema';
 
-  const form = useForm({
-    resolver: zodResolver(formSchema),
-    mode: 'onchange',
+const Login = () => {
+  const LoginForm = useForm({
+    resolver: zodResolver(LoginValidationSchema),
+    mode: 'onChange',
     defaultValues: {
       email: '',
       senha: '',
     },
   });
 
-  function onSubmit(data) {
+  type FormData = z.infer<typeof LoginValidationSchema>;
+  function onSubmit(data: FormData) {
     console.log(data);
     alert('dados enviados');
+    toast('Cadastro realizado!', {
+      description: JSON.stringify(data, null, 2),
+    });
   }
 
   return (
@@ -51,7 +50,7 @@ const Login = () => {
         <form
           onSubmit={(e) => {
             e.preventDefault();
-            form.handleSubmit(onSubmit)(e);
+            LoginForm.handleSubmit(onSubmit)(e);
           }}
           className="space-y-6"
         >
@@ -59,7 +58,7 @@ const Login = () => {
             {/* Campo Email */}
             <Controller
               name="email"
-              control={form.control}
+              control={LoginForm.control}
               render={({ field, fieldState }) => (
                 <Field data-invalid={fieldState.invalid}>
                   <FieldLabel htmlFor="form-email">Email</FieldLabel>
@@ -78,7 +77,7 @@ const Login = () => {
             />
             <Controller
               name="senha"
-              control={form.control}
+              control={LoginForm.control}
               render={({ field, fieldState }) => (
                 <Field data-invalid={fieldState.invalid}>
                   <div className="flex items-center justify-between">
@@ -104,14 +103,11 @@ const Login = () => {
               )}
             />
             <Field orientation="horizontal">
-              <Button
-                asChild
-                className="mt-4 w-48 rounded-md bg-indigo-500 font-semibold hover:bg-indigo-400"
-              >
-                <Link to="/" className="block w-full text-center">
+              <Link to="/" className="block w-full text-center">
+                <Button className="mt-4 w-48 rounded-md bg-indigo-500 font-semibold hover:bg-indigo-400">
                   Voltar
-                </Link>
-              </Button>
+                </Button>
+              </Link>
               <Button
                 type="submit"
                 className="mt-4 w-48 rounded-md bg-indigo-500 py-2 font-semibold hover:bg-indigo-400"
@@ -126,7 +122,7 @@ const Login = () => {
           Não tem cadastro?
           <Link
             to="/register"
-            class="font-semibold text-indigo-400 hover:text-indigo-300"
+            className="font-semibold text-indigo-400 hover:text-indigo-300"
           >
             Cadastre-se
           </Link>
