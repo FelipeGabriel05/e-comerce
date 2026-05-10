@@ -1,5 +1,6 @@
 import { zodResolver } from '@hookform/resolvers/zod';
 import { Link } from '@tanstack/react-router';
+import axios from 'axios';
 import { Controller, useForm } from 'react-hook-form';
 import { toast } from 'sonner';
 import type * as z from 'zod';
@@ -27,11 +28,18 @@ const Login = () => {
 
   type FormData = z.infer<typeof LoginValidationSchema>;
   function onSubmit(data: FormData) {
-    console.log(data);
-    alert('dados enviados');
-    toast('Cadastro realizado!', {
-      description: JSON.stringify(data, null, 2),
-    });
+    axios
+      .post('http://localhost:8080/login', data)
+      .then((res) => {
+        console.log(res.data);
+        toast('Login realizado!', {
+          description: JSON.stringify(data, null, 2),
+        });
+      })
+      .catch((error) => {
+        console.log(error);
+        toast('Login falhou');
+      });
   }
 
   return (
@@ -82,12 +90,6 @@ const Login = () => {
                 <Field data-invalid={fieldState.invalid}>
                   <div className="flex items-center justify-between">
                     <FieldLabel htmlFor="form-password">Senha</FieldLabel>
-                    <Link
-                      to="/recoverPassword"
-                      className="text-sm font-semibold text-indigo-400 hover:text-indigo-300"
-                    >
-                      Recuperar Senha
-                    </Link>
                   </div>
                   <Input
                     {...field}
@@ -121,7 +123,7 @@ const Login = () => {
         <p className="mt-10 text-center text-sm/6 text-gray-400">
           Não tem cadastro?
           <Link
-            to="/register"
+            to="/cadastrar"
             className="font-semibold text-indigo-400 hover:text-indigo-300"
           >
             Cadastre-se

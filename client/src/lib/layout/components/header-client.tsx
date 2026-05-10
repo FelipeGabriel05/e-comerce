@@ -4,7 +4,7 @@ import { ShoppingCart } from 'lucide-react';
 
 import SearchHeader from '@/lib/components/search-header';
 
-export const Header = () => {
+export const HeaderClient = () => {
   return (
     <header className="flex items-center justify-between px-8 py-4 border-b">
       <div>
@@ -19,11 +19,6 @@ export const Header = () => {
         <Link to="/login" className="block w-full text-center">
           <Button className="mt-4 w-48 rounded-md bg-purple-700 font-bold hover:bg-purple-400">
             Login
-          </Button>
-        </Link>
-        <Link to="/cadastrar" className="block w-full text-center">
-          <Button className="mt-4 w-48 rounded-md bg-purple-700 font-bold hover:bg-purple-400">
-            Cadastrar-se
           </Button>
         </Link>
         <Link to="/carrinho" className="block w-full text-center">

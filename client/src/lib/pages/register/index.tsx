@@ -1,5 +1,6 @@
 import { zodResolver } from '@hookform/resolvers/zod';
 import { Link } from '@tanstack/react-router';
+import axios from 'axios';
 import { Controller, useForm } from 'react-hook-form';
 import { toast } from 'sonner';
 import type * as z from 'zod';
@@ -30,11 +31,19 @@ const Register = () => {
 
   type FormData = z.infer<typeof RegisterValidationSchema>;
   function onSubmit(data: FormData) {
-    console.log(data);
-    alert('Cadastro realizado com sucesso');
-    toast('Cadastro realizado!', {
-      description: JSON.stringify(data, null, 2),
-    });
+    axios
+      .post('http://localhost:8080/cadastro', data)
+      .then((res) => {
+        console.log(res.data);
+        alert('Cadastro realizado com sucesso');
+        toast('Cadastro realizado!', {
+          description: JSON.stringify(data, null, 2),
+        });
+      })
+      .catch((error) => {
+        console.log(error);
+        toast('Cadastro falhou');
+      });
   }
 
   return (
