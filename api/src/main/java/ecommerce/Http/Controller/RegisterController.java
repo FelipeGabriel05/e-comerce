@@ -34,7 +34,7 @@ public class RegisterController extends HttpServlet {
             if (createdUser != null){
                 JsonResponse jsonRes =
                   new JsonResponse(HttpServletResponse.SC_CREATED, "User created", createdUser);
-       
+
                 response.setStatus(jsonRes.getStatus());
                 response.getWriter().write(jsonRes.toJson());
 
@@ -65,4 +65,3 @@ public class RegisterController extends HttpServlet {
         }
     }
 }
-
