@@ -4,6 +4,7 @@ import ecommerce.Database.Entites.User;
 import ecommerce.Http.IO.Responses.JsonResponse;
 import ecommerce.Http.Validators.HttpUserValidators;
 import ecommerce.UseCases.CreateUserUseCase;
+import ecommerce.Exceptions.ValidationException;
 import java.io.IOException;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -45,7 +46,7 @@ public class RegisterController extends HttpServlet {
 
     } catch (ValidationException e) {
       JsonResponse jsonRes =
-          new JsonResponse(HttpServletResponse.SC_UNPROCESSABLE_ENTITY, e.getMessage());
+          new JsonResponse(422, e.getMessage());
 
       response.setStatus(jsonRes.getStatus());
       response.getWriter().write(jsonRes.toJson());
