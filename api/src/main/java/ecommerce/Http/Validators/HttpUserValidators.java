@@ -53,6 +53,7 @@ public class HttpUserValidators {
     user.setEmail(body.email);
     user.setLogin(body.login);
     user.setSenha(body.password);
+
     return user;
   }
 }
