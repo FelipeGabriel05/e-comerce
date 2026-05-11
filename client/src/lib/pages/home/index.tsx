@@ -1,16 +1,38 @@
 import { useQuery } from '@tanstack/react-query';
+
+import { ProductCard } from '@/lib/components/product-card';
 import { fetchProducts } from '@/lib/services/products';
 import type { Product } from '@/lib/types/product';
-import { ProductCard } from '@/lib/components/product-card';
 
 const mockProducts: Array<Product> = [
-  { id: 1, descricao: 'God of War', preco: 199.90, foto: '', quantidade: 10, categoriaId: 1 },
-  { id: 2, descricao: 'Spider-Man 2', preco: 249.90, foto: '', quantidade: 5, categoriaId: 1 },
-  { id: 3, descricao: 'Hogwarts Legacy', preco: 179.90, foto: '', quantidade: 0, categoriaId: 2 },
+  {
+    id: 1,
+    descricao: 'God of War',
+    preco: 199.9,
+    foto: '',
+    quantidade: 10,
+    categoriaId: 1,
+  },
+  {
+    id: 2,
+    descricao: 'Spider-Man 2',
+    preco: 249.9,
+    foto: '',
+    quantidade: 5,
+    categoriaId: 1,
+  },
+  {
+    id: 3,
+    descricao: 'Hogwarts Legacy',
+    preco: 179.9,
+    foto: '',
+    quantidade: 0,
+    categoriaId: 2,
+  },
 ];
 
 const Home = () => {
-  const { data, isLoading, } = useQuery({
+  const { data, isLoading } = useQuery({
     queryKey: ['products'],
     queryFn: fetchProducts,
   });
