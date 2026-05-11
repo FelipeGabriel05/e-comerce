@@ -1,67 +1,62 @@
-package ecommerce.Http.Controller;                    
+package ecommerce.Http.Controller;
 
-import ecommerce.Database.Entites.User;               
-import ecommerce.Http.IO.Responses.JsonResponse;      
-import ecommerce.Http.Validators.HttpUserValidators;  
-import ecommerce.UseCases.CreateUserUseCase;          
-
-import java.io.IOException;                           
-import javax.servlet.ServletException;                
+import ecommerce.Database.Entites.User;
+import ecommerce.Http.IO.Responses.JsonResponse;
+import ecommerce.Http.Validators.HttpUserValidators;
+import ecommerce.UseCases.CreateUserUseCase;
+import java.io.IOException;
+import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-
-@WebServlet("/register")                                    
-
-
+@WebServlet("/register")
 public class RegisterController extends HttpServlet {
-    protected void doPost(HttpServletRequest request, HttpServletResponse response)
-           throws ServletException, IOException {
+  protected void doPost(HttpServletRequest request, HttpServletResponse response)
+      throws ServletException, IOException {
 
-        response.setContentType("application/json");
+    response.setContentType("application/json");
 
-        HttpUserValidators validators = new HttpUserValidators();
-       
-        try{
-            User userInput = validators.validateCreateUser(request);
+    HttpUserValidators validators = new HttpUserValidators();
 
-            CreateUserUseCase useCase = new CreateUserUseCase();
+    try {
+      User userInput = validators.validateCreateUser(request);
 
-            User createdUser = useCase.execute(userInput);
+      CreateUserUseCase useCase = new CreateUserUseCase();
 
-            if (createdUser != null){
-                JsonResponse jsonRes =
-                  new JsonResponse(HttpServletResponse.SC_CREATED, "User created", createdUser);
+      User createdUser = useCase.execute(userInput);
 
-                response.setStatus(jsonRes.getStatus());
-                response.getWriter().write(jsonRes.toJson());
+      if (createdUser != null) {
+        JsonResponse jsonRes =
+            new JsonResponse(HttpServletResponse.SC_CREATED, "User created", createdUser);
 
-            }else{
+        response.setStatus(jsonRes.getStatus());
+        response.getWriter().write(jsonRes.toJson());
 
-                JsonResponse jsonRes =
-                  new JsonResponse(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, "Failed to create user");
-             
-                response.setStatus(jsonRes.getStatus());
-                response.getWriter().write(jsonRes.toJson());
-            }
-    
-        } catch (ValidationException e) {
-            JsonResponse jsonRes =
-                new JsonResponse(HttpServletResponse.SC_UNPROCESSABLE_ENTITY, e.getMessage());
-        
-            response.setStatus(jsonRes.getStatus());
-            response.getWriter().write(jsonRes.toJson());
-        }
-        catch (Exception e) {
-            e.printStackTrace();
-        
-            JsonResponse jsonRes =
-                new JsonResponse(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, "Internal server error");
-        
-            response.setStatus(jsonRes.getStatus());
-            response.getWriter().write(jsonRes.toJson());
-        }
+      } else {
+
+        JsonResponse jsonRes =
+            new JsonResponse(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, "Failed to create user");
+
+        response.setStatus(jsonRes.getStatus());
+        response.getWriter().write(jsonRes.toJson());
+      }
+
+    } catch (ValidationException e) {
+      JsonResponse jsonRes =
+          new JsonResponse(HttpServletResponse.SC_UNPROCESSABLE_ENTITY, e.getMessage());
+
+      response.setStatus(jsonRes.getStatus());
+      response.getWriter().write(jsonRes.toJson());
+    } catch (Exception e) {
+      e.printStackTrace();
+
+      JsonResponse jsonRes =
+          new JsonResponse(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, "Internal server error");
+
+      response.setStatus(jsonRes.getStatus());
+      response.getWriter().write(jsonRes.toJson());
     }
+  }
 }
