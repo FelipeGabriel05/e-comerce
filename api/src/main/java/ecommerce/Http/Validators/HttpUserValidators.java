@@ -14,7 +14,6 @@ public class HttpUserValidators {
     return email != null && email.matches(regex);
   }
 
-
   public User validateCreateUser(HttpServletRequest request) throws ValidationException {
     List<String> errors = new ArrayList<String>();
 
@@ -87,7 +86,7 @@ public class HttpUserValidators {
   public User validateUpdateUser(HttpServletRequest request) throws ValidationException {
     List<String> errors = new ArrayList<>();
 
-     String idParam = request.getParameter("id");
+    String idParam = request.getParameter("id");
 
     if (idParam == null || idParam.isEmpty()) {
       errors.add("ID is required");
