@@ -13,10 +13,10 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 
-@WebServlet("/users")                                    
+@WebServlet("/register")                                    
 
 
-public class UsersController extends HttpServlet {
+public class RegisterController extends HttpServlet {
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
            throws ServletException, IOException {
 
@@ -25,12 +25,10 @@ public class UsersController extends HttpServlet {
         HttpUserValidators validators = new HttpUserValidators();
        
         try{
-            //cria o input com dados validados
             User userInput = validators.validateCreateUser(request);
 
             CreateUserUseCase useCase = new CreateUserUseCase();
 
-            //manda pro useCase o input validado
             User createdUser = useCase.execute(userInput);
 
             if (createdUser != null){
@@ -49,13 +47,19 @@ public class UsersController extends HttpServlet {
                 response.getWriter().write(jsonRes.toJson());
             }
     
-        } catch (Exception e){ 
-            
-            e.printStackTrace(); 
-             
+        } catch (ValidationException e) {
             JsonResponse jsonRes =
-              new JsonResponse(HttpServletResponse.SC_BAD_REQUEST, e.getMessage());
-                
+                new JsonResponse(HttpServletResponse.SC_UNPROCESSABLE_ENTITY, e.getMessage());
+        
+            response.setStatus(jsonRes.getStatus());
+            response.getWriter().write(jsonRes.toJson());
+        }
+        catch (Exception e) {
+            e.printStackTrace();
+        
+            JsonResponse jsonRes =
+                new JsonResponse(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, "Internal server error");
+        
             response.setStatus(jsonRes.getStatus());
             response.getWriter().write(jsonRes.toJson());
         }
