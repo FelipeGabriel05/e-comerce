@@ -1,6 +1,7 @@
 import { createRouter, RouterProvider } from '@tanstack/react-router';
 import { StrictMode } from 'react';
 import ReactDOM from 'react-dom/client';
+
 import { CartProvider } from '@/lib/context/cart-context';
 
 // Import the generated route tree
