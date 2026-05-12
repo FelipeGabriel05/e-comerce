@@ -1,10 +1,10 @@
 package ecommerce.Http.Controller;
 
 import ecommerce.Database.Entites.User;
+import ecommerce.Exceptions.ValidationException;
 import ecommerce.Http.IO.Responses.JsonResponse;
 import ecommerce.Http.Validators.HttpUserValidators;
 import ecommerce.UseCases.CreateUserUseCase;
-import ecommerce.Exceptions.ValidationException;
 import java.io.IOException;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -45,8 +45,7 @@ public class RegisterController extends HttpServlet {
       }
 
     } catch (ValidationException e) {
-      JsonResponse jsonRes =
-          new JsonResponse(422, e.getMessage());
+      JsonResponse jsonRes = new JsonResponse(422, e.getMessage());
 
       response.setStatus(jsonRes.getStatus());
       response.getWriter().write(jsonRes.toJson());
