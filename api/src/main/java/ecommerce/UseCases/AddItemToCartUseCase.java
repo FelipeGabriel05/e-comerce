@@ -1,7 +1,7 @@
 package ecommerce.UseCases;
 
 import ecommerce.Database.DBConnection;
-import ecommerce.Database.Entites.Cart;
+import ecommerce.Database.Entites.Cart.Cart;
 import ecommerce.Database.Entites.Product;
 import ecommerce.Database.Repositories.ProductRepository;
 import ecommerce.Http.IO.Requests.CartItemBodyRequest;
