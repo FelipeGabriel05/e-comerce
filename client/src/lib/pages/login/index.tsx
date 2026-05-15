@@ -1,6 +1,6 @@
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useMutation } from '@tanstack/react-query';
-import { Link } from '@tanstack/react-router';
+import { Link, useNavigate } from '@tanstack/react-router';
 import { Controller, useForm } from 'react-hook-form';
 import { toast } from 'sonner';
 import type * as z from 'zod';
@@ -28,6 +28,7 @@ const Login = () => {
   });
 
   type FormData = z.infer<typeof LoginValidationSchema>;
+  const navigate = useNavigate();
   const loginMutation = useMutation({
     mutationFn: async (data: FormData) => {
       const response = await api.post('/login', data);
@@ -35,7 +36,12 @@ const Login = () => {
     },
 
     onSuccess: (data) => {
-      console.log(data);
+      if (data.data.administrador) {
+        navigate({ to: '/admin' });
+      } else {
+        navigate({ to: '/cliente' });
+      }
+      // console.log(data);
       toast('Login realizado!');
     },
 
