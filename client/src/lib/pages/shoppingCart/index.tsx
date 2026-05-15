@@ -1,5 +1,4 @@
 import { Button } from '@base-ui/react/button';
-import { Link } from '@tanstack/react-router';
 import { Trash } from 'lucide-react';
 
 import {
@@ -65,20 +64,13 @@ const produtos = [
   },
 ];
 
-const Carrinho = () => {
+const CarrinhoPage = () => {
   return (
     <div className="flex justify-center py-10">
       <div className="w-full max-w-6xl rounded-xl bg-indigo-900/80 p-8 shadow-2xl">
         <h1 className="mb-4 text-3xl font-bold text-white">
           Carrinho de Compras
         </h1>
-
-        <div className="mb-6">
-          <Link to="/" className="text-indigo-300 hover:text-indigo-100">
-            Voltar para Página Inicial
-          </Link>
-        </div>
-
         <Table>
           <TableHeader className="bg-indigo-950">
             <TableRow>
@@ -141,4 +133,4 @@ const Carrinho = () => {
   );
 };
 
-export default Carrinho;
+export default CarrinhoPage;
