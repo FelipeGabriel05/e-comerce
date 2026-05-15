@@ -1,5 +1,5 @@
 import { Button } from '@base-ui/react/button';
-import { Link } from '@tanstack/react-router';
+import { Link, Link as LinkRouter } from '@tanstack/react-router';
 import { ShoppingCart } from 'lucide-react';
 
 import SearchHeader from '@/lib/components/search-header';
@@ -8,7 +8,9 @@ export const Header = () => {
   return (
     <header className="flex items-center justify-between px-8 py-4 border-b">
       <div>
-        <h1 className="text-2xl font-bold">Logo</h1>
+        <h1 className="text-2xl font-bold">
+          <LinkRouter to="/">Logo</LinkRouter>
+        </h1>
       </div>
 
       <div className="w-full max-w-md">
