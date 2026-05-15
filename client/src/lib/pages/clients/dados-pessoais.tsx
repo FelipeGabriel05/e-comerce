@@ -1,5 +1,5 @@
-const dadosPessoais = () => {
+const DadosPessoaisPage = () => {
   return <div>hello</div>;
 };
 
-export default dadosPessoais;
+export default DadosPessoaisPage;

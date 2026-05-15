@@ -1,6 +1,6 @@
 import { Link } from '@tanstack/react-router';
 
-const MainClient = () => {
+const MainClientPage = () => {
   return (
     <div>
       <h1>Hello cliente</h1>
@@ -15,4 +15,4 @@ const MainClient = () => {
   );
 };
 
-export default MainClient;
+export default MainClientPage;

@@ -1,5 +1,5 @@
-const historicoPedidos = () => {
+const HistoricoPedidosPage = () => {
   return <div>Hello</div>;
 };
 
-export default historicoPedidos;
+export default HistoricoPedidosPage;
