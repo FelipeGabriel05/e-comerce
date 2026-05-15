@@ -2,6 +2,7 @@ package ecommerce.Database.Repositories;
 
 import ecommerce.Database.Entites.User;
 import ecommerce.Database.Queries.UsersQueries;
+import ecommerce.Exceptions.DuplicateUserException;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -15,7 +16,7 @@ public class UsersRepository {
     con = dbConnection;
   }
 
-  public User createUser(User userInput) {
+  public User createUser(User userInput) throws DuplicateUserException, SQLException {
     try {
       String query = UsersQueries.insertUserQuery;
       PreparedStatement ps = con.prepareStatement(query, Statement.RETURN_GENERATED_KEYS);
@@ -45,9 +46,23 @@ public class UsersRepository {
       user.setAdministrador(userInput.isAdministrador());
 
       return user;
+
     } catch (SQLException e) {
-      e.printStackTrace();
-      return null;
+      if ("23505".equals(e.getSQLState())) {
+
+        String errorMessage = e.getMessage().toLowerCase();
+
+        if (errorMessage.contains("login")) {
+          throw new DuplicateUserException("Login already exists");
+        }
+
+        if (errorMessage.contains("Email")) {
+          throw new DuplicateUserException("Email already exists");
+        }
+
+        throw new DuplicateUserException("User already exists");
+      }
+      throw e;
     }
   }
 
