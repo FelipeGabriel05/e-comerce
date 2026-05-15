@@ -30,7 +30,6 @@ const Login = () => {
   type FormData = z.infer<typeof LoginValidationSchema>;
   const loginMutation = useMutation({
     mutationFn: async (data: FormData) => {
-      console.log(data);
       const response = await api.post('/login', data);
       return response.data;
     },
@@ -125,7 +124,6 @@ const Login = () => {
                 type="submit"
                 className="mt-4 w-48 rounded-md bg-indigo-500 py-2 font-semibold hover:bg-indigo-400"
               >
-                {/* Login */}
                 {loginMutation.isPending ? 'Entrando...' : 'Entrar'}
               </Button>
             </Field>

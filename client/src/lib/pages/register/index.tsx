@@ -1,6 +1,6 @@
 import { zodResolver } from '@hookform/resolvers/zod';
+import { useMutation } from '@tanstack/react-query';
 import { Link } from '@tanstack/react-router';
-import axios from 'axios';
 import { Controller, useForm } from 'react-hook-form';
 import { toast } from 'sonner';
 import type * as z from 'zod';
@@ -13,6 +13,7 @@ import {
   FieldLabel,
 } from '@/components/ui/field';
 import { Input } from '@/components/ui/input';
+import { api } from '@/lib/services/constants';
 
 import { RegisterValidationSchema } from './schema';
 
@@ -21,29 +22,37 @@ const Register = () => {
     resolver: zodResolver(RegisterValidationSchema),
     mode: 'onChange',
     defaultValues: {
-      nome: '',
-      endereco: '',
+      name: '',
+      address: '',
       email: '',
-      username: '',
-      senha: '',
+      login: '',
+      password: '',
     },
   });
 
   type FormData = z.infer<typeof RegisterValidationSchema>;
+  const registerMutation = useMutation({
+    mutationFn: async (data: FormData) => {
+      console.log(data);
+      const response = await api.post('/register', data);
+      return response.data;
+    },
+
+    onSuccess: (data) => {
+      // provisório até rota de registro estar pronta
+      console.log(data);
+      toast('Login realizado!');
+    },
+
+    onError: (error) => {
+      // provisório até rota de registro estar pronta
+      console.log(error);
+      toast('Login falhou');
+    },
+  });
+
   function onSubmit(data: FormData) {
-    axios
-      .post('http://localhost:8080/cadastro', data)
-      .then((res) => {
-        console.log(res.data);
-        alert('Cadastro realizado com sucesso');
-        toast('Cadastro realizado!', {
-          description: JSON.stringify(data, null, 2),
-        });
-      })
-      .catch((error) => {
-        console.log(error);
-        toast('Cadastro falhou');
-      });
+    registerMutation.mutate(data);
   }
 
   return (
@@ -69,7 +78,7 @@ const Register = () => {
         <FieldGroup>
           {/* Campo nome */}
           <Controller
-            name="nome"
+            name="name"
             control={RegisterForm.control}
             render={({ field, fieldState }) => (
               <Field data-invalid={fieldState.invalid}>
@@ -92,7 +101,7 @@ const Register = () => {
           />
           {/* Campo Endereço */}
           <Controller
-            name="endereco"
+            name="address"
             control={RegisterForm.control}
             render={({ field, fieldState }) => (
               <Field data-invalid={fieldState.invalid}>
@@ -138,7 +147,7 @@ const Register = () => {
           />
           {/* Campo Username */}
           <Controller
-            name="username"
+            name="login"
             control={RegisterForm.control}
             render={({ field, fieldState }) => (
               <Field data-invalid={fieldState.invalid}>
@@ -161,7 +170,7 @@ const Register = () => {
           />
           {/* Campo Senha */}
           <Controller
-            name="senha"
+            name="password"
             control={RegisterForm.control}
             render={({ field, fieldState }) => (
               <Field data-invalid={fieldState.invalid}>
@@ -189,10 +198,11 @@ const Register = () => {
               </Button>
             </Link>
             <Button
+              disabled={registerMutation.isPending}
               type="submit"
               className="mt-4 w-48 rounded-md bg-indigo-500 py-2 font-semibold hover:bg-indigo-400"
             >
-              Cadastrar
+              {registerMutation.isPending ? 'Cadastrando...' : 'Cadastrar'}
             </Button>
           </Field>
         </FieldGroup>
