@@ -11,10 +11,10 @@ const SearchHeader = () => {
       <ButtonGroup>
         <Input
           id="input-button-group"
-          className="bg-purple-700 font-bold"
+          className="bg-purple-700 h-10 font-bold w-full"
           placeholder="Pesquisar"
         />
-        <ButtonUi className={'bg-purple-700'}>
+        <ButtonUi className={'bg-purple-700 h-10'}>
           <Search />
         </ButtonUi>
       </ButtonGroup>
