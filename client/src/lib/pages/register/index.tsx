@@ -143,7 +143,7 @@ const Register = () => {
             render={({ field, fieldState }) => (
               <Field data-invalid={fieldState.invalid}>
                 <FieldLabel htmlFor="form-username">
-                  Username <span className="text-destructive">*</span>
+                  Nome de usuário <span className="text-destructive">*</span>
                 </FieldLabel>
                 <Input
                   {...field}

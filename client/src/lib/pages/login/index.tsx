@@ -1,6 +1,6 @@
 import { zodResolver } from '@hookform/resolvers/zod';
+import { useMutation } from '@tanstack/react-query';
 import { Link } from '@tanstack/react-router';
-import axios from 'axios';
 import { Controller, useForm } from 'react-hook-form';
 import { toast } from 'sonner';
 import type * as z from 'zod';
@@ -13,6 +13,7 @@ import {
   FieldLabel,
 } from '@/components/ui/field';
 import { Input } from '@/components/ui/input';
+import { api } from '@/lib/services/constants';
 
 import { LoginValidationSchema } from './schema';
 
@@ -21,25 +22,32 @@ const Login = () => {
     resolver: zodResolver(LoginValidationSchema),
     mode: 'onChange',
     defaultValues: {
-      email: '',
-      senha: '',
+      login: '',
+      password: '',
     },
   });
 
   type FormData = z.infer<typeof LoginValidationSchema>;
+  const loginMutation = useMutation({
+    mutationFn: async (data: FormData) => {
+      console.log(data);
+      const response = await api.post('/login', data);
+      return response.data;
+    },
+
+    onSuccess: (data) => {
+      console.log(data);
+      toast('Login realizado!');
+    },
+
+    onError: (error) => {
+      console.log(error);
+      toast('Login falhou');
+    },
+  });
+
   function onSubmit(data: FormData) {
-    axios
-      .post('http://localhost:8080/login', data)
-      .then((res) => {
-        console.log(res.data);
-        toast('Login realizado!', {
-          description: JSON.stringify(data, null, 2),
-        });
-      })
-      .catch((error) => {
-        console.log(error);
-        toast('Login falhou');
-      });
+    loginMutation.mutate(data);
   }
 
   return (
@@ -65,15 +73,17 @@ const Login = () => {
           <FieldGroup>
             {/* Campo Email */}
             <Controller
-              name="email"
+              name="login"
               control={LoginForm.control}
               render={({ field, fieldState }) => (
                 <Field data-invalid={fieldState.invalid}>
-                  <FieldLabel htmlFor="form-email">Email</FieldLabel>
+                  <FieldLabel htmlFor="form-Username">
+                    Nome de usuário
+                  </FieldLabel>
                   <Input
                     {...field}
-                    id="form-email"
-                    type="email"
+                    id="form-Username"
+                    type="text"
                     aria-invalid={fieldState.invalid}
                     required
                   />
@@ -84,7 +94,7 @@ const Login = () => {
               )}
             />
             <Controller
-              name="senha"
+              name="password"
               control={LoginForm.control}
               render={({ field, fieldState }) => (
                 <Field data-invalid={fieldState.invalid}>
@@ -111,10 +121,12 @@ const Login = () => {
                 </Button>
               </Link>
               <Button
+                disabled={loginMutation.isPending}
                 type="submit"
                 className="mt-4 w-48 rounded-md bg-indigo-500 py-2 font-semibold hover:bg-indigo-400"
               >
-                Login
+                {/* Login */}
+                {loginMutation.isPending ? 'Entrando...' : 'Entrar'}
               </Button>
             </Field>
           </FieldGroup>
