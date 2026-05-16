@@ -10,6 +10,9 @@ import java.sql.SQLException;
 import java.sql.Statement;
 
 public class UsersRepository {
+
+  private static final String SQLSTATE_UNIQUE_CONSTRAINT_VIOLATION = "23505";
+
   private Connection con;
 
   public UsersRepository(Connection dbConnection) {
@@ -48,7 +51,7 @@ public class UsersRepository {
       return user;
 
     } catch (SQLException e) {
-      if ("23505".equals(e.getSQLState())) {
+      if (SQLSTATE_UNIQUE_CONSTRAINT_VIOLATION.equals(e.getSQLState())) {
 
         String errorMessage = e.getMessage().toLowerCase();
 
@@ -56,7 +59,7 @@ public class UsersRepository {
           throw new DuplicateUserException("Login already exists");
         }
 
-        if (errorMessage.contains("Email")) {
+        if (errorMessage.contains("email")) {
           throw new DuplicateUserException("Email already exists");
         }
 

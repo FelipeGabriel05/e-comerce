@@ -7,7 +7,6 @@ import ecommerce.Http.IO.Responses.JsonResponse;
 import ecommerce.Http.Validators.HttpUserValidators;
 import ecommerce.UseCases.CreateUserUseCase;
 import java.io.IOException;
-import java.sql.SQLException;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
@@ -55,14 +54,6 @@ public class RegisterController extends HttpServlet {
 
     } catch (DuplicateUserException e) {
       JsonResponse jsonRes = new JsonResponse(HttpServletResponse.SC_CONFLICT, e.getMessage());
-
-      response.setStatus(jsonRes.getStatus());
-      response.getWriter().write(jsonRes.toJson());
-
-    } catch (SQLException e) {
-      e.printStackTrace();
-      JsonResponse jsonRes =
-          new JsonResponse(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, "Database error");
 
       response.setStatus(jsonRes.getStatus());
       response.getWriter().write(jsonRes.toJson());
