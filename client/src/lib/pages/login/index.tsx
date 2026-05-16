@@ -40,8 +40,8 @@ const Login = () => {
       toast('Login realizado!');
     },
 
-    onError: () => {
-      console.error;
+    onError: (error) => {
+      console.error(error);
       toast('Login falhou');
     },
   });
