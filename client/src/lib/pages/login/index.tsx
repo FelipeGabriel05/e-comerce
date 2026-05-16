@@ -41,12 +41,11 @@ const Login = () => {
       } else {
         navigate({ to: '/cliente' });
       }
-      // console.log(data);
       toast('Login realizado!');
     },
 
-    onError: (error) => {
-      console.log(error);
+    onError: () => {
+      console.error;
       toast('Login falhou');
     },
   });
