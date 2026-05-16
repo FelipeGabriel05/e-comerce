@@ -3,7 +3,6 @@ import { useMutation } from '@tanstack/react-query';
 import { Link } from '@tanstack/react-router';
 import { Controller, useForm } from 'react-hook-form';
 import { toast } from 'sonner';
-import type * as z from 'zod';
 
 import { Button } from '@/components/ui/button';
 import {
@@ -13,8 +12,9 @@ import {
   FieldLabel,
 } from '@/components/ui/field';
 import { Input } from '@/components/ui/input';
-import { api } from '@/lib/services/constants';
+import { registerService } from '@/lib/services/auth.services';
 
+import type { RegisterFormData } from './schema';
 import { RegisterValidationSchema } from './schema';
 
 const Register = () => {
@@ -30,13 +30,8 @@ const Register = () => {
     },
   });
 
-  type FormData = z.infer<typeof RegisterValidationSchema>;
   const registerMutation = useMutation({
-    mutationFn: async (data: FormData) => {
-      console.log(data);
-      const response = await api.post('/register', data);
-      return response.data;
-    },
+    mutationFn: registerService,
 
     onSuccess: (data) => {
       // provisório até rota de registro estar pronta
@@ -51,7 +46,7 @@ const Register = () => {
     },
   });
 
-  function onSubmit(data: FormData) {
+  function onSubmit(data: RegisterFormData) {
     registerMutation.mutate(data);
   }
 

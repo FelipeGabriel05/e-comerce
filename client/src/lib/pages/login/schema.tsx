@@ -10,3 +10,5 @@ export const LoginValidationSchema = z.object({
     .min(8, 'Mínimo de 8 caracteres')
     .max(12, 'Máximo de 12 caracteres'),
 });
+
+export type LoginFormData = z.infer<typeof LoginValidationSchema>;

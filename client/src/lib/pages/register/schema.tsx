@@ -26,3 +26,5 @@ export const RegisterValidationSchema = z.object({
       'Sua senha deve conter pelo menos um caractere especial',
     ),
 });
+
+export type RegisterFormData = z.infer<typeof RegisterValidationSchema>;

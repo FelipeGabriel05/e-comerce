@@ -3,7 +3,6 @@ import { useMutation } from '@tanstack/react-query';
 import { Link, useNavigate } from '@tanstack/react-router';
 import { Controller, useForm } from 'react-hook-form';
 import { toast } from 'sonner';
-import type * as z from 'zod';
 
 import { Button } from '@/components/ui/button';
 import {
@@ -13,8 +12,9 @@ import {
   FieldLabel,
 } from '@/components/ui/field';
 import { Input } from '@/components/ui/input';
-import { api } from '@/lib/services/constants';
+import { loginService } from '@/lib/services/auth.services';
 
+import type { LoginFormData } from './schema';
 import { LoginValidationSchema } from './schema';
 
 const Login = () => {
@@ -27,13 +27,9 @@ const Login = () => {
     },
   });
 
-  type FormData = z.infer<typeof LoginValidationSchema>;
   const navigate = useNavigate();
   const loginMutation = useMutation({
-    mutationFn: async (data: FormData) => {
-      const response = await api.post('/login', data);
-      return response.data;
-    },
+    mutationFn: loginService,
 
     onSuccess: (data) => {
       if (data.data.administrador) {
@@ -50,7 +46,7 @@ const Login = () => {
     },
   });
 
-  function onSubmit(data: FormData) {
+  function onSubmit(data: LoginFormData) {
     loginMutation.mutate(data);
   }
 
