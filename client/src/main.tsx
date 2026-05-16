@@ -8,6 +8,7 @@ import { routeTree } from './routeTree.gen';
 import '@/lib/styles/globals.css';
 
 import { QueryClientProvider } from '@tanstack/react-query';
+import { Toaster } from 'sonner';
 
 import Page404 from '@/lib/pages/404';
 import { queryClient } from '@/lib/services/constants';
@@ -45,6 +46,7 @@ if (rootElement && !rootElement.innerHTML) {
     <StrictMode>
       <QueryClientProvider client={queryClient}>
         <RouterProvider router={router} />
+        <Toaster richColors position="top-center" />
       </QueryClientProvider>
     </StrictMode>,
   );

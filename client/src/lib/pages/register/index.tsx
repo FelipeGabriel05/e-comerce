@@ -36,13 +36,13 @@ const Register = () => {
     onSuccess: (data) => {
       // provisório até rota de registro estar pronta
       console.log(data);
-      toast('Login realizado!');
+      toast('Cadastro realizado!');
     },
 
     onError: (error) => {
       // provisório até rota de registro estar pronta
       console.log(error);
-      toast('Login falhou');
+      toast('Cadastro falhou');
     },
   });
 
