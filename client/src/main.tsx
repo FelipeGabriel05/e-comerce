@@ -2,8 +2,6 @@ import { createRouter, RouterProvider } from '@tanstack/react-router';
 import { StrictMode } from 'react';
 import ReactDOM from 'react-dom/client';
 
-import { CartProvider } from '@/lib/context/cart-context';
-
 // Import the generated route tree
 import { routeTree } from './routeTree.gen';
 
@@ -46,9 +44,7 @@ if (rootElement && !rootElement.innerHTML) {
   root.render(
     <StrictMode>
       <QueryClientProvider client={queryClient}>
-        <CartProvider>
-          <RouterProvider router={router} />
-        </CartProvider>
+        <RouterProvider router={router} />
       </QueryClientProvider>
     </StrictMode>,
   );

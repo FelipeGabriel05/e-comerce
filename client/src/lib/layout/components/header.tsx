@@ -1,4 +1,7 @@
-import { useCart } from '@/lib/context/cart-context';
+import { ShoppingCart } from 'lucide-react';
+
+import { Button } from '@/components/ui/button';
+import { useCart } from '@/lib/hooks/use-cart';
 
 export const Header = () => {
   const { totalItems } = useCart();
@@ -8,17 +11,18 @@ export const Header = () => {
       <section className="wrapper mx-auto flex items-center justify-between py-2 px-4">
         <p className="text-white font-bold">Games Store</p>
 
-        <button
-          type="button"
-          className="relative flex items-center gap-2 rounded-lg border border-white/10 px-3 py-1.5 text-sm text-white/70 hover:text-white transition-colors"
+        <Button
+          variant="outline"
+          className="relative flex items-center gap-2 text-white/70 hover:text-white"
         >
-          🛒 Carrinho
+          <ShoppingCart size={16} />
+          Carrinho
           {totalItems > 0 && (
             <span className="absolute -right-2 -top-2 flex h-5 w-5 items-center justify-center rounded-full bg-violet-500 text-xs font-bold text-white">
               {totalItems}
             </span>
           )}
-        </button>
+        </Button>
       </section>
     </header>
   );

@@ -1,4 +1,7 @@
-import { useCart } from '@/lib/context/cart-context';
+import { ShoppingCart } from 'lucide-react';
+
+import { Button } from '@/components/ui/button';
+import { useCart } from '@/lib/hooks/use-cart';
 import type { Product } from '@/lib/types/product';
 
 type ProductCardProps = {
@@ -16,8 +19,16 @@ export const ProductCard = ({ product }: ProductCardProps) => {
   return (
     <div className="flex flex-col gap-3 rounded-xl border border-white/10 bg-white/5 p-4 hover:border-white/25 hover:bg-white/10 transition-all">
       {/* Imagem */}
-      <div className="aspect-video w-full rounded-lg bg-white/10 flex items-center justify-center">
-        <span className="text-white/20 text-sm">Sem imagem</span>
+      <div className="aspect-video w-full rounded-lg bg-white/10 flex items-center justify-center overflow-hidden">
+        {product.foto ? (
+          <img
+            src={product.foto}
+            alt={product.descricao}
+            className="w-full h-full object-cover"
+          />
+        ) : (
+          <span className="text-white/20 text-sm">Sem imagem</span>
+        )}
       </div>
 
       {/* Descrição */}
@@ -27,13 +38,13 @@ export const ProductCard = ({ product }: ProductCardProps) => {
       <p className="text-violet-400 font-bold text-lg">{formattedPrice}</p>
 
       {/* Botão */}
-      <button
-        type="button"
-        onClick={() => addToCart(product)}
-        className="w-full rounded-lg bg-violet-600 py-2 text-sm font-semibold text-white hover:bg-violet-500 transition-colors"
+      <Button
+        onClick={() => addToCart(product.id)}
+        className="w-full bg-violet-600 hover:bg-violet-500 text-white"
       >
+        <ShoppingCart size={14} />
         Adicionar ao Carrinho
-      </button>
+      </Button>
     </div>
   );
 };
