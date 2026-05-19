@@ -9,4 +9,6 @@ public class SessionsQueries {
       "SELECT u.* FROM usuario u"
           + " JOIN sessions s ON u.id = s.user_id"
           + " WHERE s.token = ? AND s.expires_at > ?";
+
+  public static String deleteSessionByTokenQuery = "DELETE FROM sessions WHERE token = ?";
 }
