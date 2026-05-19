@@ -13,8 +13,16 @@ export const ProductCard = ({ product }: ProductCardProps) => {
   return (
     <div className="flex flex-col gap-3 rounded-xl border border-white/10 bg-white/5 p-4 hover:border-white/25 hover:bg-white/10 transition-all">
       {/* Imagem */}
-      <div className="aspect-video w-full rounded-lg bg-white/10 flex items-center justify-center">
-        <span className="text-white/20 text-sm">Sem imagem</span>
+      <div className="aspect-video w-full rounded-lg bg-white/10 flex items-center justify-center overflow-hidden">
+        {product.foto ? (
+          <img
+            src={product.foto}
+            alt={product.descricao}
+            className="w-full h-full object-cover"
+          />
+        ) : (
+          <span className="text-white/20 text-sm">Sem imagem</span>
+        )}
       </div>
 
       {/* Descrição */}
