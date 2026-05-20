@@ -23,6 +23,7 @@ public class AuthenticationRequiredFilter implements Filter {
 
   private static final List<Route> protectedRoutes =
       List.of(
+          new Route("GET", "/me"),
           new Route("POST", "/image/upload"),
           new Route("POST", "/sales"),
           new Route("POST", "/admin/category"),
