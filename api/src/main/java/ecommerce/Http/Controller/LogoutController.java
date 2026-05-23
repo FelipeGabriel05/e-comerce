@@ -22,24 +22,11 @@ public class LogoutController extends HttpServlet {
 
       String sessionToken = extractSessionToken(request);
 
-      if (sessionToken == null) {
-        JsonResponse jsonRes =
-            new JsonResponse(HttpServletResponse.SC_UNAUTHORIZED, "User is not authenticated");
-
-        response.setStatus(jsonRes.getStatus());
-        response.getWriter().write(jsonRes.toJson());
-
-        return;
-      }
-
       LogoutUseCase logoutUseCase = new LogoutUseCase();
 
       logoutUseCase.execute(sessionToken);
 
-      Cookie sessionCookie = new Cookie("session_token", "");
-      sessionCookie.setMaxAge(0);
-      sessionCookie.setPath("/");
-      response.addCookie(sessionCookie);
+      clearSessionCookie(response);
 
       JsonResponse jsonRes = new JsonResponse(HttpServletResponse.SC_OK, "Logout successful");
 
@@ -71,5 +58,13 @@ public class LogoutController extends HttpServlet {
     }
 
     return null;
+  }
+
+  private void clearSessionCookie(HttpServletResponse response) {
+
+    Cookie sessionCookie = new Cookie("session_token", "");
+    sessionCookie.setMaxAge(0);
+    sessionCookie.setPath("/");
+    response.addCookie(sessionCookie);
   }
 }
