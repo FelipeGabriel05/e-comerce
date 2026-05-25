@@ -41,4 +41,12 @@ public class SessionsRepository {
     }
     return null;
   }
+
+  public void deleteSessionByToken(String token) throws SQLException {
+    PreparedStatement ps = con.prepareStatement(SessionsQueries.deleteSessionByTokenQuery);
+
+    ps.setString(1, token);
+
+    ps.executeUpdate();
+  }
 }
