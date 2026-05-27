@@ -4,7 +4,7 @@ import ecommerce.Database.Entites.User;
 import ecommerce.Exceptions.InternalServerException;
 import ecommerce.Exceptions.NotFoundException;
 import ecommerce.Exceptions.ValidationException;
-import ecommerce.Http.Responses.JsonResponse;
+import ecommerce.Http.IO.Responses.JsonResponse;
 import ecommerce.Http.Validators.HttpUserValidators;
 import ecommerce.UseCases.DeleteUserUseCase;
 import ecommerce.UseCases.UpdateUseCase;
@@ -41,25 +41,26 @@ public class UserController extends HttpServlet {
 
       deleteUseCase.execute(id);
 
-      JsonResponse.send(
-          response,
-          200,
-          "User deleted successfully");
+       JsonResponse jsonRes =
+          new JsonResponse(HttpServletResponse.SC_OK, "User Deleted sucessfully", id);
+
+      response.setStatus(jsonRes.getStatus());
+      response.getWriter().write(jsonRes.toJson());
 
     } catch (ValidationException e) {
 
-      JsonResponse.send(
-          response,
-          400,
-          e.getMessage());
+      JsonResponse jsonRes = new JsonResponse(HttpServletResponse.SC_BAD_REQUEST, e.getMessage());
+
+      response.setStatus(jsonRes.getStatus());
+      response.getWriter().write(jsonRes.toJson());
 
     } catch (Exception e) {
       e.printStackTrace();
 
-      JsonResponse.send(
-          response,
-          500,
-          "Internal server error");
+      JsonResponse jsonRes = new JsonResponse(HttpServletResponse.SC_BAD_REQUEST, e.getMessage());
+
+      response.setStatus(jsonRes.getStatus());
+      response.getWriter().write(jsonRes.toJson());
     }
   }
 
@@ -77,33 +78,34 @@ public class UserController extends HttpServlet {
 
       updateUseCase.execute(user);
 
-      JsonResponse.send(
-          response,
-          200,
-          "User updated successfully");
+      JsonResponse jsonRes =
+          new JsonResponse(HttpServletResponse.SC_OK, "User Updated sucessfully", user);
+
+      response.setStatus(jsonRes.getStatus());
+      response.getWriter().write(jsonRes.toJson());
 
     } catch (ValidationException e) {
 
-      JsonResponse.send(
-          response,
-          400,
-          e.getMessage());
+      JsonResponse jsonRes = new JsonResponse(HttpServletResponse.SC_BAD_REQUEST, e.getMessage());
+
+      response.setStatus(jsonRes.getStatus());
+      response.getWriter().write(jsonRes.toJson());
 
     } catch (NotFoundException e) {
 
-      JsonResponse.send(
-          response,
-          404,
-          e.getMessage());
+      JsonResponse jsonRes = new JsonResponse(HttpServletResponse.SC_NOT_FOUND, e.getMessage());
+
+      response.setStatus(jsonRes.getStatus());
+      response.getWriter().write(jsonRes.toJson());
 
     } catch (InternalServerException e) {
 
       e.printStackTrace();
 
-      JsonResponse.send(
-          response,
-          500,
-          e.getMessage());
+      JsonResponse jsonRes = new JsonResponse(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, e.getMessage());
+
+      response.setStatus(jsonRes.getStatus());
+      response.getWriter().write(jsonRes.toJson());
     }
   }
 }
