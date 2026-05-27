@@ -10,6 +10,7 @@
     "includes": [
       "src/**/*",
       "!src/*.gen.ts",
+      "!src/components/ui/**/*",
       "!src/lib/components/ui/**/*",
       "!src/lib/hooks/use-mobile.*",
       "*.config.ts",

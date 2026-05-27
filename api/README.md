@@ -81,12 +81,16 @@ api/
 │       │   │   ├── Entites/      # Domain models (User)
 │       │   │   ├── Queries/      # SQL query constants
 │       │   │   ├── Repositories/ # Data access layer
+│       │   │   ├── Seeds/        # Initial and mock database data
 │       │   │   ├── Tables/       # SQL table definitions
 │       │   │   └── DBConnection.java
 │       │   ├── Exceptions/       # Custom exceptions
 │       │   ├── Http/
 │       │   │   ├── Controller/   # Servlet controllers
 │       │   │   ├── Filter/       # HTTP filters (e.g. auth)
+│       │   │   ├── IO/
+│       │   │   │   ├── Requests/   # Request DTOs
+│       │   │   │   └── Responses/  # Response DTOs
 │       │   │   └── Validators/   # Input validators
 │       │   └── UseCases/         # Business logic
 │       └── webapp/
@@ -115,6 +119,12 @@ docker compose -f infra/dev/docker-compose.yml up --build
 
 - Api is available at `http://localhost:8080`.
 - PgAdmin is available at `http://localhost:5050`.
+
+Seed the database:
+
+```bash
+docker exec -it postgres-ecommerce-dev psql -U postgres -d ecommerceproject -f /tmp/seeds.sql
+```
 
 ### Code Quality
 

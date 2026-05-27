@@ -80,6 +80,28 @@ public class ProductRepository {
     } catch (SQLException e) {
       e.printStackTrace();
       return new ArrayList<>();
+
+      }
+  }
+
+  public Product findById(int id) {
+    try {
+      String query = ProductQueries.selectProductByIdQuery;
+      PreparedStatement ps = con.prepareStatement(query);
+      ps.setInt(1, id);
+
+      ResultSet rs = ps.executeQuery();
+
+      if (rs.next()) {
+        Product product = new Product();
+        
+        return product;
+      }
+
+      return null;
+    } catch (SQLException e) {
+      e.printStackTrace();
+      return null;
     }
   }
 }
