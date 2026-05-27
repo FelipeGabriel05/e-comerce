@@ -8,8 +8,7 @@ import java.sql.Connection;
 
 public class DeleteUserUseCase {
 
-  public void execute(int id)
-      throws NotFoundException, InternalServerException {
+  public void execute(int id) throws NotFoundException, InternalServerException {
 
     try {
       Connection con = DBConnection.getConnection();
@@ -26,8 +25,7 @@ public class DeleteUserUseCase {
       throw e;
 
     } catch (Exception e) {
-      throw new InternalServerException(
-          "Internal error while deleting user");
+      throw new InternalServerException("Internal error while deleting user");
     }
   }
 }

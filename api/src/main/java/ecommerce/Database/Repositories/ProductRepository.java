@@ -80,8 +80,7 @@ public class ProductRepository {
     } catch (SQLException e) {
       e.printStackTrace();
       return new ArrayList<>();
-
-      }
+    }
   }
 
   public Product findById(int id) {
@@ -94,7 +93,7 @@ public class ProductRepository {
 
       if (rs.next()) {
         Product product = new Product();
-        
+
         return product;
       }
 

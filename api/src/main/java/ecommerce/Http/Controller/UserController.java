@@ -22,16 +22,12 @@ public class UserController extends HttpServlet {
 
   private HttpUserValidators validator = new HttpUserValidators();
 
-  private DeleteUserUseCase deleteUseCase =
-      new DeleteUserUseCase();
+  private DeleteUserUseCase deleteUseCase = new DeleteUserUseCase();
 
-  private UpdateUseCase updateUseCase =
-      new UpdateUseCase();
+  private UpdateUseCase updateUseCase = new UpdateUseCase();
 
   @Override
-  protected void doDelete(
-      HttpServletRequest request,
-      HttpServletResponse response)
+  protected void doDelete(HttpServletRequest request, HttpServletResponse response)
       throws ServletException, IOException {
 
     response.setContentType("application/json");
@@ -41,7 +37,7 @@ public class UserController extends HttpServlet {
 
       deleteUseCase.execute(id);
 
-       JsonResponse jsonRes =
+      JsonResponse jsonRes =
           new JsonResponse(HttpServletResponse.SC_OK, "User Deleted sucessfully", id);
 
       response.setStatus(jsonRes.getStatus());
@@ -65,9 +61,7 @@ public class UserController extends HttpServlet {
   }
 
   @Override
-  protected void doPut(
-      HttpServletRequest request,
-      HttpServletResponse response)
+  protected void doPut(HttpServletRequest request, HttpServletResponse response)
       throws ServletException, IOException {
 
     response.setContentType("application/json");
@@ -102,7 +96,8 @@ public class UserController extends HttpServlet {
 
       e.printStackTrace();
 
-      JsonResponse jsonRes = new JsonResponse(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, e.getMessage());
+      JsonResponse jsonRes =
+          new JsonResponse(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, e.getMessage());
 
       response.setStatus(jsonRes.getStatus());
       response.getWriter().write(jsonRes.toJson());

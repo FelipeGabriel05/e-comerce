@@ -9,8 +9,7 @@ import java.sql.Connection;
 
 public class UpdateUseCase {
 
-  public void execute(User user)
-      throws NotFoundException, InternalServerException {
+  public void execute(User user) throws NotFoundException, InternalServerException {
 
     try {
       Connection con = DBConnection.getConnection();
@@ -20,16 +19,14 @@ public class UpdateUseCase {
       boolean updated = userRepository.updateUser(user);
 
       if (!updated) {
-        throw new NotFoundException(
-            "User not found or could not be updated");
+        throw new NotFoundException("User not found or could not be updated");
       }
 
     } catch (NotFoundException e) {
       throw e;
 
     } catch (Exception e) {
-      throw new InternalServerException(
-          "Internal error while updating user");
+      throw new InternalServerException("Internal error while updating user");
     }
   }
 }
