@@ -23,13 +23,16 @@ public class AuthenticationRequiredFilter implements Filter {
 
   private static final List<Route> protectedRoutes =
       List.of(
+          new Route("GET", "/me"),
           new Route("POST", "/image/upload"),
+          new Route("POST", "/sales"),
           new Route("POST", "/admin/category"),
           new Route("POST", "/admin/products"),
           new Route("DELETE", "/admin/category"),
           new Route("DELETE", "/admin/products"),
           new Route("PUT", "/admin/category"),
-          new Route("PUT", "/admin/products"));
+          new Route("PUT", "/admin/products"),
+          new Route("POST", "/logout"));
 
   @Override
   public void init(FilterConfig filterConfig) throws ServletException {}

@@ -1,8 +1,8 @@
 import { zodResolver } from '@hookform/resolvers/zod';
-import { Link } from '@tanstack/react-router';
+import { useMutation } from '@tanstack/react-query';
+import { Link, useNavigate } from '@tanstack/react-router';
 import { Controller, useForm } from 'react-hook-form';
 import { toast } from 'sonner';
-import type * as z from 'zod';
 
 import { Button } from '@/components/ui/button';
 import {
@@ -12,7 +12,9 @@ import {
   FieldLabel,
 } from '@/components/ui/field';
 import { Input } from '@/components/ui/input';
+import { loginService } from '@/lib/services/auth.services';
 
+import type { LoginFormData } from './schema';
 import { LoginValidationSchema } from './schema';
 
 const Login = () => {
@@ -20,18 +22,32 @@ const Login = () => {
     resolver: zodResolver(LoginValidationSchema),
     mode: 'onChange',
     defaultValues: {
-      email: '',
-      senha: '',
+      login: '',
+      password: '',
     },
   });
 
-  type FormData = z.infer<typeof LoginValidationSchema>;
-  function onSubmit(data: FormData) {
-    console.log(data);
-    alert('dados enviados');
-    toast('Cadastro realizado!', {
-      description: JSON.stringify(data, null, 2),
-    });
+  const navigate = useNavigate();
+  const loginMutation = useMutation({
+    mutationFn: loginService,
+
+    onSuccess: (data) => {
+      if (data.data.administrador) {
+        navigate({ to: '/admin' });
+      } else {
+        navigate({ to: '/cliente' });
+      }
+      toast('Login realizado!');
+    },
+
+    onError: (error) => {
+      console.error(error);
+      toast('Login falhou');
+    },
+  });
+
+  function onSubmit(data: LoginFormData) {
+    loginMutation.mutate(data);
   }
 
   return (
@@ -57,15 +73,17 @@ const Login = () => {
           <FieldGroup>
             {/* Campo Email */}
             <Controller
-              name="email"
+              name="login"
               control={LoginForm.control}
               render={({ field, fieldState }) => (
                 <Field data-invalid={fieldState.invalid}>
-                  <FieldLabel htmlFor="form-email">Email</FieldLabel>
+                  <FieldLabel htmlFor="form-Username">
+                    Nome de usuário
+                  </FieldLabel>
                   <Input
                     {...field}
-                    id="form-email"
-                    type="email"
+                    id="form-Username"
+                    type="text"
                     aria-invalid={fieldState.invalid}
                     required
                   />
@@ -76,18 +94,12 @@ const Login = () => {
               )}
             />
             <Controller
-              name="senha"
+              name="password"
               control={LoginForm.control}
               render={({ field, fieldState }) => (
                 <Field data-invalid={fieldState.invalid}>
                   <div className="flex items-center justify-between">
                     <FieldLabel htmlFor="form-password">Senha</FieldLabel>
-                    <Link
-                      to="/recoverPassword"
-                      className="text-sm font-semibold text-indigo-400 hover:text-indigo-300"
-                    >
-                      Recuperar Senha
-                    </Link>
                   </div>
                   <Input
                     {...field}
@@ -109,10 +121,11 @@ const Login = () => {
                 </Button>
               </Link>
               <Button
+                disabled={loginMutation.isPending}
                 type="submit"
                 className="mt-4 w-48 rounded-md bg-indigo-500 py-2 font-semibold hover:bg-indigo-400"
               >
-                Login
+                {loginMutation.isPending ? 'Entrando...' : 'Entrar'}
               </Button>
             </Field>
           </FieldGroup>
@@ -121,7 +134,7 @@ const Login = () => {
         <p className="mt-10 text-center text-sm/6 text-gray-400">
           Não tem cadastro?
           <Link
-            to="/register"
+            to="/cadastrar"
             className="font-semibold text-indigo-400 hover:text-indigo-300"
           >
             Cadastre-se

@@ -81,12 +81,16 @@ api/
 │       │   │   ├── Entites/      # Domain models (User)
 │       │   │   ├── Queries/      # SQL query constants
 │       │   │   ├── Repositories/ # Data access layer
+│       │   │   ├── Seeds/        # Initial and mock database data
 │       │   │   ├── Tables/       # SQL table definitions
 │       │   │   └── DBConnection.java
 │       │   ├── Exceptions/       # Custom exceptions
 │       │   ├── Http/
 │       │   │   ├── Controller/   # Servlet controllers
 │       │   │   ├── Filter/       # HTTP filters (e.g. auth)
+│       │   │   ├── IO/
+│       │   │   │   ├── Requests/   # Request DTOs
+│       │   │   │   └── Responses/  # Response DTOs
 │       │   │   └── Validators/   # Input validators
 │       │   └── UseCases/         # Business logic
 │       └── webapp/
