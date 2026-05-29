@@ -31,9 +31,10 @@ public class LoginController extends HttpServlet {
           loginUseCase.execute(credentials.getLogin(), credentials.getSenha());
 
       if (result != null) {
-        String cookieHeader = String.format(
-            "session_token=%s; Path=/; Max-Age=%d; HttpOnly; SameSite=None; Secure",
-            result.token(), LoginUseCase.ONE_DAY);
+        String cookieHeader =
+            String.format(
+                "session_token=%s; Path=/; Max-Age=%d; HttpOnly; SameSite=None; Secure",
+                result.token(), LoginUseCase.ONE_DAY);
         response.addHeader("Set-Cookie", cookieHeader);
 
         JsonResponse jsonRes =
