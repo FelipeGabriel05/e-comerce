@@ -1,11 +1,10 @@
-
 import { Button } from '@base-ui/react/button';
 import { Link, Link as LinkRouter } from '@tanstack/react-router';
 import { LogIn, LogOut, ShoppingCart } from 'lucide-react';
 import { useState } from 'react';
 
 import SearchHeader from '@/lib/components/search-header';
-import { useAuth } from '@/lib/hooks/useAuth';
+import { useAuth } from './useAuth';
 import { LogoutDialog } from '@/lib/layout/components/LogoutDialog';
 
 export const Header = () => {
@@ -20,19 +19,19 @@ export const Header = () => {
   return (
     <>
       <header className="flex items-center justify-between px-8 py-4 border-b">
-        {/* Logo */}
+        {/* logo */}
         <div>
           <h1 className="text-2xl font-bold">
             <LinkRouter to="/">Logo</LinkRouter>
           </h1>
         </div>
 
-        {/* Busca */}
+        {/* busca */}
         <div className="w-full max-w-md">
           <SearchHeader />
         </div>
 
-        {/* Ações */}
+        {/* ações */}
         <div className="flex items-center gap-4">
           {isAuthenticated ? (
             <Button
