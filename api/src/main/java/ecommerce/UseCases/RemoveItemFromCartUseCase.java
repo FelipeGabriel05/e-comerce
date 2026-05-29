@@ -1,6 +1,6 @@
 package ecommerce.UseCases;
 
-import ecommerce.Database.Entites.Cart;
+import ecommerce.Database.Entites.Cart.Cart;
 
 public class RemoveItemFromCartUseCase {
 
