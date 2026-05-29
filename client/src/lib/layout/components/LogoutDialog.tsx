@@ -1,12 +1,17 @@
-import { type JSX } from 'react';
 
 type LogoutDialogProps = {
   open: boolean;
   onConfirm: () => void;
   onCancel: () => void;
+  isPending?: boolean;
 };
 
-export const LogoutDialog = ({ open, onConfirm, onCancel }: LogoutDialogProps): JSX.Element | null => {
+export const LogoutDialog = ({
+  open,
+  onConfirm,
+  onCancel,
+  isPending = false,
+}: LogoutDialogProps) => {
   if (!open) return null;
 
   return (
@@ -37,7 +42,9 @@ export const LogoutDialog = ({ open, onConfirm, onCancel }: LogoutDialogProps): 
           </div>
         </div>
 
-        <h3 className="mb-2 text-center text-xl font-bold text-white">Desconectar</h3>
+        <h3 className="mb-2 text-center text-xl font-bold text-white">
+          Desconectar
+        </h3>
         <p className="mb-8 text-center text-sm text-gray-400">
           Tem certeza que deseja encerrar sua sessão?
         </p>
@@ -46,16 +53,18 @@ export const LogoutDialog = ({ open, onConfirm, onCancel }: LogoutDialogProps): 
           <button
             type="button"
             onClick={onCancel}
-            className="flex-1 rounded-lg border border-white/10 bg-white/5 py-2.5 text-sm font-semibold text-white transition hover:bg-white/10"
+            disabled={isPending}
+            className="flex-1 rounded-lg border border-white/10 bg-white/5 py-2.5 text-sm font-semibold text-white transition hover:bg-white/10 disabled:opacity-50"
           >
             Cancelar
           </button>
           <button
             type="button"
             onClick={onConfirm}
-            className="flex-1 rounded-lg bg-purple-700 py-2.5 text-sm font-semibold text-white transition hover:bg-purple-600"
+            disabled={isPending}
+            className="flex-1 rounded-lg bg-purple-700 py-2.5 text-sm font-semibold text-white transition hover:bg-purple-600 disabled:opacity-50"
           >
-            Sim, desconectar
+            {isPending ? 'Saindo...' : 'Sim, desconectar'}
           </button>
         </div>
       </div>

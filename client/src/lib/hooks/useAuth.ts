@@ -4,7 +4,7 @@ import { toast } from 'sonner';
 import { api } from '@/lib/services/constants';
 import type { LoginFormData } from '@/lib/pages/login/schema';
 
-/* aq é o tipo do user retornado pela API  */s
+/* aq é o tipo do user retornado pela API  */
 export type AuthUser = {
   id: number;
   login: string;
