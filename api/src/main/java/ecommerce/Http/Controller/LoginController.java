@@ -7,7 +7,6 @@ import ecommerce.UseCases.LoginUseCase;
 import java.io.IOException;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
-import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -32,12 +31,10 @@ public class LoginController extends HttpServlet {
           loginUseCase.execute(credentials.getLogin(), credentials.getSenha());
 
       if (result != null) {
-        Cookie sessionCookie = new Cookie("session_token", result.token());
-        sessionCookie.setMaxAge(LoginUseCase.ONE_DAY);
-        sessionCookie.setPath("/");
-        sessionCookie.setHttpOnly(true);
-        sessionCookie.setSecure(true);
-        response.addCookie(sessionCookie);
+        String cookieHeader = String.format(
+            "session_token=%s; Path=/; Max-Age=%d; HttpOnly; SameSite=None; Secure",
+            result.token(), LoginUseCase.ONE_DAY);
+        response.addHeader("Set-Cookie", cookieHeader);
 
         JsonResponse jsonRes =
             new JsonResponse(HttpServletResponse.SC_OK, "Login successful", result.user());
