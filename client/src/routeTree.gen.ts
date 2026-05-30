@@ -18,7 +18,6 @@ import { Route as CarrinhoRouteImport } from './routes/carrinho'
 import { Route as CadastrarRouteImport } from './routes/cadastrar'
 import { Route as AdminRouteImport } from './routes/admin'
 import { Route as IndexRouteImport } from './routes/index'
-import { Route as AdminProductsRouteImport } from './routes/admin/products'
 
 const RecoverPasswordRoute = RecoverPasswordRouteImport.update({
   id: '/recoverPassword',
@@ -65,15 +64,10 @@ const IndexRoute = IndexRouteImport.update({
   path: '/',
   getParentRoute: () => rootRouteImport,
 } as any)
-const AdminProductsRoute = AdminProductsRouteImport.update({
-  id: '/products',
-  path: '/products',
-  getParentRoute: () => AdminRoute,
-} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
-  '/admin': typeof AdminRouteWithChildren
+  '/admin': typeof AdminRoute
   '/cadastrar': typeof CadastrarRoute
   '/carrinho': typeof CarrinhoRoute
   '/cliente': typeof ClienteRoute
@@ -81,11 +75,10 @@ export interface FileRoutesByFullPath {
   '/historicoCliente': typeof HistoricoClienteRoute
   '/login': typeof LoginRoute
   '/recoverPassword': typeof RecoverPasswordRoute
-  '/admin/products': typeof AdminProductsRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
-  '/admin': typeof AdminRouteWithChildren
+  '/admin': typeof AdminRoute
   '/cadastrar': typeof CadastrarRoute
   '/carrinho': typeof CarrinhoRoute
   '/cliente': typeof ClienteRoute
@@ -93,12 +86,11 @@ export interface FileRoutesByTo {
   '/historicoCliente': typeof HistoricoClienteRoute
   '/login': typeof LoginRoute
   '/recoverPassword': typeof RecoverPasswordRoute
-  '/admin/products': typeof AdminProductsRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
-  '/admin': typeof AdminRouteWithChildren
+  '/admin': typeof AdminRoute
   '/cadastrar': typeof CadastrarRoute
   '/carrinho': typeof CarrinhoRoute
   '/cliente': typeof ClienteRoute
@@ -106,7 +98,6 @@ export interface FileRoutesById {
   '/historicoCliente': typeof HistoricoClienteRoute
   '/login': typeof LoginRoute
   '/recoverPassword': typeof RecoverPasswordRoute
-  '/admin/products': typeof AdminProductsRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
@@ -120,7 +111,6 @@ export interface FileRouteTypes {
     | '/historicoCliente'
     | '/login'
     | '/recoverPassword'
-    | '/admin/products'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
@@ -132,7 +122,6 @@ export interface FileRouteTypes {
     | '/historicoCliente'
     | '/login'
     | '/recoverPassword'
-    | '/admin/products'
   id:
     | '__root__'
     | '/'
@@ -144,12 +133,11 @@ export interface FileRouteTypes {
     | '/historicoCliente'
     | '/login'
     | '/recoverPassword'
-    | '/admin/products'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
-  AdminRoute: typeof AdminRouteWithChildren
+  AdminRoute: typeof AdminRoute
   CadastrarRoute: typeof CadastrarRoute
   CarrinhoRoute: typeof CarrinhoRoute
   ClienteRoute: typeof ClienteRoute
@@ -224,29 +212,12 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof IndexRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/admin/products': {
-      id: '/admin/products'
-      path: '/products'
-      fullPath: '/admin/products'
-      preLoaderRoute: typeof AdminProductsRouteImport
-      parentRoute: typeof AdminRoute
-    }
   }
 }
 
-interface AdminRouteChildren {
-  AdminProductsRoute: typeof AdminProductsRoute
-}
-
-const AdminRouteChildren: AdminRouteChildren = {
-  AdminProductsRoute: AdminProductsRoute,
-}
-
-const AdminRouteWithChildren = AdminRoute._addFileChildren(AdminRouteChildren)
-
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
-  AdminRoute: AdminRouteWithChildren,
+  AdminRoute: AdminRoute,
   CadastrarRoute: CadastrarRoute,
   CarrinhoRoute: CarrinhoRoute,
   ClienteRoute: ClienteRoute,
