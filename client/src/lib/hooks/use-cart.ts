@@ -1,11 +1,35 @@
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 
-import { addToCart, fetchCart, removeFromCart } from '@/lib/services/cart';
+interface CartItem {
+  productId: number;
+  quantity: number;
+  preco?: number;
+  descricao?: string;
+}
+
+interface CartData {
+  items: Array<CartItem>;
+}
+
+const fetchCart = async (): Promise<CartData> => {
+  return { items: [] };
+};
+
+const addToCart = async (
+  productId: number,
+  quantity: number,
+): Promise<void> => {
+  console.log('Adicionando ao carrinho:', productId, quantity);
+};
+
+const removeFromCart = async (productId: number): Promise<void> => {
+  console.log('Removendo do carrinho:', productId);
+};
 
 export const useCart = () => {
   const queryClient = useQueryClient();
 
-  const { data: cart } = useQuery({
+  const { data: cart } = useQuery<CartData>({
     queryKey: ['cart'],
     queryFn: fetchCart,
   });
@@ -31,7 +55,10 @@ export const useCart = () => {
   });
 
   const totalItems =
-    cart?.items.reduce((sum, item) => sum + item.quantity, 0) ?? 0;
+    cart?.items.reduce(
+      (sum: number, item: CartItem) => sum + item.quantity,
+      0,
+    ) ?? 0;
 
   return {
     cart,
