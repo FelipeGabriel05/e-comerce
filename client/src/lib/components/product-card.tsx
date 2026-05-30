@@ -1,3 +1,7 @@
+import { ShoppingCart } from 'lucide-react';
+
+import { Button } from '@/components/ui/button';
+import { useCart } from '@/lib/hooks/use-cart';
 import type { Product } from '@/lib/types/product';
 
 type ProductCardProps = {
@@ -5,6 +9,8 @@ type ProductCardProps = {
 };
 
 export const ProductCard = ({ product }: ProductCardProps) => {
+  const { addToCart } = useCart();
+
   const formattedPrice = new Intl.NumberFormat('pt-BR', {
     style: 'currency',
     currency: 'BRL',
@@ -30,6 +36,15 @@ export const ProductCard = ({ product }: ProductCardProps) => {
 
       {/* Preço */}
       <p className="text-violet-400 font-bold text-lg">{formattedPrice}</p>
+
+      {/* Botão */}
+      <Button
+        onClick={() => addToCart(product.id)}
+        className="w-full bg-violet-600 hover:bg-violet-500 text-white"
+      >
+        <ShoppingCart size={14} />
+        Adicionar ao Carrinho
+      </Button>
     </div>
   );
 };
