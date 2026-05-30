@@ -64,10 +64,7 @@ const Login = () => {
         </h2>
       </div>
       <div className="mt-10 sm:mx-auto sm:w-full sm:max-w-sm">
-        <form
-          onSubmit={form.handleSubmit(onSubmit)}
-          className="space-y-6"
-        >
+        <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
           <FieldGroup>
             <Controller
               name="login"
@@ -113,7 +110,10 @@ const Login = () => {
             />
             <Field orientation="horizontal">
               <Link to="/" className="block w-full text-center">
-                <Button type="button" className="mt-4 w-48 rounded-md bg-indigo-500 font-semibold hover:bg-indigo-400">
+                <Button
+                  type="button"
+                  className="mt-4 w-48 rounded-md bg-indigo-500 font-semibold hover:bg-indigo-400"
+                >
                   Voltar
                 </Button>
               </Link>
