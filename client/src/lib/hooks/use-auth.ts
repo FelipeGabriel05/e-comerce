@@ -6,7 +6,7 @@ import type { LoginFormData } from '@/lib/pages/login/schema';
 import { api } from '@/lib/services/constants';
 
 /* aq é o tipo do user retornado pela API  */
-export type AuthUser = {
+type AuthUser = {
   id: number;
   login: string;
   nome: string;
