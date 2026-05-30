@@ -1,18 +1,16 @@
+import { QueryClientProvider } from '@tanstack/react-query';
 import { createRouter, RouterProvider } from '@tanstack/react-router';
 import { StrictMode } from 'react';
 import ReactDOM from 'react-dom/client';
+import { Toaster } from 'sonner';
 
-import { CartProvider } from '@/lib/context/cart-context';
+import Page404 from '@/lib/pages/404';
+import { queryClient } from '@/lib/services/constants';
 
 // Import the generated route tree
 import { routeTree } from './routeTree.gen';
 
 import '@/lib/styles/globals.css';
-
-import { QueryClientProvider } from '@tanstack/react-query';
-
-import Page404 from '@/lib/pages/404';
-import { queryClient } from '@/lib/services/constants';
 
 // Create a new router instance
 const router = createRouter({
@@ -46,9 +44,8 @@ if (rootElement && !rootElement.innerHTML) {
   root.render(
     <StrictMode>
       <QueryClientProvider client={queryClient}>
-        <CartProvider>
-          <RouterProvider router={router} />
-        </CartProvider>
+        <RouterProvider router={router} />
+        <Toaster richColors position="top-center" />
       </QueryClientProvider>
     </StrictMode>,
   );

@@ -9,19 +9,55 @@
 // Additionally, you should also exclude this file from your linter and/or formatter to prevent it from being checked or modified.
 
 import { Route as rootRouteImport } from './routes/__root'
-import { Route as RegisterRouteImport } from './routes/register'
+import { Route as RecoverPasswordRouteImport } from './routes/recoverPassword'
 import { Route as LoginRouteImport } from './routes/login'
+import { Route as HistoricoClienteRouteImport } from './routes/historicoCliente'
+import { Route as DadosClienteRouteImport } from './routes/dadosCliente'
+import { Route as ClienteRouteImport } from './routes/cliente'
+import { Route as CarrinhoRouteImport } from './routes/carrinho'
+import { Route as CadastrarRouteImport } from './routes/cadastrar'
+import { Route as AdminRouteImport } from './routes/admin'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as AdminProductsRouteImport } from './routes/admin/products'
 
-const RegisterRoute = RegisterRouteImport.update({
-  id: '/register',
-  path: '/register',
+const RecoverPasswordRoute = RecoverPasswordRouteImport.update({
+  id: '/recoverPassword',
+  path: '/recoverPassword',
   getParentRoute: () => rootRouteImport,
 } as any)
 const LoginRoute = LoginRouteImport.update({
   id: '/login',
   path: '/login',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const HistoricoClienteRoute = HistoricoClienteRouteImport.update({
+  id: '/historicoCliente',
+  path: '/historicoCliente',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const DadosClienteRoute = DadosClienteRouteImport.update({
+  id: '/dadosCliente',
+  path: '/dadosCliente',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ClienteRoute = ClienteRouteImport.update({
+  id: '/cliente',
+  path: '/cliente',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const CarrinhoRoute = CarrinhoRouteImport.update({
+  id: '/carrinho',
+  path: '/carrinho',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const CadastrarRoute = CadastrarRouteImport.update({
+  id: '/cadastrar',
+  path: '/cadastrar',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const AdminRoute = AdminRouteImport.update({
+  id: '/admin',
+  path: '/admin',
   getParentRoute: () => rootRouteImport,
 } as any)
 const IndexRoute = IndexRouteImport.update({
@@ -30,52 +66,106 @@ const IndexRoute = IndexRouteImport.update({
   getParentRoute: () => rootRouteImport,
 } as any)
 const AdminProductsRoute = AdminProductsRouteImport.update({
-  id: '/admin/products',
-  path: '/admin/products',
-  getParentRoute: () => rootRouteImport,
+  id: '/products',
+  path: '/products',
+  getParentRoute: () => AdminRoute,
 } as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
+  '/admin': typeof AdminRouteWithChildren
+  '/cadastrar': typeof CadastrarRoute
+  '/carrinho': typeof CarrinhoRoute
+  '/cliente': typeof ClienteRoute
+  '/dadosCliente': typeof DadosClienteRoute
+  '/historicoCliente': typeof HistoricoClienteRoute
   '/login': typeof LoginRoute
-  '/register': typeof RegisterRoute
+  '/recoverPassword': typeof RecoverPasswordRoute
   '/admin/products': typeof AdminProductsRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
+  '/admin': typeof AdminRouteWithChildren
+  '/cadastrar': typeof CadastrarRoute
+  '/carrinho': typeof CarrinhoRoute
+  '/cliente': typeof ClienteRoute
+  '/dadosCliente': typeof DadosClienteRoute
+  '/historicoCliente': typeof HistoricoClienteRoute
   '/login': typeof LoginRoute
-  '/register': typeof RegisterRoute
+  '/recoverPassword': typeof RecoverPasswordRoute
   '/admin/products': typeof AdminProductsRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
+  '/admin': typeof AdminRouteWithChildren
+  '/cadastrar': typeof CadastrarRoute
+  '/carrinho': typeof CarrinhoRoute
+  '/cliente': typeof ClienteRoute
+  '/dadosCliente': typeof DadosClienteRoute
+  '/historicoCliente': typeof HistoricoClienteRoute
   '/login': typeof LoginRoute
-  '/register': typeof RegisterRoute
+  '/recoverPassword': typeof RecoverPasswordRoute
   '/admin/products': typeof AdminProductsRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '/login' | '/register' | '/admin/products'
+  fullPaths:
+    | '/'
+    | '/admin'
+    | '/cadastrar'
+    | '/carrinho'
+    | '/cliente'
+    | '/dadosCliente'
+    | '/historicoCliente'
+    | '/login'
+    | '/recoverPassword'
+    | '/admin/products'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/login' | '/register' | '/admin/products'
-  id: '__root__' | '/' | '/login' | '/register' | '/admin/products'
+  to:
+    | '/'
+    | '/admin'
+    | '/cadastrar'
+    | '/carrinho'
+    | '/cliente'
+    | '/dadosCliente'
+    | '/historicoCliente'
+    | '/login'
+    | '/recoverPassword'
+    | '/admin/products'
+  id:
+    | '__root__'
+    | '/'
+    | '/admin'
+    | '/cadastrar'
+    | '/carrinho'
+    | '/cliente'
+    | '/dadosCliente'
+    | '/historicoCliente'
+    | '/login'
+    | '/recoverPassword'
+    | '/admin/products'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
+  AdminRoute: typeof AdminRouteWithChildren
+  CadastrarRoute: typeof CadastrarRoute
+  CarrinhoRoute: typeof CarrinhoRoute
+  ClienteRoute: typeof ClienteRoute
+  DadosClienteRoute: typeof DadosClienteRoute
+  HistoricoClienteRoute: typeof HistoricoClienteRoute
   LoginRoute: typeof LoginRoute
-  RegisterRoute: typeof RegisterRoute
-  AdminProductsRoute: typeof AdminProductsRoute
+  RecoverPasswordRoute: typeof RecoverPasswordRoute
 }
 
 declare module '@tanstack/react-router' {
   interface FileRoutesByPath {
-    '/register': {
-      id: '/register'
-      path: '/register'
-      fullPath: '/register'
-      preLoaderRoute: typeof RegisterRouteImport
+    '/recoverPassword': {
+      id: '/recoverPassword'
+      path: '/recoverPassword'
+      fullPath: '/recoverPassword'
+      preLoaderRoute: typeof RecoverPasswordRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/login': {
@@ -83,6 +173,48 @@ declare module '@tanstack/react-router' {
       path: '/login'
       fullPath: '/login'
       preLoaderRoute: typeof LoginRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/historicoCliente': {
+      id: '/historicoCliente'
+      path: '/historicoCliente'
+      fullPath: '/historicoCliente'
+      preLoaderRoute: typeof HistoricoClienteRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/dadosCliente': {
+      id: '/dadosCliente'
+      path: '/dadosCliente'
+      fullPath: '/dadosCliente'
+      preLoaderRoute: typeof DadosClienteRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/cliente': {
+      id: '/cliente'
+      path: '/cliente'
+      fullPath: '/cliente'
+      preLoaderRoute: typeof ClienteRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/carrinho': {
+      id: '/carrinho'
+      path: '/carrinho'
+      fullPath: '/carrinho'
+      preLoaderRoute: typeof CarrinhoRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/cadastrar': {
+      id: '/cadastrar'
+      path: '/cadastrar'
+      fullPath: '/cadastrar'
+      preLoaderRoute: typeof CadastrarRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/admin': {
+      id: '/admin'
+      path: '/admin'
+      fullPath: '/admin'
+      preLoaderRoute: typeof AdminRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/': {
@@ -94,19 +226,34 @@ declare module '@tanstack/react-router' {
     }
     '/admin/products': {
       id: '/admin/products'
-      path: '/admin/products'
+      path: '/products'
       fullPath: '/admin/products'
       preLoaderRoute: typeof AdminProductsRouteImport
-      parentRoute: typeof rootRouteImport
+      parentRoute: typeof AdminRoute
     }
   }
 }
 
+interface AdminRouteChildren {
+  AdminProductsRoute: typeof AdminProductsRoute
+}
+
+const AdminRouteChildren: AdminRouteChildren = {
+  AdminProductsRoute: AdminProductsRoute,
+}
+
+const AdminRouteWithChildren = AdminRoute._addFileChildren(AdminRouteChildren)
+
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
+  AdminRoute: AdminRouteWithChildren,
+  CadastrarRoute: CadastrarRoute,
+  CarrinhoRoute: CarrinhoRoute,
+  ClienteRoute: ClienteRoute,
+  DadosClienteRoute: DadosClienteRoute,
+  HistoricoClienteRoute: HistoricoClienteRoute,
   LoginRoute: LoginRoute,
-  RegisterRoute: RegisterRoute,
-  AdminProductsRoute: AdminProductsRoute,
+  RecoverPasswordRoute: RecoverPasswordRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)

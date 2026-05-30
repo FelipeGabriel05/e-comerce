@@ -23,6 +23,10 @@ code {
     source-code-pro, Menlo, Monaco, Consolas, "Courier New", monospace;
 }
 
+@theme {
+  --color-formblack: #1A1B2F;
+}
+
 @layer base {
   h1 {
     @apply text-4xl font-bold md:text-5xl;
