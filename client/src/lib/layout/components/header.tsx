@@ -1,24 +1,20 @@
+
 import { Button } from '@base-ui/react/button';
-import { Link, Link as LinkRouter, useNavigate } from '@tanstack/react-router';
+import { Link, Link as LinkRouter } from '@tanstack/react-router';
 import { LogIn, LogOut, ShoppingCart } from 'lucide-react';
 import { useState } from 'react';
-import { toast } from 'sonner';
 
 import SearchHeader from '@/lib/components/search-header';
-import { authStore } from '@/lib/store/authStore';
-import { useAuth } from '@/lib/store/useAuth';
-import { LogoutDialog } from './LogoutDialog';
+import { useAuth } from '@/lib/hooks/useAuth';
+import { LogoutDialog } from '@/lib/layout/components/LogoutDialog';
 
-const Header = () => {
-  const { isAuthenticated } = useAuth();
-  const navigate = useNavigate();
+export const Header = () => {
+  const { isAuthenticated, logout, isLogoutPending } = useAuth();
   const [logoutOpen, setLogoutOpen] = useState(false);
 
-  function handleLogout() {
-    authStore.clear(); // limpa store + localStorage
+  function handleLogoutConfirm() {
+    logout();
     setLogoutOpen(false);
-    navigate({ to: '/' });
-    toast('Sessão encerrada.');
   }
 
   return (
@@ -48,18 +44,20 @@ const Header = () => {
             </Button>
           ) : (
             <>
-              <Link to="/login" className="block w-full text-center">
-                <Button className="w-48 h-10 rounded-md bg-purple-700 font-bold hover:bg-purple-400 flex justify-center items-center gap-5">
-                  Login
-                  <LogIn />
-                </Button>
-              </Link>
-              <Link to="/carrinho" className="block w-full text-center">
-                <Button className="w-48 h-10 rounded-md bg-purple-700 font-bold hover:bg-purple-400 flex justify-center items-center gap-5">
-                  Carrinho
-                  <ShoppingCart />
-                </Button>
-              </Link>
+              <Button
+                render={<Link to="/login" />}
+                className="w-48 h-10 rounded-md bg-purple-700 font-bold hover:bg-purple-400 flex justify-center items-center gap-5"
+              >
+                Login
+                <LogIn />
+              </Button>
+              <Button
+                render={<Link to="/carrinho" />}
+                className="w-48 h-10 rounded-md bg-purple-700 font-bold hover:bg-purple-400 flex justify-center items-center gap-5"
+              >
+                Carrinho
+                <ShoppingCart />
+              </Button>
             </>
           )}
         </div>
@@ -67,11 +65,10 @@ const Header = () => {
 
       <LogoutDialog
         open={logoutOpen}
-        onConfirm={handleLogout}
+        onConfirm={handleLogoutConfirm}
         onCancel={() => setLogoutOpen(false)}
+        isPending={isLogoutPending}
       />
     </>
   );
 };
-
-export default Header;
