@@ -1,8 +1,9 @@
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { useNavigate } from '@tanstack/react-router';
 import { toast } from 'sonner';
-import { api } from '@/lib/services/constants';
+
 import type { LoginFormData } from '@/lib/pages/login/schema';
+import { api } from '@/lib/services/constants';
 
 /* aq é o tipo do user retornado pela API  */
 export type AuthUser = {
@@ -22,10 +23,7 @@ export function useAuth() {
   const navigate = useNavigate();
 
   /* Busca o usuário logado. Se a sessão expirou, a API retorna erro */
-  const {
-    data: user = null,
-    isLoading,
-  } = useQuery<AuthUser | null>({
+  const { data: user = null, isLoading } = useQuery<AuthUser | null>({
     queryKey: ME_KEY,
     queryFn: async () => {
       try {
