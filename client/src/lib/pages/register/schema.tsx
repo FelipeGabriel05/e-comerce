@@ -1,20 +1,20 @@
 import * as z from 'zod';
 
 export const RegisterValidationSchema = z.object({
-  nome: z
+  name: z
     .string()
     .min(5, 'O nome deve ter no mínimo 5 caracteres')
     .max(80, 'O nome deve ter no máximo 80 caracteres'),
-  username: z
+  login: z
     .string()
     .min(5, 'O username deve ter no mínimo 5 caracteres')
     .max(20, 'O username deve ter no máximo 20 caracteres'),
-  endereco: z
+  address: z
     .string()
     .min(10, 'Informe um endereço mais completo')
     .max(120, 'Endereço muito longo'),
   email: z.email('Digite um email válido'),
-  senha: z
+  password: z
     .string()
     .min(8, 'Mínimo de 8 caracteres')
     .max(12, 'Máximo de 12 caracteres')
@@ -26,3 +26,5 @@ export const RegisterValidationSchema = z.object({
       'Sua senha deve conter pelo menos um caractere especial',
     ),
 });
+
+export type RegisterFormData = z.infer<typeof RegisterValidationSchema>;

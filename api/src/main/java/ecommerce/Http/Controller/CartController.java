@@ -1,7 +1,7 @@
 package ecommerce.Http.Controller;
 
 import com.google.gson.Gson;
-import ecommerce.Database.Entites.Cart;
+import ecommerce.Database.Entites.Cart.Cart;
 import ecommerce.Exceptions.ValidationException;
 import ecommerce.Http.IO.Requests.CartItemBodyRequest;
 import ecommerce.Http.IO.Responses.JsonResponse;

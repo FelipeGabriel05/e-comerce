@@ -1,9 +1,14 @@
 import * as z from 'zod';
 
 export const LoginValidationSchema = z.object({
-  email: z.email('Digite um email válido'),
-  senha: z
+  login: z
+    .string()
+    .min(5, 'Mínimo de 5 caracteres')
+    .max(20, 'Máximo de 20 caracteres'),
+  password: z
     .string()
     .min(8, 'Mínimo de 8 caracteres')
     .max(12, 'Máximo de 12 caracteres'),
 });
+
+export type LoginFormData = z.infer<typeof LoginValidationSchema>;
