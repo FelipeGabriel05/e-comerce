@@ -1,7 +1,6 @@
 package ecommerce.Http.Controllers;
 
 import ecommerce.Database.Entites.User;
-import ecommerce.Exceptions.InternalServerException;
 import ecommerce.Exceptions.NotFoundException;
 import ecommerce.Exceptions.ValidationException;
 import ecommerce.Http.IO.Responses.JsonResponse;
@@ -53,7 +52,8 @@ public class UserController extends HttpServlet {
     } catch (Exception e) {
       e.printStackTrace();
 
-      JsonResponse jsonRes = new JsonResponse(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, e.getMessage());
+      JsonResponse jsonRes =
+          new JsonResponse(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, e.getMessage());
 
       response.setStatus(jsonRes.getStatus());
       response.getWriter().write(jsonRes.toJson());
