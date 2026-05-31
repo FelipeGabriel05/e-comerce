@@ -45,7 +45,7 @@ public class UserController extends HttpServlet {
 
     } catch (ValidationException e) {
 
-      JsonResponse jsonRes = new JsonResponse(HttpServletResponse.SC_BAD_REQUEST, e.getMessage());
+      JsonResponse jsonRes = new JsonResponse(HttpServletResponse.SC_UNPROCESSABLE_ENTITY, e.getMessage());
 
       response.setStatus(jsonRes.getStatus());
       response.getWriter().write(jsonRes.toJson());
@@ -53,7 +53,7 @@ public class UserController extends HttpServlet {
     } catch (Exception e) {
       e.printStackTrace();
 
-      JsonResponse jsonRes = new JsonResponse(HttpServletResponse.SC_BAD_REQUEST, e.getMessage());
+      JsonResponse jsonRes = new JsonResponse(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, e.getMessage());
 
       response.setStatus(jsonRes.getStatus());
       response.getWriter().write(jsonRes.toJson());
@@ -72,6 +72,8 @@ public class UserController extends HttpServlet {
 
       updateUseCase.execute(user);
 
+      user.setSenha(null);
+
       JsonResponse jsonRes =
           new JsonResponse(HttpServletResponse.SC_OK, "User Updated sucessfully", user);
 
@@ -80,7 +82,7 @@ public class UserController extends HttpServlet {
 
     } catch (ValidationException e) {
 
-      JsonResponse jsonRes = new JsonResponse(HttpServletResponse.SC_BAD_REQUEST, e.getMessage());
+      JsonResponse jsonRes = new JsonResponse(HttpServletResponse.SC_UNPROCESSABLE_ENTITY, e.getMessage());
 
       response.setStatus(jsonRes.getStatus());
       response.getWriter().write(jsonRes.toJson());
@@ -92,7 +94,7 @@ public class UserController extends HttpServlet {
       response.setStatus(jsonRes.getStatus());
       response.getWriter().write(jsonRes.toJson());
 
-    } catch (InternalServerException e) {
+    } catch (Exception e) {
 
       e.printStackTrace();
 
