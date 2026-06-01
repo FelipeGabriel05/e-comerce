@@ -1,6 +1,7 @@
 import { zodResolver } from '@hookform/resolvers/zod';
-import { useMutation } from '@tanstack/react-query';
+import { useMutation, useQuery } from '@tanstack/react-query';
 import { Link } from '@tanstack/react-router';
+import { useEffect } from 'react';
 import { Controller, useForm } from 'react-hook-form';
 import { toast } from 'sonner';
 
@@ -12,11 +13,17 @@ import {
   FieldLabel,
 } from '@/components/ui/field';
 import { Input } from '@/components/ui/input';
+import { getMeService, updateUserService } from '@/lib/services/auth.services';
 
 import type { RegisterFormDataEdit } from './schema-dados-pessoais';
 import { RegisterEditionSchema } from './schema-dados-pessoais';
 
 const DadosPessoaisPage = () => {
+  const { data: user } = useQuery({
+    queryKey: ['me'],
+    queryFn: getMeService,
+  });
+
   const form = useForm<RegisterFormDataEdit>({
     resolver: zodResolver(RegisterEditionSchema),
     mode: 'onChange',
@@ -30,10 +37,8 @@ const DadosPessoaisPage = () => {
   });
 
   const updateUserMutation = useMutation({
-    mutationFn: async (data: RegisterFormDataEdit) => {
-      console.log(data);
-      return data;
-    },
+    mutationFn: ({ id, data }: { id: number; data: RegisterFormDataEdit }) =>
+      updateUserService(id, data),
 
     onSuccess: () => {
       toast.success('Dados atualizados com sucesso!');
@@ -45,12 +50,37 @@ const DadosPessoaisPage = () => {
   });
 
   function onSubmit(data: RegisterFormDataEdit) {
-    updateUserMutation.mutate(data);
+    if (!user) return;
+
+    const payload = {
+      ...data,
+    };
+
+    if (!payload.password) {
+      delete payload.password;
+    }
+
+    updateUserMutation.mutate({
+      id: user.id,
+      data: payload,
+    });
   }
 
   function handleDeleteAccount() {
     toast.error('Excluir conta ainda não implementado');
   }
+
+  useEffect(() => {
+    if (!user) return;
+
+    form.reset({
+      name: user.nome,
+      address: user.endereco,
+      email: user.email,
+      login: user.login,
+      password: '',
+    });
+  }, [user, form]);
 
   return (
     <div className="mx-auto w-full max-w-3xl rounded-2xl bg-formblack p-8 text-white shadow-lg">

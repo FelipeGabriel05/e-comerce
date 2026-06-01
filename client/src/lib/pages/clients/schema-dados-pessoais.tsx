@@ -24,7 +24,8 @@ export const RegisterEditionSchema = z.object({
     .regex(
       /[^A-Za-z0-9]/,
       'Sua senha deve conter pelo menos um caractere especial',
-    ),
+    )
+    .optional(),
 });
 
 export type RegisterFormDataEdit = z.infer<typeof RegisterEditionSchema>;
