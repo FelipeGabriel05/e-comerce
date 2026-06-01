@@ -14,12 +14,11 @@ export async function getMeService(): Promise<AuthUser | null> {
 
 export async function loginService(data: LoginFormData) {
   const response = await api.post('/login', data);
-  return response.data;
+  return response.data; // { data: { ...AuthUser } }
 }
 
-export async function logoutService() {
-  const response = await api.post('/logout');
-  return response.data;
+export async function logoutService(): Promise<void> {
+  await api.post('/logout');
 }
 
 export async function registerService(data: RegisterFormData) {
