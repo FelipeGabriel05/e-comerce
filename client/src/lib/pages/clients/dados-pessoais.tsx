@@ -1,9 +1,7 @@
 import { zodResolver } from '@hookform/resolvers/zod';
-import { useMutation, useQuery } from '@tanstack/react-query';
 import { Link } from '@tanstack/react-router';
 import { useEffect } from 'react';
 import { Controller, useForm } from 'react-hook-form';
-import { toast } from 'sonner';
 
 import { Button } from '@/components/ui/button';
 import {
@@ -13,16 +11,19 @@ import {
   FieldLabel,
 } from '@/components/ui/field';
 import { Input } from '@/components/ui/input';
-import { getMeService, updateUserService } from '@/lib/services/auth.services';
+import { useUserProfile } from '@/lib/hooks/use-user-profile';
 
 import type { RegisterFormDataEdit } from './schema-dados-pessoais';
 import { RegisterEditionSchema } from './schema-dados-pessoais';
 
 const DadosPessoaisPage = () => {
-  const { data: user } = useQuery({
-    queryKey: ['me'],
-    queryFn: getMeService,
-  });
+  const {
+    user,
+    // isLoadingUser,
+    updateUser,
+    deleteUser,
+    isUpdating,
+  } = useUserProfile();
 
   const form = useForm<RegisterFormDataEdit>({
     resolver: zodResolver(RegisterEditionSchema),
@@ -33,19 +34,6 @@ const DadosPessoaisPage = () => {
       email: '',
       login: '',
       password: '',
-    },
-  });
-
-  const updateUserMutation = useMutation({
-    mutationFn: ({ id, data }: { id: number; data: RegisterFormDataEdit }) =>
-      updateUserService(id, data),
-
-    onSuccess: () => {
-      toast.success('Dados atualizados com sucesso!');
-    },
-
-    onError: () => {
-      toast.error('Falha ao atualizar os dados.');
     },
   });
 
@@ -60,14 +48,22 @@ const DadosPessoaisPage = () => {
       delete payload.password;
     }
 
-    updateUserMutation.mutate({
+    updateUser({
       id: user.id,
       data: payload,
     });
   }
 
   function handleDeleteAccount() {
-    toast.error('Excluir conta ainda não implementado');
+    if (!user) return;
+
+    const confirmed = window.confirm(
+      'Tem certeza que deseja excluir sua conta? Esta ação não pode ser desfeita.',
+    );
+
+    if (!confirmed) return;
+
+    deleteUser(user.id);
   }
 
   useEffect(() => {
@@ -213,18 +209,15 @@ const DadosPessoaisPage = () => {
         </div>
 
         <div className="flex flex-wrap justify-end gap-3 border-t border-zinc-700 pt-6">
-          <Link to="/cliente">
-            <Button
-              type="button"
-              variant="outline"
-              className="border-zinc-700 bg-zinc-800 text-white hover:bg-zinc-700"
-            >
-              Cancelar
-            </Button>
-          </Link>
+          <Button
+            type="button"
+            variant="outline"
+            className="border-zinc-700 bg-zinc-800 text-white hover:bg-zinc-700"
+            render={<Link to="/cliente">Cancelar</Link>}
+          />
 
-          <Button type="submit" disabled={updateUserMutation.isPending}>
-            {updateUserMutation.isPending ? 'Salvando...' : 'Salvar Alterações'}
+          <Button type="submit" disabled={isUpdating}>
+            {isUpdating ? 'Salvando...' : 'Salvar Alterações'}
           </Button>
         </div>
 
