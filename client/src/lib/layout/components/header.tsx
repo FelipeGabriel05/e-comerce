@@ -8,7 +8,11 @@ import { useAuth } from '@/lib/hooks/use-auth';
 import { LogoutDialog } from '@/lib/layout/components/logout-dialog';
 
 export const Header = () => {
-  const { isAuthenticated, logout, isLogoutPending } = useAuth();
+  const { isAuthenticated, logout, isLogoutPending } = useAuth() as {
+    isAuthenticated: boolean;
+    logout: () => void;
+    isLogoutPending: boolean;
+  };
   const [logoutOpen, setLogoutOpen] = useState(false);
 
   function handleLogoutConfirm() {

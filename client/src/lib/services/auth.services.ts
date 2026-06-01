@@ -1,6 +1,6 @@
+import type { AuthUser } from '../hooks/use-auth';
 import type { LoginFormData } from '../pages/login/schema';
 import type { RegisterFormData } from '../pages/register/schema';
-import type { AuthUser } from '../hooks/use-auth';
 import { api } from './constants';
 
 export async function getMeService(): Promise<AuthUser | null> {
