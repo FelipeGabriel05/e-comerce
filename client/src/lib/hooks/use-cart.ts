@@ -1,70 +1,51 @@
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 
-interface CartItem {
-  productId: number;
-  quantity: number;
-  preco?: number;
-  descricao?: string;
-}
+import {
+  addToCartService,
+  type CartData,
+  fetchCartService,
+  removeFromCartService,
+  updateCartService,
+} from '@/lib/services/cart.service';
 
-interface CartData {
-  items: Array<CartItem>;
-}
-
-const fetchCart = async (): Promise<CartData> => {
-  return { items: [] };
-};
-
-const addToCart = async (
-  productId: number,
-  quantity: number,
-): Promise<void> => {
-  console.log('Adicionando ao carrinho:', productId, quantity);
-};
-
-const removeFromCart = async (productId: number): Promise<void> => {
-  console.log('Removendo do carrinho:', productId);
-};
+const CART_QUERY_KEY = ['cart'];
 
 export const useCart = () => {
   const queryClient = useQueryClient();
 
   const { data: cart } = useQuery<CartData>({
-    queryKey: ['cart'],
-    queryFn: fetchCart,
+    queryKey: CART_QUERY_KEY,
+    queryFn: fetchCartService,
   });
 
   const addMutation = useMutation({
-    mutationFn: ({
-      productId,
-      quantity,
-    }: {
-      productId: number;
-      quantity: number;
-    }) => addToCart(productId, quantity),
+    mutationFn: addToCartService,
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ['cart'] });
+      queryClient.invalidateQueries({ queryKey: CART_QUERY_KEY });
+    },
+  });
+
+  const updateMutation = useMutation({
+    mutationFn: updateCartService,
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: CART_QUERY_KEY });
     },
   });
 
   const removeMutation = useMutation({
-    mutationFn: (productId: number) => removeFromCart(productId),
+    mutationFn: removeFromCartService,
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ['cart'] });
+      queryClient.invalidateQueries({ queryKey: CART_QUERY_KEY });
     },
   });
 
-  const totalItems =
-    cart?.items.reduce(
-      (sum: number, item: CartItem) => sum + item.quantity,
-      0,
-    ) ?? 0;
-
   return {
     cart,
-    totalItems,
+    total: cart?.total ?? 0,
     addToCart: (productId: number, quantity = 1) =>
       addMutation.mutate({ productId, quantity }),
+    updateCart: (productId: number, quantity: number) =>
+      updateMutation.mutate({ productId, quantity }),
     removeFromCart: (productId: number) => removeMutation.mutate(productId),
   };
 };

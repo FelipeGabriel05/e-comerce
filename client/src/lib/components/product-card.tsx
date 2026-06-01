@@ -1,6 +1,7 @@
 import { ShoppingCart } from 'lucide-react';
 
 import { Button } from '@/components/ui/button';
+import { P } from '@/components/ui/typography';
 import { useCart } from '@/lib/hooks/use-cart';
 import type { Product } from '@/lib/types/product';
 
@@ -18,8 +19,7 @@ export const ProductCard = ({ product }: ProductCardProps) => {
 
   return (
     <div className="flex flex-col gap-3 rounded-xl border border-white/10 bg-white/5 p-4 hover:border-white/25 hover:bg-white/10 transition-all">
-      {/* Imagem */}
-      <div className="aspect-video w-full rounded-lg bg-white/10 flex items-center justify-center overflow-hidden">
+      <div className="aspect-video w-full min-h-40 rounded-lg bg-white/10 flex items-center justify-center overflow-hidden">
         {product.foto ? (
           <img
             src={product.foto}
@@ -31,13 +31,10 @@ export const ProductCard = ({ product }: ProductCardProps) => {
         )}
       </div>
 
-      {/* Descrição */}
-      <p className="text-white font-medium">{product.descricao}</p>
+      <P className="text-white font-medium">{product.descricao}</P>
 
-      {/* Preço */}
-      <p className="text-violet-400 font-bold text-lg">{formattedPrice}</p>
+      <P className="text-violet-400 font-bold text-lg">{formattedPrice}</P>
 
-      {/* Botão */}
       <Button
         onClick={() => addToCart(product.id)}
         className="w-full bg-violet-600 hover:bg-violet-500 text-white"
