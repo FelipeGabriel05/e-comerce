@@ -3,11 +3,11 @@ import { LogIn, ShoppingCart } from 'lucide-react';
 
 import { buttonVariants } from '@/components/ui/button';
 import SearchHeader from '@/lib/components/search-header';
-import { useCart } from '@/lib/hooks/use-cart';
+import { useCartContext } from '@/lib/context/cart-context';
 import { cn } from '@/lib/utils';
 
 export const Header = () => {
-  const { total } = useCart();
+  const { total } = useCartContext();
 
   return (
     <header className="sticky top-0 z-10 w-full bg-base-100/80 backdrop-blur-md flex items-center justify-between px-8 py-4 border-b">
