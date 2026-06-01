@@ -3,10 +3,14 @@ import { useNavigate } from '@tanstack/react-router';
 import { toast } from 'sonner';
 
 import type { LoginFormData } from '@/lib/pages/login/schema';
-import { api } from '@/lib/services/constants';
 
-/* aq é o tipo do user retornado pela API  */
-type AuthUser = {
+import {
+  getMeService,
+  loginService,
+  logoutService,
+} from '../services/auth.services';
+
+export type AuthUser = {
   id: number;
   login: string;
   nome: string;
@@ -16,34 +20,23 @@ type AuthUser = {
 };
 
 const ME_KEY = ['auth', 'me'];
+const FIVE_MINUTES_STALE_TIME = 1000 * 60 * 5;
 
-/* aq o hook  */
 export function useAuth() {
   const queryClient = useQueryClient();
   const navigate = useNavigate();
 
-  /* Busca o usuário logado. Se a sessão expirou, a API retorna erro */
   const { data: user = null, isLoading } = useQuery<AuthUser | null>({
     queryKey: ME_KEY,
-    queryFn: async () => {
-      try {
-        const response = await api.get('/me');
-        return response.data.data as AuthUser;
-      } catch {
-        // Sessão inexistente ou expirada ent o user n foi autenticado
-        return null;
-      }
-    },
+    queryFn: getMeService,
     retry: false,
-    staleTime: 1000 * 60 * 5, // revalida a cada 5 minutos
+    staleTime: FIVE_MINUTES_STALE_TIME,
   });
 
-  /* ── login ── */
   const loginMutation = useMutation({
-    mutationFn: (data: LoginFormData) => api.post('/login', data),
+    mutationFn: loginService,
     onSuccess: async (response) => {
-      const loggedUser: AuthUser = response.data.data;
-      // aq preenche o cache do /me sem fazer nova requisição
+      const loggedUser: AuthUser = response.data;
       queryClient.setQueryData(ME_KEY, loggedUser);
       toast('Login realizado!');
       navigate({ to: loggedUser.administrador ? '/admin' : '/cliente' });
@@ -53,11 +46,9 @@ export function useAuth() {
     },
   });
 
-  /* logout */
   const logoutMutation = useMutation({
-    mutationFn: () => api.post('/logout'),
+    mutationFn: logoutService,
     onSettled: () => {
-      // ele limpa o cache independente de erro (sessão pode já ter expirado)
       queryClient.setQueryData(ME_KEY, null);
       queryClient.clear();
       navigate({ to: '/' });
@@ -77,7 +68,6 @@ export function useAuth() {
     logout: () => logoutMutation.mutate(),
     isLogoutPending: logoutMutation.isPending,
 
-    /** Força revalidação do /me (útil após alterar dados do usuário). */
     refreshUser: () => queryClient.invalidateQueries({ queryKey: ME_KEY }),
   };
 }
