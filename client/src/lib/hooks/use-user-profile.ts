@@ -1,15 +1,22 @@
-import { useMutation, useQuery } from '@tanstack/react-query';
+import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
+import { useNavigate } from '@tanstack/react-router';
 import { toast } from 'sonner';
 
 import {
   deleteUserService,
   getMeService,
+  logoutService,
   updateUserService,
 } from '@/lib/services/auth.services';
 
 import type { RegisterFormDataEdit } from '../pages/clients/schema-dados-pessoais';
 
 export function useUserProfile() {
+  const queryClient = useQueryClient();
+  const navigate = useNavigate();
+
+  const ME_KEY = ['auth', 'me'];
+
   const userQuery = useQuery({
     queryKey: ['me'],
     queryFn: getMeService,
@@ -40,6 +47,16 @@ export function useUserProfile() {
     },
   });
 
+  const logoutMutation = useMutation({
+    mutationFn: logoutService,
+    onSettled: () => {
+      queryClient.setQueryData(ME_KEY, null);
+      queryClient.clear();
+      navigate({ to: '/' });
+      toast('Sessão encerrada.');
+    },
+  });
+
   return {
     user: userQuery.data,
     isLoadingUser: userQuery.isLoading,
@@ -47,5 +64,7 @@ export function useUserProfile() {
     deleteUser: deleteUserMutation.mutate,
     isDeleting: deleteUserMutation.isPending,
     isUpdating: updateUserMutation.isPending,
+    logout: () => logoutMutation.mutate(),
+    isLogoutPending: logoutMutation.isPending,
   };
 }
