@@ -40,17 +40,9 @@ const DadosPessoaisPage = () => {
   function onSubmit(data: RegisterFormDataEdit) {
     if (!user) return;
 
-    const payload = {
-      ...data,
-    };
-
-    if (!payload.password) {
-      delete payload.password;
-    }
-
     updateUser({
       id: user.id,
-      data: payload,
+      data: data,
     });
   }
 

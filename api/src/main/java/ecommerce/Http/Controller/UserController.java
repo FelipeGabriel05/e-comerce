@@ -1,4 +1,4 @@
-package ecommerce.Http.Controllers;
+package ecommerce.Http.Controller;
 
 import ecommerce.Database.Entites.User;
 import ecommerce.Exceptions.NotFoundException;

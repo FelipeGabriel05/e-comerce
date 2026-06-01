@@ -23,11 +23,11 @@ export async function updateUserService(
   data: RegisterFormDataEdit,
 ) {
   console.log(data);
-  const response = await api.put(`/users/${id}`, data);
+  const response = await api.put(`/users?id=${id}`, data);
   return response.data;
 }
 
 export async function deleteUserService(id: number) {
-  const response = await api.delete(`/users/${id}`);
+  const response = await api.delete(`/users?id=${id}`);
   return response.data;
 }
