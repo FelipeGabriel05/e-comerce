@@ -1,7 +1,6 @@
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { useState } from 'react';
 
-import { fetchProducts } from '@/lib/services/products';
 import type { Product } from '@/lib/types/product';
 
 const mockProducts: Array<Product> = [
@@ -36,7 +35,7 @@ const AdminProducts = () => {
 
   const { data, isLoading } = useQuery({
     queryKey: ['products'],
-    queryFn: fetchProducts,
+    queryFn: async () => mockProducts,
   });
 
   const [novoProduct, setNovoProduct] = useState({
