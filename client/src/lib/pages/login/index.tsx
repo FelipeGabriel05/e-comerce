@@ -18,7 +18,7 @@ import type { LoginFormData } from './schema';
 import { LoginValidationSchema } from './schema';
 
 const Login = () => {
-  const form = useForm({
+  const LoginForm = useForm({
     resolver: zodResolver(LoginValidationSchema),
     mode: 'onChange',
     defaultValues: {
@@ -27,28 +27,27 @@ const Login = () => {
     },
   });
 
-  const nav = useNavigate();
-
-  const mut = useMutation({
+  const navigate = useNavigate();
+  const loginMutation = useMutation({
     mutationFn: loginService,
 
-    onSuccess: (res) => {
-      if (res.data.administrador) {
-        nav({ to: '/admin' });
+    onSuccess: (data) => {
+      if (data.data.administrador) {
+        navigate({ to: '/admin' });
       } else {
-        nav({ to: '/cliente' });
+        navigate({ to: '/cliente' });
       }
       toast('Login realizado!');
     },
 
-    onError: (err) => {
-      console.error(err);
+    onError: (error) => {
+      console.error(error);
       toast('Login falhou');
     },
   });
 
-  function onSubmit(d: LoginFormData) {
-    mut.mutate(d);
+  function onSubmit(data: LoginFormData) {
+    loginMutation.mutate(data);
   }
 
   return (
@@ -64,11 +63,18 @@ const Login = () => {
         </h2>
       </div>
       <div className="mt-10 sm:mx-auto sm:w-full sm:max-w-sm">
-        <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
+        <form
+          onSubmit={(e) => {
+            e.preventDefault();
+            LoginForm.handleSubmit(onSubmit)(e);
+          }}
+          className="space-y-6"
+        >
           <FieldGroup>
+            {/* Campo Email */}
             <Controller
               name="login"
-              control={form.control}
+              control={LoginForm.control}
               render={({ field, fieldState }) => (
                 <Field data-invalid={fieldState.invalid}>
                   <FieldLabel htmlFor="form-Username">
@@ -89,7 +95,7 @@ const Login = () => {
             />
             <Controller
               name="password"
-              control={form.control}
+              control={LoginForm.control}
               render={({ field, fieldState }) => (
                 <Field data-invalid={fieldState.invalid}>
                   <div className="flex items-center justify-between">
@@ -110,19 +116,16 @@ const Login = () => {
             />
             <Field orientation="horizontal">
               <Link to="/" className="block w-full text-center">
-                <Button
-                  type="button"
-                  className="mt-4 w-48 rounded-md bg-indigo-500 font-semibold hover:bg-indigo-400"
-                >
+                <Button className="mt-4 w-48 rounded-md bg-indigo-500 font-semibold hover:bg-indigo-400">
                   Voltar
                 </Button>
               </Link>
               <Button
-                disabled={mut.isPending}
+                disabled={loginMutation.isPending}
                 type="submit"
                 className="mt-4 w-48 rounded-md bg-indigo-500 py-2 font-semibold hover:bg-indigo-400"
               >
-                {mut.isPending ? 'Entrando...' : 'Entrar'}
+                {loginMutation.isPending ? 'Entrando...' : 'Entrar'}
               </Button>
             </Field>
           </FieldGroup>
