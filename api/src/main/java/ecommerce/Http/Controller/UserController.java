@@ -3,6 +3,7 @@ package ecommerce.Http.Controller;
 import ecommerce.Database.Entites.User;
 import ecommerce.Exceptions.NotFoundException;
 import ecommerce.Exceptions.ValidationException;
+import ecommerce.Http.IO.PathVariableExtractor;
 import ecommerce.Http.IO.Responses.JsonResponse;
 import ecommerce.Http.Validators.HttpUserValidators;
 import ecommerce.UseCases.DeleteUserUseCase;
@@ -14,7 +15,7 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-@WebServlet("/users")
+@WebServlet("/users/*")
 public class UserController extends HttpServlet {
 
   private static final long serialVersionUID = 1L;
@@ -32,7 +33,7 @@ public class UserController extends HttpServlet {
     response.setContentType("application/json");
 
     try {
-      int id = validator.validateDeleteUser(request);
+      int id = PathVariableExtractor.extractIntPathVariable(request, "/users/:id", "id");
 
       deleteUseCase.execute(id);
 
@@ -67,8 +68,9 @@ public class UserController extends HttpServlet {
     response.setContentType("application/json");
 
     try {
+      int id = PathVariableExtractor.extractIntPathVariable(request, "/users/:id", "id");
 
-      User user = validator.validateUpdateUser(request);
+      User user = validator.validateUpdateUser(request, id);
 
       updateUseCase.execute(user);
 
