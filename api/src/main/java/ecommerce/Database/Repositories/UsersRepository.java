@@ -141,15 +141,23 @@ public class UsersRepository {
 
   public boolean updateUser(User user) {
     try {
-      String query = UsersQueries.updateUserQuery;
+      boolean changePassword = user.getSenha() != null;
+      String query =
+          changePassword
+              ? UsersQueries.updateUserQuery
+              : UsersQueries.updateUserWithoutPasswordQuery;
       PreparedStatement ps = con.prepareStatement(query);
 
       ps.setString(1, user.getNome());
       ps.setString(2, user.getEndereco());
       ps.setString(3, user.getEmail());
       ps.setString(4, user.getLogin());
-      ps.setString(5, user.getSenha());
-      ps.setInt(6, user.getId());
+      if (changePassword) {
+        ps.setString(5, user.getSenha());
+        ps.setInt(6, user.getId());
+      } else {
+        ps.setInt(5, user.getId());
+      }
 
       int rowsAffected = ps.executeUpdate();
 

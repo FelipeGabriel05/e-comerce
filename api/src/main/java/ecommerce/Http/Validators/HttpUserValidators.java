@@ -275,17 +275,24 @@ public class HttpUserValidators {
       errors.add("Login must have at least 4 characters");
     }
 
-    if (body.password == null || body.password.isBlank()) {
-      errors.add("Password is required");
-    } else {
-      if (body.password.length() < 6) {
-        errors.add("Password must have at least 6 characters");
+    if (body.password != null && !body.password.isBlank()) {
+      if (body.password.length() < 8) {
+        errors.add("Password must have at least 8 characters");
+      }
+      if (body.password.length() > 12) {
+        errors.add("Password must have at most 12 characters");
       }
       if (!body.password.matches(".*[A-Z].*")) {
         errors.add("Password must contain at least one uppercase letter");
       }
+      if (!body.password.matches(".*[a-z].*")) {
+        errors.add("Password must contain at least one lowercase letter");
+      }
       if (!body.password.matches(".*\\d.*")) {
         errors.add("Password must contain at least one number");
+      }
+      if (!body.password.matches(".*[^A-Za-z0-9].*")) {
+        errors.add("Password must contain at least one special character");
       }
     }
 
@@ -300,7 +307,7 @@ public class HttpUserValidators {
     user.setEndereco(body.address);
     user.setEmail(body.email);
     user.setLogin(body.login);
-    user.setSenha(body.password);
+    user.setSenha(body.password == null || body.password.isBlank() ? null : body.password);
 
     return user;
   }
