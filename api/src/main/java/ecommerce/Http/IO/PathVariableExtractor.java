@@ -11,7 +11,8 @@ public class PathVariableExtractor {
 
   public static Map<String, String> extractPathVariables(
       HttpServletRequest request, String pathPattern) throws ValidationException {
-    String pathInfo = request.getPathInfo();
+    String contextPath = request.getContextPath();
+    String pathInfo = request.getRequestURI().substring(contextPath.length());
 
     if (pathInfo == null || pathInfo.isEmpty() || pathInfo.equals("/")) {
       throw new ValidationException("Invalid path");
