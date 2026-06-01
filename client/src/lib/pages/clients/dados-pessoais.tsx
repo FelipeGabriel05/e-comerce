@@ -13,7 +13,10 @@ import {
 import { Input } from '@/components/ui/input';
 import { useUserProfile } from '@/lib/hooks/use-user-profile';
 
-import type { RegisterFormDataEdit } from './schema-dados-pessoais';
+import type {
+  RegisterFormDataEdit,
+  RegisterFormDataInput,
+} from './schema-dados-pessoais';
 import { RegisterEditionSchema } from './schema-dados-pessoais';
 
 const DadosPessoaisPage = () => {
@@ -25,7 +28,7 @@ const DadosPessoaisPage = () => {
     isUpdating,
   } = useUserProfile();
 
-  const form = useForm<RegisterFormDataEdit>({
+  const form = useForm<RegisterFormDataInput, unknown, RegisterFormDataEdit>({
     resolver: zodResolver(RegisterEditionSchema),
     mode: 'onChange',
     defaultValues: {

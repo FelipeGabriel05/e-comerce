@@ -16,15 +16,16 @@ export const RegisterEditionSchema = z.object({
   email: z.email('Digite um email válido'),
   password: z
     .string()
-    .min(8, 'Mínimo de 8 caracteres')
-    .max(12, 'Máximo de 12 caracteres')
-    .regex(/[A-Z]/, 'Sua senha deve conter pelo menos uma letra maiúscula')
-    .regex(/[a-z]/, 'Sua senha deve conter pelo menos uma letra minúscula')
-    .regex(/[0-9]/, 'Sua senha deve conter pelo menos um número')
-    .regex(
-      /[^A-Za-z0-9]/,
-      'Sua senha deve conter pelo menos um caractere especial',
-    ),
+    .min(8)
+    .max(12)
+    .regex(/[A-Z]/)
+    .regex(/[a-z]/)
+    .regex(/[0-9]/)
+    .regex(/[^A-Za-z0-9]/)
+    .optional()
+    .or(z.literal(''))
+    .transform((value: string | undefined | null) => value || null),
 });
 
 export type RegisterFormDataEdit = z.infer<typeof RegisterEditionSchema>;
+export type RegisterFormDataInput = z.input<typeof RegisterEditionSchema>;
