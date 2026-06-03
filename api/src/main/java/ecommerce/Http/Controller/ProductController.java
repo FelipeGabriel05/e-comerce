@@ -50,4 +50,59 @@ public class ProductController extends HttpServlet {
       response.getWriter().write(jsonRes.toJson());
     }
   }
+
+   @Override
+protected void doPut(HttpServletRequest request, HttpServletResponse response)
+    throws IOException {
+
+  HttpProductValidators validators = new HttpProductValidators();
+
+  response.setContentType("application/json");
+
+  try {
+
+    Product productInput =
+        validators.validateUpdateProduct(request);
+
+    UpdateProductUseCase useCase =
+        new UpdateProductUseCase();
+
+    Product updatedProduct =
+        useCase.execute(productInput);
+
+    if (updatedProduct != null) {
+
+      JsonResponse jsonRes =
+          new JsonResponse(
+              HttpServletResponse.SC_OK,
+              "Product updated",
+              updatedProduct);
+
+      response.setStatus(jsonRes.getStatus());
+      response.getWriter().write(jsonRes.toJson());
+
+    } else {
+
+      JsonResponse jsonRes =
+          new JsonResponse(
+              HttpServletResponse.SC_INTERNAL_SERVER_ERROR,
+              "Failed to update product");
+
+      response.setStatus(jsonRes.getStatus());
+      response.getWriter().write(jsonRes.toJson());
+    }
+
+  } catch (Exception e) {
+
+    e.printStackTrace();
+
+    JsonResponse jsonRes =
+        new JsonResponse(
+            HttpServletResponse.SC_BAD_REQUEST,
+            e.getMessage());
+
+    response.setStatus(jsonRes.getStatus());
+    response.getWriter().write(jsonRes.toJson());
+  }
+}
 }
