@@ -1,5 +1,6 @@
 package ecommerce.Http.Controller;
 
+import ecommerce.Http.IO.PathVariableExtractor;
 import ecommerce.Http.IO.Requests.ImageBodyRequest;
 import ecommerce.Http.IO.Responses.JsonResponse;
 import ecommerce.Http.Validators.HttpImageValidators;
@@ -26,32 +27,31 @@ public class ImageController extends HttpServlet {
 
   protected void doGet(HttpServletRequest request, HttpServletResponse response)
       throws ServletException, IOException {
-    String pathInfo = request.getPathInfo();
-    if (pathInfo == null || pathInfo.equals("/")) {
+    try {
+      String filename =
+          PathVariableExtractor.extractPathVariable(request, "/image/:filename", "filename");
+      GetImageUseCase getImageUseCase = new GetImageUseCase();
+      File file = getImageUseCase.execute(filename);
+
+      if (file == null) {
+        response.setStatus(HttpServletResponse.SC_NOT_FOUND);
+        return;
+      }
+
+      String mimeType = getServletContext().getMimeType(file.getName());
+      if (mimeType == null) mimeType = "application/octet-stream";
+
+      response.setContentType(mimeType);
+      response.setContentLengthLong(file.length());
+
+      try (FileInputStream in = new FileInputStream(file)) {
+        in.transferTo(response.getOutputStream());
+      }
+      response.getOutputStream().flush();
+      response.setHeader("Cache-Control", "public, max-age=86400");
+    } catch (Exception e) {
       response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
-      return;
     }
-
-    String filename = pathInfo.substring(1);
-    GetImageUseCase getImageUseCase = new GetImageUseCase();
-    File file = getImageUseCase.execute(filename);
-
-    if (file == null) {
-      response.setStatus(HttpServletResponse.SC_NOT_FOUND);
-      return;
-    }
-
-    String mimeType = getServletContext().getMimeType(file.getName());
-    if (mimeType == null) mimeType = "application/octet-stream";
-
-    response.setContentType(mimeType);
-    response.setContentLengthLong(file.length());
-
-    try (FileInputStream in = new FileInputStream(file)) {
-      in.transferTo(response.getOutputStream());
-    }
-    response.getOutputStream().flush();
-    response.setHeader("Cache-Control", "public, max-age=86400");
   }
 
   protected void doPost(HttpServletRequest request, HttpServletResponse response)

@@ -1,8 +1,9 @@
 package ecommerce.Http.Controller;
 
 import com.google.gson.Gson;
-import ecommerce.Database.Entites.Cart;
+import ecommerce.Database.Entites.Cart.Cart;
 import ecommerce.Exceptions.ValidationException;
+import ecommerce.Http.IO.PathVariableExtractor;
 import ecommerce.Http.IO.Requests.CartItemBodyRequest;
 import ecommerce.Http.IO.Responses.JsonResponse;
 import ecommerce.Http.Validators.HttpCartValidators;
@@ -109,13 +110,8 @@ public class CartController extends HttpServlet {
     RemoveItemFromCartUseCase removeItemFromCartUseCase = new RemoveItemFromCartUseCase();
 
     try {
-      String pathInfo = request.getPathInfo();
-      if (pathInfo == null || pathInfo.equals("/")) {
-        response.setStatus(HttpServletResponse.SC_NOT_FOUND);
-        return;
-      }
-
-      int productId = Integer.parseInt(pathInfo.substring(1));
+      int productId =
+          PathVariableExtractor.extractIntPathVariable(request, "/cart/:productId", "productId");
       Cart rawCart = getCartFromCookie(request);
       Cart cart = removeItemFromCartUseCase.execute(rawCart, productId);
 

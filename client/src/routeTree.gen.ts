@@ -9,16 +9,16 @@
 // Additionally, you should also exclude this file from your linter and/or formatter to prevent it from being checked or modified.
 
 import { Route as rootRouteImport } from './routes/__root'
-import { Route as RegisterRouteImport } from './routes/register'
 import { Route as RecoverPasswordRouteImport } from './routes/recoverPassword'
 import { Route as LoginRouteImport } from './routes/login'
+import { Route as HistoricoClienteRouteImport } from './routes/historicoCliente'
+import { Route as DadosClienteRouteImport } from './routes/dadosCliente'
+import { Route as ClienteRouteImport } from './routes/cliente'
+import { Route as CarrinhoRouteImport } from './routes/carrinho'
+import { Route as CadastrarRouteImport } from './routes/cadastrar'
+import { Route as AdminRouteImport } from './routes/admin'
 import { Route as IndexRouteImport } from './routes/index'
 
-const RegisterRoute = RegisterRouteImport.update({
-  id: '/register',
-  path: '/register',
-  getParentRoute: () => rootRouteImport,
-} as any)
 const RecoverPasswordRoute = RecoverPasswordRouteImport.update({
   id: '/recoverPassword',
   path: '/recoverPassword',
@@ -29,6 +29,36 @@ const LoginRoute = LoginRouteImport.update({
   path: '/login',
   getParentRoute: () => rootRouteImport,
 } as any)
+const HistoricoClienteRoute = HistoricoClienteRouteImport.update({
+  id: '/historicoCliente',
+  path: '/historicoCliente',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const DadosClienteRoute = DadosClienteRouteImport.update({
+  id: '/dadosCliente',
+  path: '/dadosCliente',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ClienteRoute = ClienteRouteImport.update({
+  id: '/cliente',
+  path: '/cliente',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const CarrinhoRoute = CarrinhoRouteImport.update({
+  id: '/carrinho',
+  path: '/carrinho',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const CadastrarRoute = CadastrarRouteImport.update({
+  id: '/cadastrar',
+  path: '/cadastrar',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const AdminRoute = AdminRouteImport.update({
+  id: '/admin',
+  path: '/admin',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const IndexRoute = IndexRouteImport.update({
   id: '/',
   path: '/',
@@ -37,47 +67,88 @@ const IndexRoute = IndexRouteImport.update({
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
+  '/admin': typeof AdminRoute
+  '/cadastrar': typeof CadastrarRoute
+  '/carrinho': typeof CarrinhoRoute
+  '/cliente': typeof ClienteRoute
+  '/dadosCliente': typeof DadosClienteRoute
+  '/historicoCliente': typeof HistoricoClienteRoute
   '/login': typeof LoginRoute
   '/recoverPassword': typeof RecoverPasswordRoute
-  '/register': typeof RegisterRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
+  '/admin': typeof AdminRoute
+  '/cadastrar': typeof CadastrarRoute
+  '/carrinho': typeof CarrinhoRoute
+  '/cliente': typeof ClienteRoute
+  '/dadosCliente': typeof DadosClienteRoute
+  '/historicoCliente': typeof HistoricoClienteRoute
   '/login': typeof LoginRoute
   '/recoverPassword': typeof RecoverPasswordRoute
-  '/register': typeof RegisterRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
+  '/admin': typeof AdminRoute
+  '/cadastrar': typeof CadastrarRoute
+  '/carrinho': typeof CarrinhoRoute
+  '/cliente': typeof ClienteRoute
+  '/dadosCliente': typeof DadosClienteRoute
+  '/historicoCliente': typeof HistoricoClienteRoute
   '/login': typeof LoginRoute
   '/recoverPassword': typeof RecoverPasswordRoute
-  '/register': typeof RegisterRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '/login' | '/recoverPassword' | '/register'
+  fullPaths:
+    | '/'
+    | '/admin'
+    | '/cadastrar'
+    | '/carrinho'
+    | '/cliente'
+    | '/dadosCliente'
+    | '/historicoCliente'
+    | '/login'
+    | '/recoverPassword'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/login' | '/recoverPassword' | '/register'
-  id: '__root__' | '/' | '/login' | '/recoverPassword' | '/register'
+  to:
+    | '/'
+    | '/admin'
+    | '/cadastrar'
+    | '/carrinho'
+    | '/cliente'
+    | '/dadosCliente'
+    | '/historicoCliente'
+    | '/login'
+    | '/recoverPassword'
+  id:
+    | '__root__'
+    | '/'
+    | '/admin'
+    | '/cadastrar'
+    | '/carrinho'
+    | '/cliente'
+    | '/dadosCliente'
+    | '/historicoCliente'
+    | '/login'
+    | '/recoverPassword'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
+  AdminRoute: typeof AdminRoute
+  CadastrarRoute: typeof CadastrarRoute
+  CarrinhoRoute: typeof CarrinhoRoute
+  ClienteRoute: typeof ClienteRoute
+  DadosClienteRoute: typeof DadosClienteRoute
+  HistoricoClienteRoute: typeof HistoricoClienteRoute
   LoginRoute: typeof LoginRoute
   RecoverPasswordRoute: typeof RecoverPasswordRoute
-  RegisterRoute: typeof RegisterRoute
 }
 
 declare module '@tanstack/react-router' {
   interface FileRoutesByPath {
-    '/register': {
-      id: '/register'
-      path: '/register'
-      fullPath: '/register'
-      preLoaderRoute: typeof RegisterRouteImport
-      parentRoute: typeof rootRouteImport
-    }
     '/recoverPassword': {
       id: '/recoverPassword'
       path: '/recoverPassword'
@@ -92,6 +163,48 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof LoginRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/historicoCliente': {
+      id: '/historicoCliente'
+      path: '/historicoCliente'
+      fullPath: '/historicoCliente'
+      preLoaderRoute: typeof HistoricoClienteRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/dadosCliente': {
+      id: '/dadosCliente'
+      path: '/dadosCliente'
+      fullPath: '/dadosCliente'
+      preLoaderRoute: typeof DadosClienteRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/cliente': {
+      id: '/cliente'
+      path: '/cliente'
+      fullPath: '/cliente'
+      preLoaderRoute: typeof ClienteRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/carrinho': {
+      id: '/carrinho'
+      path: '/carrinho'
+      fullPath: '/carrinho'
+      preLoaderRoute: typeof CarrinhoRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/cadastrar': {
+      id: '/cadastrar'
+      path: '/cadastrar'
+      fullPath: '/cadastrar'
+      preLoaderRoute: typeof CadastrarRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/admin': {
+      id: '/admin'
+      path: '/admin'
+      fullPath: '/admin'
+      preLoaderRoute: typeof AdminRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/': {
       id: '/'
       path: '/'
@@ -104,9 +217,14 @@ declare module '@tanstack/react-router' {
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
+  AdminRoute: AdminRoute,
+  CadastrarRoute: CadastrarRoute,
+  CarrinhoRoute: CarrinhoRoute,
+  ClienteRoute: ClienteRoute,
+  DadosClienteRoute: DadosClienteRoute,
+  HistoricoClienteRoute: HistoricoClienteRoute,
   LoginRoute: LoginRoute,
   RecoverPasswordRoute: RecoverPasswordRoute,
-  RegisterRoute: RegisterRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
