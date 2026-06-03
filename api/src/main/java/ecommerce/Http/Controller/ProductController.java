@@ -5,6 +5,7 @@ import ecommerce.Http.IO.Responses.JsonResponse;
 import ecommerce.Http.Validators.HttpProductValidators;
 import ecommerce.UseCases.CreateProductUseCase;
 import ecommerce.UseCases.ListProductsUseCase;
+import ecommerce.UseCases.UpdateProductUseCase;
 import java.io.IOException;
 import java.util.List;
 import javax.servlet.ServletException;
@@ -118,8 +119,8 @@ protected void doPut(HttpServletRequest request, HttpServletResponse response)
 
       JsonResponse jsonRes =
           new JsonResponse(
-              HttpServletResponse.SC_INTERNAL_SERVER_ERROR,
-              "Failed to update product");
+              HttpServletResponse.SC_NOT_FOUND,
+              "Product Not Found");
 
       response.setStatus(jsonRes.getStatus());
       response.getWriter().write(jsonRes.toJson());
