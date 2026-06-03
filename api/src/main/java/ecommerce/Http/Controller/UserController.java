@@ -27,41 +27,6 @@ public class UserController extends HttpServlet {
   private UpdateUseCase updateUseCase = new UpdateUseCase();
 
   @Override
-  protected void doDelete(HttpServletRequest request, HttpServletResponse response)
-      throws ServletException, IOException {
-
-    response.setContentType("application/json");
-
-    try {
-      int id = PathVariableExtractor.extractIntPathVariable(request, "/users/:id", "id");
-
-      deleteUseCase.execute(id);
-
-      JsonResponse jsonRes =
-          new JsonResponse(HttpServletResponse.SC_OK, "User Deleted sucessfully", id);
-
-      response.setStatus(jsonRes.getStatus());
-      response.getWriter().write(jsonRes.toJson());
-
-    } catch (ValidationException e) {
-
-      JsonResponse jsonRes = new JsonResponse(422, e.getMessage());
-
-      response.setStatus(jsonRes.getStatus());
-      response.getWriter().write(jsonRes.toJson());
-
-    } catch (Exception e) {
-      e.printStackTrace();
-
-      JsonResponse jsonRes =
-          new JsonResponse(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, e.getMessage());
-
-      response.setStatus(jsonRes.getStatus());
-      response.getWriter().write(jsonRes.toJson());
-    }
-  }
-
-  @Override
   protected void doPut(HttpServletRequest request, HttpServletResponse response)
       throws ServletException, IOException {
 
@@ -98,6 +63,41 @@ public class UserController extends HttpServlet {
 
     } catch (Exception e) {
 
+      e.printStackTrace();
+
+      JsonResponse jsonRes =
+          new JsonResponse(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, e.getMessage());
+
+      response.setStatus(jsonRes.getStatus());
+      response.getWriter().write(jsonRes.toJson());
+    }
+  }
+
+  @Override
+  protected void doDelete(HttpServletRequest request, HttpServletResponse response)
+      throws ServletException, IOException {
+
+    response.setContentType("application/json");
+
+    try {
+      int id = PathVariableExtractor.extractIntPathVariable(request, "/users/:id", "id");
+
+      deleteUseCase.execute(id);
+
+      JsonResponse jsonRes =
+          new JsonResponse(HttpServletResponse.SC_OK, "User Deleted sucessfully", id);
+
+      response.setStatus(jsonRes.getStatus());
+      response.getWriter().write(jsonRes.toJson());
+
+    } catch (ValidationException e) {
+
+      JsonResponse jsonRes = new JsonResponse(422, e.getMessage());
+
+      response.setStatus(jsonRes.getStatus());
+      response.getWriter().write(jsonRes.toJson());
+
+    } catch (Exception e) {
       e.printStackTrace();
 
       JsonResponse jsonRes =
