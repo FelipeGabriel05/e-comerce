@@ -104,9 +104,7 @@ public class ProductRepository {
     }
   }
 
-  public Product updateProduct(Product productInput) {
-
-    try {
+  public Product updateProduct(Product productInput) throws SQLException {
 
         String query = ProductQueries.updateProductQuery;
 
@@ -119,23 +117,12 @@ public class ProductRepository {
         ps.setInt(5, productInput.getCategoriaId());
         ps.setInt(6, productInput.getId());
 
-        ps.executeUpdate();
+        int rowsAffected = ps.executeUpdate();
 
-        Product product = new Product();
+        if (rowsAffected == 0){
+          return null;
+        }
 
-        product.setId(productInput.getId());
-        product.setDescricao(productInput.getDescricao());
-        product.setPreco(productInput.getPreco());
-        product.setFoto(productInput.getFoto());
-        product.setQuantidade(productInput.getQuantidade());
-        product.setCategoriaId(productInput.getCategoriaId());
-
-        return product;
-
-    } catch (SQLException e) {
-
-        e.printStackTrace();
-        return null;
-    }
-}
+        return productInput; 
+  }
 }
