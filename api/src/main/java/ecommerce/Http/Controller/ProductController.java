@@ -85,58 +85,47 @@ public class ProductController extends HttpServlet {
     }
   }
 
-   @Override
-protected void doPut(HttpServletRequest request, HttpServletResponse response)
-    throws IOException {
+  @Override
+  protected void doPut(HttpServletRequest request, HttpServletResponse response)
+      throws IOException {
 
-  HttpProductValidators validators = new HttpProductValidators();
+    HttpProductValidators validators = new HttpProductValidators();
 
-  response.setContentType("application/json");
+    response.setContentType("application/json");
 
-  try {
+    try {
 
-    Product productInput =
-        validators.validateUpdateProduct(request);
+      Product productInput = validators.validateUpdateProduct(request);
 
-    UpdateProductUseCase useCase =
-        new UpdateProductUseCase();
+      UpdateProductUseCase useCase = new UpdateProductUseCase();
 
-    Product updatedProduct =
-        useCase.execute(productInput);
+      Product updatedProduct = useCase.execute(productInput);
 
-    if (updatedProduct != null) {
+      if (updatedProduct != null) {
 
-      JsonResponse jsonRes =
-          new JsonResponse(
-              HttpServletResponse.SC_OK,
-              "Product updated",
-              updatedProduct);
+        JsonResponse jsonRes =
+            new JsonResponse(HttpServletResponse.SC_OK, "Product updated", updatedProduct);
 
-      response.setStatus(jsonRes.getStatus());
-      response.getWriter().write(jsonRes.toJson());
+        response.setStatus(jsonRes.getStatus());
+        response.getWriter().write(jsonRes.toJson());
 
-    } else {
+      } else {
 
-      JsonResponse jsonRes =
-          new JsonResponse(
-              HttpServletResponse.SC_NOT_FOUND,
-              "Product Not Found");
+        JsonResponse jsonRes =
+            new JsonResponse(HttpServletResponse.SC_NOT_FOUND, "Product Not Found");
+
+        response.setStatus(jsonRes.getStatus());
+        response.getWriter().write(jsonRes.toJson());
+      }
+
+    } catch (Exception e) {
+
+      e.printStackTrace();
+
+      JsonResponse jsonRes = new JsonResponse(HttpServletResponse.SC_BAD_REQUEST, e.getMessage());
 
       response.setStatus(jsonRes.getStatus());
       response.getWriter().write(jsonRes.toJson());
     }
-
-  } catch (Exception e) {
-
-    e.printStackTrace();
-
-    JsonResponse jsonRes =
-        new JsonResponse(
-            HttpServletResponse.SC_BAD_REQUEST,
-            e.getMessage());
-
-    response.setStatus(jsonRes.getStatus());
-    response.getWriter().write(jsonRes.toJson());
   }
-}
 }

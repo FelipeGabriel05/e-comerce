@@ -5,41 +5,33 @@ import ecommerce.Database.Entites.Product;
 import ecommerce.Database.Repositories.ProductRepository;
 import ecommerce.Exceptions.InternalServerException;
 import ecommerce.Exceptions.NotFoundException;
-
 import java.sql.Connection;
 
 public class UpdateProductUseCase {
 
-    public Product execute(Product product)
-        throws NotFoundException, InternalServerException {
+  public Product execute(Product product) throws NotFoundException, InternalServerException {
 
-        try {
+    try {
 
-            Connection con = DBConnection.getConnection();
+      Connection con = DBConnection.getConnection();
 
-            ProductRepository repository =
-                new ProductRepository(con);
+      ProductRepository repository = new ProductRepository(con);
 
-            Product updatedProduct =
-                repository.updateProduct(product);
+      Product updatedProduct = repository.updateProduct(product);
 
-            if (updatedProduct == null) {
-                throw new NotFoundException(
-                    "Product not found or could not be updated"
-                );
-            }
+      if (updatedProduct == null) {
+        throw new NotFoundException("Product not found or could not be updated");
+      }
 
-            return updatedProduct;
+      return updatedProduct;
 
-        } catch (NotFoundException e) {
+    } catch (NotFoundException e) {
 
-            throw e;
+      throw e;
 
-        } catch (Exception e) {
+    } catch (Exception e) {
 
-            throw new InternalServerException(
-                "Internal error while updating product"
-            );
-        }
+      throw new InternalServerException("Internal error while updating product");
     }
+  }
 }
