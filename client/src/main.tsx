@@ -4,7 +4,6 @@ import { StrictMode } from 'react';
 import ReactDOM from 'react-dom/client';
 import { Toaster } from 'sonner';
 
-import { CartProvider } from '@/lib/context/cart-context';
 import Page404 from '@/lib/pages/404';
 import { queryClient } from '@/lib/services/constants';
 
@@ -45,10 +44,8 @@ if (rootElement && !rootElement.innerHTML) {
   root.render(
     <StrictMode>
       <QueryClientProvider client={queryClient}>
-        <CartProvider>
-          <RouterProvider router={router} />
-          <Toaster richColors position="top-center" />
-        </CartProvider>
+        <RouterProvider router={router} />
+        <Toaster richColors position="top-center" />
       </QueryClientProvider>
     </StrictMode>,
   );

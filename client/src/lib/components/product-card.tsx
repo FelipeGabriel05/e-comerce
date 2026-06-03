@@ -2,7 +2,7 @@ import { ShoppingCart } from 'lucide-react';
 
 import { Button } from '@/components/ui/button';
 import { P } from '@/components/ui/typography';
-import { useCartContext } from '@/lib/context/cart-context';
+import { useCart } from '@/lib/hooks/use-cart';
 import type { Product } from '@/lib/types/product';
 
 type ProductCardProps = {
@@ -10,7 +10,7 @@ type ProductCardProps = {
 };
 
 export const ProductCard = ({ product }: ProductCardProps) => {
-  const { addToCart } = useCartContext();
+  const { addToCart } = useCart();
 
   const formattedPrice = new Intl.NumberFormat('pt-BR', {
     style: 'currency',
