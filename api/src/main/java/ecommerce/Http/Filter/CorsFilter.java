@@ -23,7 +23,10 @@ public class CorsFilter implements Filter {
     HttpServletRequest req = (HttpServletRequest) request;
     HttpServletResponse res = (HttpServletResponse) response;
 
-    res.setHeader("Access-Control-Allow-Origin", "http://localhost:3000");
+    String origin = req.getHeader("Origin");
+    if ("http://localhost:3000".equals(origin) || "http://localhost:8081".equals(origin)) {
+      res.setHeader("Access-Control-Allow-Origin", origin);
+    }
     res.setHeader("Access-Control-Allow-Credentials", "true");
     res.setHeader("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE, OPTIONS");
     res.setHeader("Access-Control-Allow-Headers", "Content-Type, Authorization");
