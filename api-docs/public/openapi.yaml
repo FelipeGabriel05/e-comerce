@@ -1,0 +1,521 @@
+openapi: '3.0.3'
+info:
+  title: Ecommerce
+  description: |
+      API documentation converted from Postman Collection: Ecommerce
+  version: '1.0.0'
+servers:
+  - url: http://localhost:8080
+    description: Dev server
+paths:
+  /login:
+    post:
+      summary: Login
+      description: ''
+      operationId: post_Login
+      tags:
+        - Auth
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+            example:
+              login: admin
+              password: admin123
+      responses:
+        200:
+          description: Login Success
+          content:
+            application/json:
+              example:
+                status: 200
+                code: '20260514155422620'
+                message: Login successful
+                data:
+                  id: 1
+                  nome: Admin
+                  endereco: Rua Admin, 1
+                  email: admin@dev.local
+                  login: admin
+                  senha: null
+                  administrador: true
+        401:
+          description: Invalid Credentials Error
+          content:
+            application/json:
+              example:
+                status: 401
+                code: '20260514155033937'
+                message: Invalid credentials
+                data: null
+  /register:
+    post:
+      summary: Register
+      description: ''
+      operationId: post_Register
+      tags:
+        - Auth
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+            example:
+              name: Paulo Victor
+              address: Rua Sao Sebastiao
+              email: paulo@gmail.com
+              login: paulo_123
+              password: Senha@123
+      responses:
+        201:
+          description: Success
+          content:
+            application/json:
+              example:
+                status: 201
+                code: '20260602234056009'
+                message: User created
+                data:
+                  id: 3
+                  nome: Paulo Victor
+                  endereco: Rua Sao Sebastiao
+                  email: paulo@gmail.com
+                  login: paulo_123
+                  senha: null
+                  administrador: false
+        422:
+          description: Validation error
+          content:
+            application/json:
+              example:
+                status: 422
+                code: '20260602234123385'
+                message: Password must contain at least 8 characters, Password must contain at least one number
+                data: null
+  /me:
+    get:
+      summary: Me
+      description: ''
+      operationId: get_Me
+      tags:
+        - Auth
+      responses:
+        200:
+          description: Success
+          content:
+            application/json:
+              example:
+                status: 200
+                code: '20260602234204927'
+                message: User info
+                data:
+                  id: 1
+                  nome: Admin
+                  endereco: Rua Admin, 1
+                  email: admin@dev.local
+                  login: admin
+                  senha: null
+                  administrador: true
+        401:
+          description: Unauthorized
+          content:
+            application/json:
+              example:
+                status: 401
+                code: '20260602234223264'
+                message: Authentication required
+                data: null
+  /admin/products:
+    post:
+      summary: Create Product
+      description: ''
+      operationId: post_Create_Product
+      tags:
+        - Product
+      requestBody:
+        required: true
+        content:
+          multipart/form-data:
+            schema:
+              type: object
+              properties:
+                descricao:
+                  type: string
+                preco:
+                  type: string
+                foto:
+                  type: string
+                  format: binary
+                quantidade:
+                  type: string
+                categoriaId:
+                  type: string
+      responses:
+        201:
+          description: Create Product Sucess
+          content:
+            application/json:
+              example:
+                status: 201
+                message: Product created
+                data:
+                  id: 6
+                  descricao: Jill Valentine is one of the last remaining people in Raccoon City to witness the atrocities Umbrella performed.
+                  preco: 16.9
+                  foto: 12acff6a-92cf-4cee-8667-a24f32c3798c.png
+                  quantidade: 200
+                  categoriaId: 1
+  /image/{image_filename}:
+    get:
+      summary: Get image
+      description: ''
+      operationId: get_Get_image
+      tags:
+        - Upload
+      parameters:
+        - name: image_filename
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        200:
+          description: Successful response
+        400:
+          description: Bad request
+        500:
+          description: Server error
+  /image/upload:
+    post:
+      summary: Upload image
+      description: ''
+      operationId: post_Upload_image
+      tags:
+        - Upload
+      requestBody:
+        required: true
+        content:
+          multipart/form-data:
+            schema:
+              type: object
+              properties:
+                image:
+                  type: string
+                  format: binary
+      responses:
+        400:
+          description: Validation error
+          content:
+            application/json:
+              example:
+                status: 400
+                message: Image is required
+                data: null
+        401:
+          description: Auth error
+          content:
+            application/json:
+              example:
+                status: 401
+                message: Authentication required
+                data: null
+  /cart:
+    get:
+      summary: Get Cart Details
+      description: ''
+      operationId: get_Get_Cart_Details
+      tags:
+        - Cart
+      responses:
+        200:
+          description: Get Cart Details Sucess
+          content:
+            application/json:
+              example:
+                status: 200
+                message: Cart retrieved
+                data:
+                  items:
+                    - product:
+                        id: 2
+                        descricao: GTA V
+                        preco: 149.9
+                        foto: |
+                            https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/3240220/header.jpg?t=1765479644
+                        quantidade: 999
+                        categoriaId: 1
+                      quantity: 10
+                      subtotal: 1499
+                  total: 1499
+    post:
+      summary: Add Product to Cart
+      description: ''
+      operationId: post_Add_Product_to_Cart
+      tags:
+        - Cart
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+            example:
+              productId: 2
+              quantity: 10
+      responses:
+        200:
+          description: Add Product to Cart Success
+          content:
+            application/json:
+              example:
+                status: 200
+                message: Item added to cart
+                data:
+                  items:
+                    - product:
+                        id: 2
+                        descricao: GTA V
+                        preco: 149.9
+                        foto: |
+                            https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/3240220/header.jpg?t=1765479644
+                        quantidade: 999
+                        categoriaId: 1
+                      quantity: 10
+                      subtotal: 1499
+                  total: 1499
+    put:
+      summary: Update Product in Cart
+      description: ''
+      operationId: put_Update_Product_in_Cart
+      tags:
+        - Cart
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+            example:
+              productId: 1
+              quantity: 13
+      responses:
+        200:
+          description: Update Product in Cart Success
+          content:
+            application/json:
+              example:
+                status: 200
+                message: Cart updated
+                data:
+                  items:
+                    - product:
+                        id: 2
+                        descricao: GTA V
+                        preco: 149.9
+                        foto: |
+                            https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/3240220/header.jpg?t=1765479644
+                        quantidade: 999
+                        categoriaId: 1
+                      quantity: 10
+                      subtotal: 1499
+                    - product:
+                        id: 1
+                        descricao: Counter-Strike 2
+                        preco: 0
+                        foto: |
+                            https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/730/header.jpg?t=1749053861
+                        quantidade: 999
+                        categoriaId: 1
+                      quantity: 13
+                      subtotal: 0
+                  total: 1499
+  /cart/{product_id}:
+    delete:
+      summary: Delete Product in Cart
+      description: ''
+      operationId: delete_Delete_Product_in_Cart
+      tags:
+        - Cart
+      parameters:
+        - name: product_id
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        200:
+          description: Delete Product in Cart Success
+          content:
+            application/json:
+              example:
+                status: 200
+                message: Item removed from cart
+                data:
+                  items:
+                    - product:
+                        id: 2
+                        descricao: GTA V
+                        preco: 149.9
+                        foto: |
+                            https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/3240220/header.jpg?t=1765479644
+                        quantidade: 999
+                        categoriaId: 1
+                      quantity: 10
+                      subtotal: 1499
+                  total: 1499
+  /sales:
+    post:
+      summary: Create Sale
+      description: ''
+      operationId: post_Create_Sale
+      tags:
+        - Sales
+      responses:
+        201:
+          description: Create Sale Success
+          content:
+            application/json:
+              example:
+                status: 201
+                code: '20260514155148641'
+                message: Sale created
+                data:
+                  id: 4
+                  dataHora: |
+                      2026-05-14T15:51:48.630676100
+                  userId: 1
+                  items:
+                    - productId: 2
+                      price: 149.9
+                      quantity: 10
+                  total: 1499
+        400:
+          description: Cart Empty Error
+          content:
+            application/json:
+              example:
+                status: 400
+                code: '20260514154806643'
+                message: Cart is empty
+                data: null
+        401:
+          description: Unauthorized Error
+          content:
+            application/json:
+              example:
+                status: 401
+                code: '20260514154924490'
+                message: Authentication required
+                data: null
+  /users/{user_id}:
+    put:
+      summary: Update user
+      description: ''
+      operationId: put_Update_user
+      tags:
+        - User
+      parameters:
+        - name: user_id
+          in: path
+          required: true
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+            example:
+              name: Paulo Victor
+              address: Rua São Sebastiao - Fortaleza/CE
+              email: paulo@gmail.com
+              login: paulo_123
+              password: null
+      responses:
+        200:
+          description: Success
+          content:
+            application/json:
+              example:
+                status: 200
+                code: '20260602234623246'
+                message: User Updated sucessfully
+                data:
+                  id: 3
+                  nome: Paulo Victor
+                  endereco: Rua São Sebastiao - Fortaleza/CE
+                  email: paulo@gmail.com
+                  login: paulo_123
+                  senha: null
+                  administrador: false
+        401:
+          description: Unauthorized
+          content:
+            application/json:
+              example:
+                status: 401
+                code: '20260602235255724'
+                message: Authentication required
+                data: null
+        404:
+          description: Not Found
+          content:
+            application/json:
+              example:
+                status: 404
+                code: '20260602234741842'
+                message: User not found or could not be updated
+                data: null
+        422:
+          description: Validation Error
+          content:
+            application/json:
+              example:
+                status: 422
+                code: '20260602234551263'
+                message: Name is required, Address is required
+                data: null
+    delete:
+      summary: Delete user
+      description: ''
+      operationId: delete_Delete_user
+      tags:
+        - User
+      parameters:
+        - name: user_id
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        200:
+          description: Success
+          content:
+            application/json:
+              example:
+                status: 200
+                code: '20260602234712040'
+                message: User Deleted sucessfully
+                data: 3
+        401:
+          description: Unauthorized
+          content:
+            application/json:
+              example:
+                status: 401
+                code: '20260602235325319'
+                message: Authentication required
+                data: null
+        500:
+          description: Not Found
+          content:
+            application/json:
+              example:
+                status: 500
+                code: '20260602234848598'
+                message: User not found
+                data: null
