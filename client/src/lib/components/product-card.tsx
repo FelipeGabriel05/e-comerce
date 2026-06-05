@@ -1,9 +1,9 @@
 import { ShoppingCart } from 'lucide-react';
 
 import { Button } from '@/components/ui/button';
-import { P } from '@/components/ui/typography';
+import { P } from '@/components/ui/typography.tsx';
 import { useCart } from '@/lib/hooks/use-cart';
-import type { Product } from '@/lib/types/product';
+import type { Product } from '@/lib/types/product.ts';
 
 type ProductCardProps = {
   product: Product;

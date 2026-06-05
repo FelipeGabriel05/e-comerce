@@ -1,6 +1,6 @@
 import { useQuery } from '@tanstack/react-query';
 
-import type { Product } from '@/lib/types/product';
+import type { Product } from '@/lib/types/product.ts';
 
 const PRODUCTS_QUERY_KEY = ['products'];
 
