@@ -1,13 +1,5 @@
 package ecommerce.Http.Controller;
 
-import java.io.IOException;
-
-import javax.servlet.ServletException;
-import javax.servlet.annotation.WebServlet;
-import javax.servlet.http.HttpServlet;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-
 import ecommerce.Database.Entites.User;
 import ecommerce.Exceptions.NotFoundException;
 import ecommerce.Exceptions.ValidationException;
@@ -16,6 +8,12 @@ import ecommerce.Http.IO.Responses.JsonResponse;
 import ecommerce.Http.Validators.HttpUserValidators;
 import ecommerce.UseCases.DeleteUserUseCase;
 import ecommerce.UseCases.UpdateUseCase;
+import java.io.IOException;
+import javax.servlet.ServletException;
+import javax.servlet.annotation.WebServlet;
+import javax.servlet.http.HttpServlet;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 
 @WebServlet("/users/*")
 public class UserController extends HttpServlet {
