@@ -1,6 +1,6 @@
 import { api } from './constants';
 
-export interface CartProduct {
+interface CartProduct {
   id: number;
   descricao: string;
   preco: number;
@@ -9,7 +9,7 @@ export interface CartProduct {
   categoriaId: number;
 }
 
-export interface CartItem {
+interface CartItem {
   product: CartProduct;
   quantity: number;
   subtotal: number;
