@@ -1,15 +1,17 @@
 package ecommerce.Http.Controller;
 
-import ecommerce.Database.Entites.User;
-import ecommerce.Http.IO.Responses.JsonResponse;
-import ecommerce.Http.Validators.HttpLoginValidators;
-import ecommerce.UseCases.LoginUseCase;
 import java.io.IOException;
+
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+
+import ecommerce.Database.Entites.User;
+import ecommerce.Http.IO.Responses.JsonResponse;
+import ecommerce.Http.Validators.HttpLoginValidators;
+import ecommerce.UseCases.LoginUseCase;
 
 @WebServlet("/login")
 public class LoginController extends HttpServlet {
