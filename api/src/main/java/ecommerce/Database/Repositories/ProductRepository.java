@@ -93,7 +93,12 @@ public class ProductRepository {
 
       if (rs.next()) {
         Product product = new Product();
-
+        product.setId(rs.getInt("id"));
+        product.setDescricao(rs.getString("descricao"));
+        product.setPreco(rs.getDouble("preco"));
+        product.setFoto(rs.getString("foto"));
+        product.setQuantidade(rs.getInt("quantidade"));
+        product.setCategoriaId(rs.getInt("categoria_id"));
         return product;
       }
 

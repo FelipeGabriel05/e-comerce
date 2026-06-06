@@ -11,12 +11,13 @@ import javax.servlet.http.HttpServletResponse;
 import ecommerce.Database.Entites.User;
 import ecommerce.Exceptions.NotFoundException;
 import ecommerce.Exceptions.ValidationException;
+import ecommerce.Http.IO.PathVariableExtractor;
 import ecommerce.Http.IO.Responses.JsonResponse;
 import ecommerce.Http.Validators.HttpUserValidators;
 import ecommerce.UseCases.DeleteUserUseCase;
 import ecommerce.UseCases.UpdateUseCase;
 
-@WebServlet("/users")
+@WebServlet("/users/*")
 public class UserController extends HttpServlet {
 
   private static final long serialVersionUID = 1L;
@@ -28,49 +29,15 @@ public class UserController extends HttpServlet {
   private UpdateUseCase updateUseCase = new UpdateUseCase();
 
   @Override
-  protected void doDelete(HttpServletRequest request, HttpServletResponse response)
-      throws ServletException, IOException {
-
-    response.setContentType("application/json");
-
-    try {
-      int id = validator.validateDeleteUser(request);
-
-      deleteUseCase.execute(id);
-
-      JsonResponse jsonRes =
-          new JsonResponse(HttpServletResponse.SC_OK, "User Deleted sucessfully", id);
-
-      response.setStatus(jsonRes.getStatus());
-      response.getWriter().write(jsonRes.toJson());
-
-    } catch (ValidationException e) {
-
-      JsonResponse jsonRes = new JsonResponse(422, e.getMessage());
-
-      response.setStatus(jsonRes.getStatus());
-      response.getWriter().write(jsonRes.toJson());
-
-    } catch (Exception e) {
-      e.printStackTrace();
-
-      JsonResponse jsonRes =
-          new JsonResponse(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, e.getMessage());
-
-      response.setStatus(jsonRes.getStatus());
-      response.getWriter().write(jsonRes.toJson());
-    }
-  }
-
-  @Override
   protected void doPut(HttpServletRequest request, HttpServletResponse response)
       throws ServletException, IOException {
 
     response.setContentType("application/json");
 
     try {
+      int id = PathVariableExtractor.extractIntPathVariable(request, "/users/:id", "id");
 
-      User user = validator.validateUpdateUser(request);
+      User user = validator.validateUpdateUser(request, id);
 
       updateUseCase.execute(user);
 
@@ -98,6 +65,41 @@ public class UserController extends HttpServlet {
 
     } catch (Exception e) {
 
+      e.printStackTrace();
+
+      JsonResponse jsonRes =
+          new JsonResponse(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, e.getMessage());
+
+      response.setStatus(jsonRes.getStatus());
+      response.getWriter().write(jsonRes.toJson());
+    }
+  }
+
+  @Override
+  protected void doDelete(HttpServletRequest request, HttpServletResponse response)
+      throws ServletException, IOException {
+
+    response.setContentType("application/json");
+
+    try {
+      int id = PathVariableExtractor.extractIntPathVariable(request, "/users/:id", "id");
+
+      deleteUseCase.execute(id);
+
+      JsonResponse jsonRes =
+          new JsonResponse(HttpServletResponse.SC_OK, "User Deleted sucessfully", id);
+
+      response.setStatus(jsonRes.getStatus());
+      response.getWriter().write(jsonRes.toJson());
+
+    } catch (ValidationException e) {
+
+      JsonResponse jsonRes = new JsonResponse(422, e.getMessage());
+
+      response.setStatus(jsonRes.getStatus());
+      response.getWriter().write(jsonRes.toJson());
+
+    } catch (Exception e) {
       e.printStackTrace();
 
       JsonResponse jsonRes =
