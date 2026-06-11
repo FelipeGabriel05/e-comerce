@@ -1,6 +1,7 @@
 package ecommerce.Http.Controller;
 
 import ecommerce.Database.Entites.Category;
+import ecommerce.Exceptions.ValidationException;
 import ecommerce.Http.IO.Responses.JsonResponse;
 import ecommerce.Http.Validators.HttpCategoryValidators;
 import ecommerce.UseCases.CreateCategoryUseCase;
@@ -29,29 +30,25 @@ public class CategoryController extends HttpServlet {
 
       Category createdCategory = useCase.execute(categoryInput);
 
-      if (createdCategory != null) {
+      JsonResponse jsonRes =
+          new JsonResponse(HttpServletResponse.SC_CREATED, "Category created", createdCategory);
 
-        JsonResponse jsonRes =
-            new JsonResponse(HttpServletResponse.SC_CREATED, "Category created", createdCategory);
+      response.setStatus(jsonRes.getStatus());
+      response.getWriter().write(jsonRes.toJson());
 
-        response.setStatus(jsonRes.getStatus());
-        response.getWriter().write(jsonRes.toJson());
+    } catch (ValidationException e) {
 
-      } else {
+      JsonResponse jsonRes = new JsonResponse(HttpServletResponse.SC_BAD_REQUEST, e.getMessage());
 
-        JsonResponse jsonRes =
-            new JsonResponse(
-                HttpServletResponse.SC_INTERNAL_SERVER_ERROR, "Failed to create category");
-
-        response.setStatus(jsonRes.getStatus());
-        response.getWriter().write(jsonRes.toJson());
-      }
+      response.setStatus(jsonRes.getStatus());
+      response.getWriter().write(jsonRes.toJson());
 
     } catch (Exception e) {
 
       e.printStackTrace();
 
-      JsonResponse jsonRes = new JsonResponse(HttpServletResponse.SC_BAD_REQUEST, e.getMessage());
+      JsonResponse jsonRes =
+          new JsonResponse(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, "Internal server error");
 
       response.setStatus(jsonRes.getStatus());
       response.getWriter().write(jsonRes.toJson());

@@ -9,7 +9,7 @@ public class CreateCategoryUseCase {
 
   public CreateCategoryUseCase() {}
 
-  public Category execute(Category category) {
+  public Category execute(Category category) throws Exception {
 
     try {
 
@@ -21,7 +21,7 @@ public class CreateCategoryUseCase {
 
     } catch (Exception e) {
       e.printStackTrace();
-      return null;
+      throw e;
     }
   }
 }

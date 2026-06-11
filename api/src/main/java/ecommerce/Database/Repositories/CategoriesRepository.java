@@ -15,7 +15,7 @@ public class CategoriesRepository {
     con = dbConnection;
   }
 
-  public Category createCategory(Category categoryInput) {
+  public Category createCategory(Category categoryInput) throws Exception {
     try {
 
       String query = CategoriesQueries.insertCategoryQuery;
@@ -37,9 +37,10 @@ public class CategoriesRepository {
       category.setDescricao(categoryInput.getDescricao());
 
       return category;
+
     } catch (Exception e) {
       e.printStackTrace();
-      return null;
+      throw e;
     }
   }
 }
