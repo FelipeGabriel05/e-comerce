@@ -1,0 +1,9 @@
+const Admin = () => {
+  return (
+    <div>
+      <h1>Esse é a tela de admin</h1>
+    </div>
+  );
+};
+
+export default Admin;
