@@ -1,4 +1,3 @@
-
 # Ecommerce API
 
 ## 🏗️ Architecture
@@ -243,7 +242,6 @@ To implement a new feature or endpoint, follow this structured process:
     - Include getters/setters and JSON serialization logic (e.g., `toJson()` method).
 8.  **Initialization**: Ensure the new table is registered in `Database.DatabaseInitializer.java` to be created on startup if it doesn't exist.
 
-
 ### Protect Routes from Unauthenticated Users
 
 ```mermaid
@@ -268,15 +266,15 @@ To protect an endpoint and restrict access to authenticated users, follow the st
 
 Modify the filter responsible for handling authentication:
 
-* Open `ecommerce.http.filter.AuthenticationRequiredFilter.java`
-* This filter intercepts incoming requests and checks whether authentication is required.
+- Open `ecommerce.http.filter.AuthenticationRequiredFilter.java`
+- This filter intercepts incoming requests and checks whether authentication is required.
 
 #### 2. Register the Protected Route
 
 Define which routes should require authentication:
 
-* Locate the `protectedRoutes` list inside the filter.
-* Add a new route entry specifying the HTTP method and path.
+- Locate the `protectedRoutes` list inside the filter.
+- Add a new route entry specifying the HTTP method and path.
 
 **Example:**
 
@@ -289,7 +287,6 @@ new Route("GET", "/admin/dashboard")
 #### 3. Done
 
 Once the route is added to `protectedRoutes`, the filter will automatically enforce authentication for that endpoint.
-
 
 ### Protect Routes with Admin Role Permission
 
@@ -320,19 +317,18 @@ To restrict access to endpoints that require **administrator privileges**, follo
 
 Modify the filter responsible for enforcing admin permissions:
 
-* Open `ecommerce.Http.Filter.AdminRolePermissionRequiredFilter.java`
-* This filter intercepts incoming requests and validates:
-
-  * If the route requires admin access
-  * If the user is authenticated
-  * If the user has the `administrator=true`
+- Open `ecommerce.Http.Filter.AdminRolePermissionRequiredFilter.java`
+- This filter intercepts incoming requests and validates:
+  - If the route requires admin access
+  - If the user is authenticated
+  - If the user has the `administrator=true`
 
 #### 2. Register Admin-Protected Routes
 
 Define which routes should only be accessible by admin users:
 
-* Locate the `adminRoutes` list inside the filter
-* Add a new route entry specifying the HTTP method and path
+- Locate the `adminRoutes` list inside the filter
+- Add a new route entry specifying the HTTP method and path
 
 **Example:**
 
@@ -345,3 +341,193 @@ new Route("POST", "/admin/products")
 #### 3. Done
 
 Once configured, the filter ensures that the user has `administrador = true` in the database to access this endpoint.
+
+### Handling Request Parameters
+
+This API uses multiple parameter types depending on the endpoint. Follow these recipes for each type:
+
+#### 1. Body Parameters (JSON)
+
+**When to use:** Create or update operations with structured data
+
+**Helper:** `BodyJsonToObject.parse(request, ClassName.class)`
+
+**Example:**
+
+```java
+// Controller
+@WebServlet("/login")
+public class LoginController extends HttpServlet {
+  protected void doPost(HttpServletRequest request, HttpServletResponse response) {
+    // 1. Parse the body into a DTO
+    LoginBodyRequest body = BodyJsonToObject.parse(request, LoginBodyRequest.class);
+
+    // 2. Validate the body
+    HttpLoginValidators validators = new HttpLoginValidators();
+    User credentials = validators.validateLogin(request);
+
+    // 3. Use the validated data
+    LoginUseCase useCase = new LoginUseCase();
+    LoginUseCase.LoginResult result = useCase.execute(credentials.getLogin(), credentials.getSenha());
+  }
+}
+
+// DTO (Request model)
+public class LoginBodyRequest {
+  public String login;
+  public String password;
+}
+
+// Validator
+public class HttpLoginValidators {
+  public User validateLogin(HttpServletRequest request) throws ValidationException {
+    LoginBodyRequest body = BodyJsonToObject.parse(request, LoginBodyRequest.class);
+    // Validate fields
+    if (body.login == null || body.login.isEmpty()) {
+      throw new ValidationException("Login is required");
+    }
+    // ... more validation
+    return user;
+  }
+}
+```
+
+#### 2. Path Variables (Dynamic URL segments)
+
+**When to use:** Identify specific resources (like `/users/42` or `/cart/67`)
+
+**Helper:** `PathVariableExtractor.extract(request, pattern, varName)`
+
+**Example:**
+
+```java
+// Controller - Update route to accept wildcard
+@WebServlet("/cart/*")
+public class CartController extends HttpServlet {
+  protected void doDelete(HttpServletRequest request, HttpServletResponse response) {
+    // 1. Extract path variable using helper
+    int productId = PathVariableExtractor.extractIntPathVariable(
+      request,
+      "/cart/:productId",
+      "productId"
+    );
+
+    // 2. Use the extracted variable
+    RemoveItemFromCartUseCase useCase = new RemoveItemFromCartUseCase();
+    Cart cart = useCase.execute(rawCart, productId);
+  }
+}
+```
+
+**Supported extraction methods:**
+
+```java
+// Extract string variable
+String filename = PathVariableExtractor.extractPathVariable(
+  request,
+  "/image/:filename",
+  "filename"
+);
+
+// Extract integer variable
+int userId = PathVariableExtractor.extractIntPathVariable(
+  request,
+  "/users/:userId",
+  "userId"
+);
+
+// Extract long variable
+long postId = PathVariableExtractor.extractLongPathVariable(
+  request,
+  "/posts/:postId",
+  "postId"
+);
+
+// Extract multiple variables at once
+Map<String, String> vars = PathVariableExtractor.extractPathVariables(
+  request,
+  "/users/:userId/posts/:postId"
+);
+String userId = vars.get("userId");
+String postId = vars.get("postId");
+```
+
+**Pattern Syntax:**
+
+- `:id` - Simple variable
+- `:userId` or `:user_id` - Named variables (underscore allowed)
+- `/users/:userId/posts/:postId` - Multiple variables
+
+#### 3. Query Parameters
+
+**When to use:** Optional filters, pagination, or configuration values
+
+**How to extract:**
+
+```java
+String value = request.getParameter("paramName");
+String[] values = request.getParameterValues("paramName"); // For multiple values
+int page = Integer.parseInt(request.getParameter("page"));
+```
+
+**Example:**
+
+```java
+// Controller
+@WebServlet("/products")
+public class ProductController extends HttpServlet {
+  protected void doGet(HttpServletRequest request, HttpServletResponse response) {
+    // Extract optional query parameters
+    String category = request.getParameter("category");
+    String sortBy = request.getParameter("sort");
+    String pageStr = request.getParameter("page");
+
+    int page = pageStr != null ? Integer.parseInt(pageStr) : 1;
+
+    // Use the parameters
+    ListProductsUseCase useCase = new ListProductsUseCase();
+    List<Product> products = useCase.execute(category, sortBy, page);
+  }
+}
+```
+
+#### 4. Request Attributes (From Filters)
+
+**When to use:** Pass data from filters/middleware to controllers (authenticated user, request context)
+
+**How to set (in filter):**
+
+```java
+User authenticatedUser = getUserFromToken(token);
+request.setAttribute("user", authenticatedUser);
+```
+
+**How to extract (in controller):**
+
+```java
+User user = (User) request.getAttribute("user");
+```
+
+**Example:**
+
+```java
+// Filter sets the authenticated user
+public class AuthenticationFilter extends HttpFilter {
+  protected void doFilter(HttpServletRequest request, HttpServletResponse response, FilterChain chain) {
+    String token = extractToken(request);
+    User user = validateToken(token);
+    request.setAttribute("user", user); // Set for controller
+    chain.doFilter(request, response);
+  }
+}
+
+// Controller reads the authenticated user
+@WebServlet("/me")
+public class AuthMeController extends HttpServlet {
+  protected void doGet(HttpServletRequest request, HttpServletResponse response) {
+    User user = (User) request.getAttribute("user"); // Already set by filter
+    JsonResponse jsonRes = new JsonResponse(HttpServletResponse.SC_OK, "User info", user);
+    response.getWriter().write(jsonRes.toJson());
+  }
+}
+```

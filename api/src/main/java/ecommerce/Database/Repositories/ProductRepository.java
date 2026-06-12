@@ -7,8 +7,11 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.util.ArrayList;
+import java.util.List;
 
 public class ProductRepository {
+
   private Connection con;
 
   public ProductRepository(Connection dbConnection) {
@@ -43,9 +46,40 @@ public class ProductRepository {
       product.setCategoriaId(productInput.getCategoriaId());
 
       return product;
+
     } catch (SQLException e) {
       e.printStackTrace();
       return null;
+    }
+  }
+
+  public List<Product> listAvailableProducts() {
+    try {
+      String query = ProductQueries.listAvailableProductsQuery;
+
+      Statement stmt = con.createStatement();
+      ResultSet rs = stmt.executeQuery(query);
+
+      List<Product> products = new ArrayList<>();
+
+      while (rs.next()) {
+        Product product = new Product();
+
+        product.setId(rs.getInt("id"));
+        product.setDescricao(rs.getString("descricao"));
+        product.setPreco(rs.getDouble("preco"));
+        product.setFoto(rs.getString("foto"));
+        product.setQuantidade(rs.getInt("quantidade"));
+        product.setCategoriaId(rs.getInt("categoria_id"));
+
+        products.add(product);
+      }
+
+      return products;
+
+    } catch (SQLException e) {
+      e.printStackTrace();
+      return new ArrayList<>();
     }
   }
 

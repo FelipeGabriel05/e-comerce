@@ -1,0 +1,22 @@
+version: '3.8'
+
+services:
+  api-docs:
+    container_name: api-docs-ecommerce-dev
+    build:
+      context: ../../
+      dockerfile: infra/dev/Dockerfile
+    ports:
+      - "8081:8081"
+    environment:
+      NODE_ENV: development
+      PORT: 8081
+    volumes:
+      - ../../src:/app/src
+      - ../../public:/app/public
+    networks:
+      - ecommerce-network
+
+networks:
+  ecommerce-network:
+    driver: bridge

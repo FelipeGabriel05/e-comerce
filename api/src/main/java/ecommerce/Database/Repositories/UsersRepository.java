@@ -121,4 +121,51 @@ public class UsersRepository {
     }
     return null;
   }
+
+  public boolean deleteUserById(int id) {
+    try {
+      String query = UsersQueries.deleteUserQuery;
+      PreparedStatement ps = con.prepareStatement(query);
+
+      ps.setInt(1, id);
+
+      int rowsAffected = ps.executeUpdate();
+
+      return rowsAffected > 0;
+
+    } catch (SQLException e) {
+      e.printStackTrace();
+    }
+    return false;
+  }
+
+  public boolean updateUser(User user) {
+    try {
+      boolean changePassword = user.getSenha() != null;
+      String query =
+          changePassword
+              ? UsersQueries.updateUserQuery
+              : UsersQueries.updateUserWithoutPasswordQuery;
+      PreparedStatement ps = con.prepareStatement(query);
+
+      ps.setString(1, user.getNome());
+      ps.setString(2, user.getEndereco());
+      ps.setString(3, user.getEmail());
+      ps.setString(4, user.getLogin());
+      if (changePassword) {
+        ps.setString(5, user.getSenha());
+        ps.setInt(6, user.getId());
+      } else {
+        ps.setInt(5, user.getId());
+      }
+
+      int rowsAffected = ps.executeUpdate();
+
+      return rowsAffected > 0;
+
+    } catch (SQLException e) {
+      e.printStackTrace();
+    }
+    return false;
+  }
 }

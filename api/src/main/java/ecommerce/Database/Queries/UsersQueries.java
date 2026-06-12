@@ -7,4 +7,12 @@ public class UsersQueries {
 
   public static String insertUserQuery =
       "INSERT INTO usuario (nome, endereco, email, login, senha, administrador) VALUES (?, ?, ?, ?, ?, ?)";
+
+  public static String deleteUserQuery = "DELETE FROM usuario WHERE id = ?";
+
+  public static String updateUserQuery =
+      "UPDATE usuario SET nome = ?, endereco = ?, email = ?, login = ?, senha = ? WHERE id = ?";
+
+  public static String updateUserWithoutPasswordQuery =
+      "UPDATE usuario SET nome = ?, endereco = ?, email = ?, login = ? WHERE id = ?";
 }
