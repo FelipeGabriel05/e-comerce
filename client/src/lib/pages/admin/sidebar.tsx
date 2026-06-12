@@ -15,6 +15,13 @@ const data = {
       title: 'Dashboard',
       url: '#',
       icon: <House />,
+      isActive: true,
+      items: [
+        {
+          title: 'Início',
+          url: '#',
+        },
+      ],
     },
     {
       title: 'Gerenciar',
