@@ -1,8 +1,12 @@
+import Layout from './layout-sidebar';
+
 const Admin = () => {
   return (
-    <div>
-      <h1>Esse é a tela de admin</h1>
-    </div>
+    <Layout>
+      <div>
+        <h1>Esse é a tela de admin</h1>
+      </div>
+    </Layout>
   );
 };
 
