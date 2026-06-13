@@ -1,42 +1,12 @@
-import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
+import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { useState } from 'react';
 
+import { useProducts } from '@/lib/hooks/use-products';
 import type { Product } from '@/lib/types/product';
-
-const mockProducts: Array<Product> = [
-  {
-    id: 1,
-    descricao: 'God of War',
-    preco: 199.9,
-    foto: '',
-    quantidade: 10,
-    categoriaId: 1,
-  },
-  {
-    id: 2,
-    descricao: 'Spider-Man 2',
-    preco: 249.9,
-    foto: '',
-    quantidade: 5,
-    categoriaId: 1,
-  },
-  {
-    id: 3,
-    descricao: 'Hogwarts Legacy',
-    preco: 179.9,
-    foto: '',
-    quantidade: 0,
-    categoriaId: 2,
-  },
-];
 
 const AdminProducts = () => {
   const queryClient = useQueryClient();
-
-  const { data, isLoading } = useQuery({
-    queryKey: ['products'],
-    queryFn: async () => mockProducts,
-  });
+  const { products, isLoading } = useProducts();
 
   const [novoProduct, setNovoProduct] = useState({
     descricao: '',
@@ -107,8 +77,6 @@ const AdminProducts = () => {
       });
     },
   });
-
-  const products: Array<Product> = data ?? mockProducts;
 
   if (isLoading) return <p>Carregando...</p>;
 
@@ -249,7 +217,7 @@ const AdminProducts = () => {
           </tr>
         </thead>
         <tbody>
-          {products.map((product) => (
+          {products.map((product: Product) => (
             <tr key={product.id}>
               <td style={{ padding: '0.5rem' }}>#{product.id}</td>
               <td style={{ padding: '0.5rem' }}>{product.descricao}</td>
