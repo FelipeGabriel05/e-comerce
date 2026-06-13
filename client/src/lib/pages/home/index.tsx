@@ -1,6 +1,7 @@
 import { H1, P } from '@/components/ui/typography';
-import { ProductCard } from '@/lib/components/product-card';
 import { useProducts } from '@/lib/hooks/use-products';
+
+import { ProductCard } from './components/product-card';
 
 const Home = () => {
   const { products, isLoading } = useProducts();
