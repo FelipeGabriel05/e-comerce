@@ -4,6 +4,5 @@ import { api } from './constants';
 
 export const fetchProducts = async (): Promise<Array<Product>> => {
   const response = await api.get<Array<Product>>('/products');
-  console.log(response.data);
   return response.data;
 };

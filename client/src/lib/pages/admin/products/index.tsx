@@ -148,7 +148,13 @@ const AdminProducts = () => {
                 <TableRow key={product.id}>
                   <TableCell>#{product.id}</TableCell>
                   <TableCell>{product.descricao}</TableCell>
-                  <TableCell>R$ {product.preco}</TableCell>
+                  <TableCell>
+                    R$
+                    {new Intl.NumberFormat('pt-BR', {
+                      style: 'currency',
+                      currency: 'BRL',
+                    }).format(product.preco)}
+                  </TableCell>
                   <TableCell>{product.quantidade}</TableCell>
                   <TableCell className="flex gap-2">
                     <Button
