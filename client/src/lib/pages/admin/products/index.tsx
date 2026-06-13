@@ -13,6 +13,7 @@ import {
   TableRow,
 } from '@/components/ui/table';
 import { useProducts } from '@/lib/hooks/use-products';
+import { api } from '@/lib/services/constants';
 import type { Product } from '@/lib/types/product';
 
 const PRODUCTS_QUERY_KEY = ['products'];
@@ -33,11 +34,7 @@ const AdminProducts = () => {
 
   const deleteMutation = useMutation({
     mutationFn: async (id: number) => {
-      const response = await fetch(
-        `http://localhost:8080/admin/products/${id}`,
-        { method: 'DELETE' },
-      );
-      if (!response.ok) throw new Error('Erro ao deletar');
+      await api.delete(`/admin/products/${id}`);
     },
     onSuccess: () =>
       queryClient.invalidateQueries({ queryKey: PRODUCTS_QUERY_KEY }),
@@ -45,16 +42,11 @@ const AdminProducts = () => {
 
   const createMutation = useMutation({
     mutationFn: async () => {
-      const response = await fetch('http://localhost:8080/admin/products', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          ...novoProduct,
-          preco: Number(novoProduct.preco),
-          quantidade: Number(novoProduct.quantidade),
-        }),
+      await api.post('/admin/products', {
+        ...novoProduct,
+        preco: Number(novoProduct.preco),
+        quantidade: Number(novoProduct.quantidade),
       });
-      if (!response.ok) throw new Error('Erro ao criar produto');
     },
     onSuccess: () =>
       queryClient.invalidateQueries({ queryKey: PRODUCTS_QUERY_KEY }),
@@ -62,19 +54,11 @@ const AdminProducts = () => {
 
   const updateMutation = useMutation({
     mutationFn: async () => {
-      const response = await fetch(
-        `http://localhost:8080/admin/products/${editandoId}`,
-        {
-          method: 'PUT',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({
-            ...novoProduct,
-            preco: Number(novoProduct.preco),
-            quantidade: Number(novoProduct.quantidade),
-          }),
-        },
-      );
-      if (!response.ok) throw new Error('Erro ao editar produto');
+      await api.put(`/admin/products/${editandoId}`, {
+        ...novoProduct,
+        preco: Number(novoProduct.preco),
+        quantidade: Number(novoProduct.quantidade),
+      });
     },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: PRODUCTS_QUERY_KEY });
