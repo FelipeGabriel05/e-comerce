@@ -8,8 +8,14 @@ import {
 } from '@/components/ui/sidebar';
 
 import NavMain from './nav-main';
+import { NavUser } from './nav-user';
 
 const data = {
+  user: {
+    name: 'admin',
+    email: 'admin@gmail.com',
+    avatar: '@/public/user-account.png',
+  },
   navMain: [
     {
       title: 'Dashboard',
@@ -73,7 +79,9 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
       <SidebarContent>
         <NavMain items={data.navMain} />
       </SidebarContent>
-      <SidebarFooter />
+      <SidebarFooter>
+        <NavUser user={data.user} />
+      </SidebarFooter>
     </Sidebar>
   );
 }
