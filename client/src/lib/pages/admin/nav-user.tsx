@@ -1,5 +1,6 @@
 'use client';
 
+import { Link } from '@tanstack/react-router';
 import { BadgeCheck, ChevronsUpDown, LogOut } from 'lucide-react';
 
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
@@ -37,9 +38,9 @@ export function NavUser({
           <DropdownMenuTrigger render={<SidebarMenuButton />}>
             <SidebarMenuButton
               size="lg"
-              className="data-[state=open]:bg-sidebar-accent data-[state=open]:text-sidebar-accent-foreground"
+              className="data-[state=open]:bg-sidebar-accent data-[state=open]:text-sidebar-accent-foreground overflow-visible"
             >
-              <Avatar className="h-8 w-8 rounded-lg">
+              <Avatar className="h-6 w-6  rounded-lg">
                 <AvatarImage src={user.avatar} alt={user.name} />
                 <AvatarFallback className="rounded-lg">CN</AvatarFallback>
               </Avatar>
@@ -80,7 +81,7 @@ export function NavUser({
             <DropdownMenuGroup>
               <DropdownMenuItem>
                 <BadgeCheck />
-                Account
+                <Link to="/admin/alterar">Account</Link>
               </DropdownMenuItem>
             </DropdownMenuGroup>
             <DropdownMenuSeparator />

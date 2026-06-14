@@ -24,6 +24,7 @@ import { Route as AdminProdutosRouteImport } from './routes/admin/produtos'
 import { Route as AdminFaltaEstoqueRouteImport } from './routes/admin/falta-estoque'
 import { Route as AdminCompraClienteRouteImport } from './routes/admin/compra-cliente'
 import { Route as AdminCategoriasRouteImport } from './routes/admin/categorias'
+import { Route as AdminAlterarRouteImport } from './routes/admin/alterar'
 
 const RecoverPasswordRoute = RecoverPasswordRouteImport.update({
   id: '/recoverPassword',
@@ -100,6 +101,11 @@ const AdminCategoriasRoute = AdminCategoriasRouteImport.update({
   path: '/admin/categorias',
   getParentRoute: () => rootRouteImport,
 } as any)
+const AdminAlterarRoute = AdminAlterarRouteImport.update({
+  id: '/admin/alterar',
+  path: '/admin/alterar',
+  getParentRoute: () => rootRouteImport,
+} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
@@ -110,6 +116,7 @@ export interface FileRoutesByFullPath {
   '/historicoCliente': typeof HistoricoClienteRoute
   '/login': typeof LoginRoute
   '/recoverPassword': typeof RecoverPasswordRoute
+  '/admin/alterar': typeof AdminAlterarRoute
   '/admin/categorias': typeof AdminCategoriasRoute
   '/admin/compra-cliente': typeof AdminCompraClienteRoute
   '/admin/falta-estoque': typeof AdminFaltaEstoqueRoute
@@ -127,6 +134,7 @@ export interface FileRoutesByTo {
   '/historicoCliente': typeof HistoricoClienteRoute
   '/login': typeof LoginRoute
   '/recoverPassword': typeof RecoverPasswordRoute
+  '/admin/alterar': typeof AdminAlterarRoute
   '/admin/categorias': typeof AdminCategoriasRoute
   '/admin/compra-cliente': typeof AdminCompraClienteRoute
   '/admin/falta-estoque': typeof AdminFaltaEstoqueRoute
@@ -145,6 +153,7 @@ export interface FileRoutesById {
   '/historicoCliente': typeof HistoricoClienteRoute
   '/login': typeof LoginRoute
   '/recoverPassword': typeof RecoverPasswordRoute
+  '/admin/alterar': typeof AdminAlterarRoute
   '/admin/categorias': typeof AdminCategoriasRoute
   '/admin/compra-cliente': typeof AdminCompraClienteRoute
   '/admin/falta-estoque': typeof AdminFaltaEstoqueRoute
@@ -164,6 +173,7 @@ export interface FileRouteTypes {
     | '/historicoCliente'
     | '/login'
     | '/recoverPassword'
+    | '/admin/alterar'
     | '/admin/categorias'
     | '/admin/compra-cliente'
     | '/admin/falta-estoque'
@@ -181,6 +191,7 @@ export interface FileRouteTypes {
     | '/historicoCliente'
     | '/login'
     | '/recoverPassword'
+    | '/admin/alterar'
     | '/admin/categorias'
     | '/admin/compra-cliente'
     | '/admin/falta-estoque'
@@ -198,6 +209,7 @@ export interface FileRouteTypes {
     | '/historicoCliente'
     | '/login'
     | '/recoverPassword'
+    | '/admin/alterar'
     | '/admin/categorias'
     | '/admin/compra-cliente'
     | '/admin/falta-estoque'
@@ -216,6 +228,7 @@ export interface RootRouteChildren {
   HistoricoClienteRoute: typeof HistoricoClienteRoute
   LoginRoute: typeof LoginRoute
   RecoverPasswordRoute: typeof RecoverPasswordRoute
+  AdminAlterarRoute: typeof AdminAlterarRoute
   AdminCategoriasRoute: typeof AdminCategoriasRoute
   AdminCompraClienteRoute: typeof AdminCompraClienteRoute
   AdminFaltaEstoqueRoute: typeof AdminFaltaEstoqueRoute
@@ -332,6 +345,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AdminCategoriasRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/admin/alterar': {
+      id: '/admin/alterar'
+      path: '/admin/alterar'
+      fullPath: '/admin/alterar'
+      preLoaderRoute: typeof AdminAlterarRouteImport
+      parentRoute: typeof rootRouteImport
+    }
   }
 }
 
@@ -344,6 +364,7 @@ const rootRouteChildren: RootRouteChildren = {
   HistoricoClienteRoute: HistoricoClienteRoute,
   LoginRoute: LoginRoute,
   RecoverPasswordRoute: RecoverPasswordRoute,
+  AdminAlterarRoute: AdminAlterarRoute,
   AdminCategoriasRoute: AdminCategoriasRoute,
   AdminCompraClienteRoute: AdminCompraClienteRoute,
   AdminFaltaEstoqueRoute: AdminFaltaEstoqueRoute,
