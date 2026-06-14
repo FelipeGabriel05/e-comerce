@@ -35,11 +35,11 @@ const data = {
         },
         {
           title: 'Vendas',
-          url: '#',
+          url: '/admin/vendas',
         },
         {
           title: 'Categorias',
-          url: '#',
+          url: '/admin/categorias',
         },
       ],
     },
@@ -51,15 +51,15 @@ const data = {
       items: [
         {
           title: 'Compras por cliente',
-          url: '#',
+          url: '/admin/compra-cliente',
         },
         {
           title: 'Falta em estoque',
-          url: '#',
+          url: '/admin/falta-estoque',
         },
         {
           title: 'Valor recebido por dia',
-          url: '#',
+          url: '/admin/valor-recebido',
         },
       ],
     },

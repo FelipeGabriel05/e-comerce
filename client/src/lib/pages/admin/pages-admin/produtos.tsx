@@ -1,4 +1,4 @@
-import Layout from './layout-sidebar';
+import Layout from '../layout-sidebar';
 
 const Produtos = () => {
   return (
