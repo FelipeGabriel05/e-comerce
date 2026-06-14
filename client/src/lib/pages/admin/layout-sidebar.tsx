@@ -1,4 +1,8 @@
-import { SidebarProvider, SidebarTrigger } from '@/components/ui/sidebar';
+import {
+  SidebarInset,
+  SidebarProvider,
+  SidebarTrigger,
+} from '@/components/ui/sidebar';
 
 import { AppSidebar } from './sidebar';
 
@@ -6,10 +10,13 @@ export default function Layout({ children }: { children: React.ReactNode }) {
   return (
     <SidebarProvider className="dark">
       <AppSidebar />
-      <main>
-        <SidebarTrigger className="-ml-140" />
-        {children}
-      </main>
+      <SidebarInset className="bg-transparent">
+        <header className="flex h-16 items-center gap-2 px-4 border-b">
+          <SidebarTrigger className="" />
+        </header>
+
+        <div className="w-full p-6">{children}</div>
+      </SidebarInset>
     </SidebarProvider>
   );
 }

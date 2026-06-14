@@ -1,3 +1,4 @@
+import { useLocation } from '@tanstack/react-router';
 import type { ReactNode } from 'react';
 
 import { Footer } from './components/footer';
@@ -8,6 +9,14 @@ type LayoutProps = {
 };
 
 export const Layout = ({ children }: LayoutProps) => {
+  const location = useLocation();
+
+  const isAdmin = location.pathname.startsWith('/admin');
+
+  if (isAdmin) {
+    return <>{children}</>;
+  }
+
   return (
     <>
       {/* <Meta /> */}
