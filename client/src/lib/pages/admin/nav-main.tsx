@@ -46,7 +46,7 @@ const NavMain = ({
               render={<SidebarMenuButton tooltip={item.title} />}
             >
               {item.icon}
-              <span>{item.title}</span>
+              <span className="text-lg font-medium">{item.title}</span>
               <ChevronRightIcon className="ml-auto transition-transform duration-200 group-data-open/collapsible:rotate-90" />
             </CollapsibleTrigger>
             <CollapsibleContent>

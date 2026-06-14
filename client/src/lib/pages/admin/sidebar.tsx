@@ -19,7 +19,7 @@ const data = {
       items: [
         {
           title: 'Início',
-          url: '#',
+          url: '/admin',
         },
       ],
     },
@@ -31,7 +31,7 @@ const data = {
       items: [
         {
           title: 'Produtos',
-          url: '#',
+          url: '/admin/produtos',
         },
         {
           title: 'Vendas',
