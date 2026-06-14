@@ -84,7 +84,7 @@ export function NavUser({
             <DropdownMenuGroup>
               <DropdownMenuItem>
                 <BadgeCheck />
-                <Link to="/admin/alterar">Account</Link>
+                <Link to="/admin/alterar">Conta</Link>
               </DropdownMenuItem>
             </DropdownMenuGroup>
             <DropdownMenuSeparator />
