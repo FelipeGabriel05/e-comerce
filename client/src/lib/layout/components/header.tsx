@@ -1,10 +1,18 @@
 import { Button } from '@base-ui/react/button';
-import { Link, Link as LinkRouter } from '@tanstack/react-router';
+import { Link, Link as LinkRouter, useLocation } from '@tanstack/react-router';
 import { LogIn, ShoppingCart } from 'lucide-react';
 
 import SearchHeader from '@/lib/components/search-header';
 
 export const Header = () => {
+  const location = useLocation();
+
+  const isAdmin = location.pathname.startsWith('/admin');
+
+  if (isAdmin) {
+    return null;
+  }
+
   return (
     <header className="flex items-center justify-between px-8 py-4 border-b">
       <div>
