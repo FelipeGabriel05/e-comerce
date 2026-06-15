@@ -33,7 +33,7 @@ const NavMain = ({
 }) => {
   return (
     <SidebarGroup>
-      <SidebarGroupLabel>Plataforma</SidebarGroupLabel>
+      <SidebarGroupLabel className="text-white">Plataforma</SidebarGroupLabel>
       <SidebarMenu>
         {items.map((item) => (
           <Collapsible
@@ -54,7 +54,7 @@ const NavMain = ({
                 {item.items?.map((subItem) => (
                   <SidebarMenuSubItem key={subItem.title}>
                     <SidebarMenuSubButton
-                      className="text-lg"
+                      className="text-lg text-white"
                       render={<Link to={subItem.url} />}
                     >
                       <span>{subItem.title}</span>
