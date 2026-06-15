@@ -16,9 +16,15 @@ import { Route as DadosClienteRouteImport } from './routes/dadosCliente'
 import { Route as ClienteRouteImport } from './routes/cliente'
 import { Route as CarrinhoRouteImport } from './routes/carrinho'
 import { Route as CadastrarRouteImport } from './routes/cadastrar'
-import { Route as AdminRouteImport } from './routes/admin'
 import { Route as IndexRouteImport } from './routes/index'
+import { Route as AdminIndexRouteImport } from './routes/admin/index'
+import { Route as AdminVendasRouteImport } from './routes/admin/vendas'
+import { Route as AdminValorRecebidoRouteImport } from './routes/admin/valor-recebido'
+import { Route as AdminProdutosRouteImport } from './routes/admin/produtos'
 import { Route as AdminProductsRouteImport } from './routes/admin/products'
+import { Route as AdminFaltaEstoqueRouteImport } from './routes/admin/falta-estoque'
+import { Route as AdminCompraClienteRouteImport } from './routes/admin/compra-cliente'
+import { Route as AdminCategoriasRouteImport } from './routes/admin/categorias'
 
 const RecoverPasswordRoute = RecoverPasswordRouteImport.update({
   id: '/recoverPassword',
@@ -55,25 +61,54 @@ const CadastrarRoute = CadastrarRouteImport.update({
   path: '/cadastrar',
   getParentRoute: () => rootRouteImport,
 } as any)
-const AdminRoute = AdminRouteImport.update({
-  id: '/admin',
-  path: '/admin',
-  getParentRoute: () => rootRouteImport,
-} as any)
 const IndexRoute = IndexRouteImport.update({
   id: '/',
   path: '/',
   getParentRoute: () => rootRouteImport,
 } as any)
+const AdminIndexRoute = AdminIndexRouteImport.update({
+  id: '/admin/',
+  path: '/admin/',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const AdminVendasRoute = AdminVendasRouteImport.update({
+  id: '/admin/vendas',
+  path: '/admin/vendas',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const AdminValorRecebidoRoute = AdminValorRecebidoRouteImport.update({
+  id: '/admin/valor-recebido',
+  path: '/admin/valor-recebido',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const AdminProdutosRoute = AdminProdutosRouteImport.update({
+  id: '/admin/produtos',
+  path: '/admin/produtos',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const AdminProductsRoute = AdminProductsRouteImport.update({
-  id: '/products',
-  path: '/products',
-  getParentRoute: () => AdminRoute,
+  id: '/admin/products',
+  path: '/admin/products',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const AdminFaltaEstoqueRoute = AdminFaltaEstoqueRouteImport.update({
+  id: '/admin/falta-estoque',
+  path: '/admin/falta-estoque',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const AdminCompraClienteRoute = AdminCompraClienteRouteImport.update({
+  id: '/admin/compra-cliente',
+  path: '/admin/compra-cliente',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const AdminCategoriasRoute = AdminCategoriasRouteImport.update({
+  id: '/admin/categorias',
+  path: '/admin/categorias',
+  getParentRoute: () => rootRouteImport,
 } as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
-  '/admin': typeof AdminRouteWithChildren
   '/cadastrar': typeof CadastrarRoute
   '/carrinho': typeof CarrinhoRoute
   '/cliente': typeof ClienteRoute
@@ -81,11 +116,17 @@ export interface FileRoutesByFullPath {
   '/historicoCliente': typeof HistoricoClienteRoute
   '/login': typeof LoginRoute
   '/recoverPassword': typeof RecoverPasswordRoute
+  '/admin/categorias': typeof AdminCategoriasRoute
+  '/admin/compra-cliente': typeof AdminCompraClienteRoute
+  '/admin/falta-estoque': typeof AdminFaltaEstoqueRoute
   '/admin/products': typeof AdminProductsRoute
+  '/admin/produtos': typeof AdminProdutosRoute
+  '/admin/valor-recebido': typeof AdminValorRecebidoRoute
+  '/admin/vendas': typeof AdminVendasRoute
+  '/admin/': typeof AdminIndexRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
-  '/admin': typeof AdminRouteWithChildren
   '/cadastrar': typeof CadastrarRoute
   '/carrinho': typeof CarrinhoRoute
   '/cliente': typeof ClienteRoute
@@ -93,12 +134,18 @@ export interface FileRoutesByTo {
   '/historicoCliente': typeof HistoricoClienteRoute
   '/login': typeof LoginRoute
   '/recoverPassword': typeof RecoverPasswordRoute
+  '/admin/categorias': typeof AdminCategoriasRoute
+  '/admin/compra-cliente': typeof AdminCompraClienteRoute
+  '/admin/falta-estoque': typeof AdminFaltaEstoqueRoute
   '/admin/products': typeof AdminProductsRoute
+  '/admin/produtos': typeof AdminProdutosRoute
+  '/admin/valor-recebido': typeof AdminValorRecebidoRoute
+  '/admin/vendas': typeof AdminVendasRoute
+  '/admin': typeof AdminIndexRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
-  '/admin': typeof AdminRouteWithChildren
   '/cadastrar': typeof CadastrarRoute
   '/carrinho': typeof CarrinhoRoute
   '/cliente': typeof ClienteRoute
@@ -106,13 +153,19 @@ export interface FileRoutesById {
   '/historicoCliente': typeof HistoricoClienteRoute
   '/login': typeof LoginRoute
   '/recoverPassword': typeof RecoverPasswordRoute
+  '/admin/categorias': typeof AdminCategoriasRoute
+  '/admin/compra-cliente': typeof AdminCompraClienteRoute
+  '/admin/falta-estoque': typeof AdminFaltaEstoqueRoute
   '/admin/products': typeof AdminProductsRoute
+  '/admin/produtos': typeof AdminProdutosRoute
+  '/admin/valor-recebido': typeof AdminValorRecebidoRoute
+  '/admin/vendas': typeof AdminVendasRoute
+  '/admin/': typeof AdminIndexRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
   fullPaths:
     | '/'
-    | '/admin'
     | '/cadastrar'
     | '/carrinho'
     | '/cliente'
@@ -120,11 +173,17 @@ export interface FileRouteTypes {
     | '/historicoCliente'
     | '/login'
     | '/recoverPassword'
+    | '/admin/categorias'
+    | '/admin/compra-cliente'
+    | '/admin/falta-estoque'
     | '/admin/products'
+    | '/admin/produtos'
+    | '/admin/valor-recebido'
+    | '/admin/vendas'
+    | '/admin/'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
-    | '/admin'
     | '/cadastrar'
     | '/carrinho'
     | '/cliente'
@@ -132,11 +191,17 @@ export interface FileRouteTypes {
     | '/historicoCliente'
     | '/login'
     | '/recoverPassword'
+    | '/admin/categorias'
+    | '/admin/compra-cliente'
+    | '/admin/falta-estoque'
     | '/admin/products'
+    | '/admin/produtos'
+    | '/admin/valor-recebido'
+    | '/admin/vendas'
+    | '/admin'
   id:
     | '__root__'
     | '/'
-    | '/admin'
     | '/cadastrar'
     | '/carrinho'
     | '/cliente'
@@ -144,12 +209,18 @@ export interface FileRouteTypes {
     | '/historicoCliente'
     | '/login'
     | '/recoverPassword'
+    | '/admin/categorias'
+    | '/admin/compra-cliente'
+    | '/admin/falta-estoque'
     | '/admin/products'
+    | '/admin/produtos'
+    | '/admin/valor-recebido'
+    | '/admin/vendas'
+    | '/admin/'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
-  AdminRoute: typeof AdminRouteWithChildren
   CadastrarRoute: typeof CadastrarRoute
   CarrinhoRoute: typeof CarrinhoRoute
   ClienteRoute: typeof ClienteRoute
@@ -157,6 +228,14 @@ export interface RootRouteChildren {
   HistoricoClienteRoute: typeof HistoricoClienteRoute
   LoginRoute: typeof LoginRoute
   RecoverPasswordRoute: typeof RecoverPasswordRoute
+  AdminCategoriasRoute: typeof AdminCategoriasRoute
+  AdminCompraClienteRoute: typeof AdminCompraClienteRoute
+  AdminFaltaEstoqueRoute: typeof AdminFaltaEstoqueRoute
+  AdminProductsRoute: typeof AdminProductsRoute
+  AdminProdutosRoute: typeof AdminProdutosRoute
+  AdminValorRecebidoRoute: typeof AdminValorRecebidoRoute
+  AdminVendasRoute: typeof AdminVendasRoute
+  AdminIndexRoute: typeof AdminIndexRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -210,13 +289,6 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof CadastrarRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/admin': {
-      id: '/admin'
-      path: '/admin'
-      fullPath: '/admin'
-      preLoaderRoute: typeof AdminRouteImport
-      parentRoute: typeof rootRouteImport
-    }
     '/': {
       id: '/'
       path: '/'
@@ -224,29 +296,67 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof IndexRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/admin/': {
+      id: '/admin/'
+      path: '/admin'
+      fullPath: '/admin/'
+      preLoaderRoute: typeof AdminIndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/admin/vendas': {
+      id: '/admin/vendas'
+      path: '/admin/vendas'
+      fullPath: '/admin/vendas'
+      preLoaderRoute: typeof AdminVendasRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/admin/valor-recebido': {
+      id: '/admin/valor-recebido'
+      path: '/admin/valor-recebido'
+      fullPath: '/admin/valor-recebido'
+      preLoaderRoute: typeof AdminValorRecebidoRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/admin/produtos': {
+      id: '/admin/produtos'
+      path: '/admin/produtos'
+      fullPath: '/admin/produtos'
+      preLoaderRoute: typeof AdminProdutosRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/admin/products': {
       id: '/admin/products'
-      path: '/products'
+      path: '/admin/products'
       fullPath: '/admin/products'
       preLoaderRoute: typeof AdminProductsRouteImport
-      parentRoute: typeof AdminRoute
+      parentRoute: typeof rootRouteImport
+    }
+    '/admin/falta-estoque': {
+      id: '/admin/falta-estoque'
+      path: '/admin/falta-estoque'
+      fullPath: '/admin/falta-estoque'
+      preLoaderRoute: typeof AdminFaltaEstoqueRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/admin/compra-cliente': {
+      id: '/admin/compra-cliente'
+      path: '/admin/compra-cliente'
+      fullPath: '/admin/compra-cliente'
+      preLoaderRoute: typeof AdminCompraClienteRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/admin/categorias': {
+      id: '/admin/categorias'
+      path: '/admin/categorias'
+      fullPath: '/admin/categorias'
+      preLoaderRoute: typeof AdminCategoriasRouteImport
+      parentRoute: typeof rootRouteImport
     }
   }
 }
 
-interface AdminRouteChildren {
-  AdminProductsRoute: typeof AdminProductsRoute
-}
-
-const AdminRouteChildren: AdminRouteChildren = {
-  AdminProductsRoute: AdminProductsRoute,
-}
-
-const AdminRouteWithChildren = AdminRoute._addFileChildren(AdminRouteChildren)
-
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
-  AdminRoute: AdminRouteWithChildren,
   CadastrarRoute: CadastrarRoute,
   CarrinhoRoute: CarrinhoRoute,
   ClienteRoute: ClienteRoute,
@@ -254,6 +364,14 @@ const rootRouteChildren: RootRouteChildren = {
   HistoricoClienteRoute: HistoricoClienteRoute,
   LoginRoute: LoginRoute,
   RecoverPasswordRoute: RecoverPasswordRoute,
+  AdminCategoriasRoute: AdminCategoriasRoute,
+  AdminCompraClienteRoute: AdminCompraClienteRoute,
+  AdminFaltaEstoqueRoute: AdminFaltaEstoqueRoute,
+  AdminProductsRoute: AdminProductsRoute,
+  AdminProdutosRoute: AdminProdutosRoute,
+  AdminValorRecebidoRoute: AdminValorRecebidoRoute,
+  AdminVendasRoute: AdminVendasRoute,
+  AdminIndexRoute: AdminIndexRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
