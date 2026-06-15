@@ -4,6 +4,7 @@ import ecommerce.Database.Entites.Category;
 import ecommerce.Exceptions.ValidationException;
 import ecommerce.Http.IO.BodyJsonToObject;
 import ecommerce.Http.IO.Requests.CreateCategoryBodyRequest;
+import ecommerce.Http.IO.Requests.DeleteCategoryBodyRequest;
 import ecommerce.Http.IO.Requests.UpdateCategoryBodyRequest;
 import java.util.ArrayList;
 import java.util.List;
@@ -84,5 +85,21 @@ public class HttpCategoryValidators {
     category.setDescricao(body.descricao);
 
     return category;
+  }
+
+  public int validateDeleteCategory(HttpServletRequest request) throws ValidationException {
+    DeleteCategoryBodyRequest body = null;
+
+    try {
+      body = BodyJsonToObject.parse(request, DeleteCategoryBodyRequest.class);
+    } catch (Exception e) {
+      throw new ValidationException("Invalid body data");
+    }
+
+    if (body == null || body.id <= 0) {
+      throw new ValidationException("Valid ID is required for deletion");
+    }
+
+    return body.id;
   }
 }
