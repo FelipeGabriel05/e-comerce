@@ -33,7 +33,11 @@ function DialogEdit({ categoria }: DialogEditProps) {
         }
       />
       <form>
-        <DialogContent className="sm:max-w-sm">
+        <DialogContent
+          className="sm:max-w-sm  bg-[oklch(0.18_0.03_280/95%)]
+            text-[oklch(0.97_0.01_280)]
+            border-[oklch(0.45_0.06_290/25%)]"
+        >
           <DialogHeader>
             <DialogTitle>Editar categoria</DialogTitle>
             <DialogDescription>Salva as novas alterações</DialogDescription>
