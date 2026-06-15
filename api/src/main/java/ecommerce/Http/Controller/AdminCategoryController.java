@@ -13,7 +13,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 @WebServlet("/admin/category")
-public class CategoryController extends HttpServlet {
+public class AdminCategoryController extends HttpServlet {
 
   public static final int SC_UNPROCESSABLE_ENTITY = 422;
 
