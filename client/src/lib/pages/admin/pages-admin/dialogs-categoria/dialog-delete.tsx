@@ -52,9 +52,7 @@ function DialogDelete({ categoria }: DialogDeleteProps) {
             </Field>
           </FieldGroup>
           <DialogFooter>
-            <DialogClose>
-              <Button>Cancelar</Button>
-            </DialogClose>
+            <DialogClose>Cancelar</DialogClose>
             <Button type="submit">Excluir</Button>
           </DialogFooter>
         </DialogContent>

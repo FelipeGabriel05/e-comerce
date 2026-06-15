@@ -39,9 +39,7 @@ function DialogCategoria() {
             </Field>
           </FieldGroup>
           <DialogFooter>
-            <DialogClose>
-              <Button>Cancelar</Button>
-            </DialogClose>
+            <DialogClose>Cancelar</DialogClose>
             <Button type="submit">Inserir</Button>
           </DialogFooter>
         </DialogContent>

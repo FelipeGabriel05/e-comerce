@@ -49,9 +49,7 @@ function DialogEdit({ categoria }: DialogEditProps) {
             </Field>
           </FieldGroup>
           <DialogFooter>
-            <DialogClose>
-              <Button>Cancelar</Button>
-            </DialogClose>
+            <DialogClose>Cancelar</DialogClose>
             <Button type="submit">Salvar alteração</Button>
           </DialogFooter>
         </DialogContent>
