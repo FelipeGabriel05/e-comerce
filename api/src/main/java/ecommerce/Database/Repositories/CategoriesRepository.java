@@ -68,4 +68,23 @@ public class CategoriesRepository {
       throw e;
     }
   }
+
+  public boolean updateCategory(Category categoryInput) throws Exception {
+
+    String query = CategoriesQueries.updateCategoryQuery;
+
+    try (PreparedStatement ps = con.prepareStatement(query)) {
+
+      ps.setString(1, categoryInput.getDescricao());
+      ps.setInt(2, categoryInput.getId());
+
+      int rowsAffected = ps.executeUpdate();
+
+      return rowsAffected > 0;
+
+    } catch (Exception e) {
+      e.printStackTrace();
+      throw e;
+    }
+  }
 }
