@@ -5,6 +5,7 @@ import ecommerce.Exceptions.ValidationException;
 import ecommerce.Http.IO.Responses.JsonResponse;
 import ecommerce.Http.Validators.HttpCategoryValidators;
 import ecommerce.UseCases.CreateCategoryUseCase;
+import ecommerce.UseCases.UpdateCategoryUseCase;
 import java.io.IOException;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -37,6 +38,56 @@ public class AdminCategoryController extends HttpServlet {
 
       response.setStatus(jsonRes.getStatus());
       response.getWriter().write(jsonRes.toJson());
+
+    } catch (ValidationException e) {
+
+      JsonResponse jsonRes = new JsonResponse(SC_UNPROCESSABLE_ENTITY, e.getMessage());
+
+      response.setStatus(jsonRes.getStatus());
+      response.getWriter().write(jsonRes.toJson());
+
+    } catch (Exception e) {
+
+      e.printStackTrace();
+
+      JsonResponse jsonRes =
+          new JsonResponse(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, "Internal server error");
+
+      response.setStatus(jsonRes.getStatus());
+      response.getWriter().write(jsonRes.toJson());
+    }
+  }
+
+  protected void doPut(HttpServletRequest request, HttpServletResponse response)
+      throws ServletException, IOException {
+
+    response.setContentType("application/json");
+
+    HttpCategoryValidators validators = new HttpCategoryValidators();
+
+    try {
+
+      Category categoryInput = validators.validateUpdateCategory(request);
+
+      UpdateCategoryUseCase useCase = new UpdateCategoryUseCase();
+
+      boolean isUpdated = useCase.execute(categoryInput);
+
+      if (isUpdated) {
+        JsonResponse jsonRes =
+            new JsonResponse(
+                HttpServletResponse.SC_OK, "Category updated successfully", categoryInput);
+
+        response.setStatus(jsonRes.getStatus());
+        response.getWriter().write(jsonRes.toJson());
+
+      } else {
+        JsonResponse jsonRes =
+            new JsonResponse(HttpServletResponse.SC_NOT_FOUND, "Category not found");
+
+        response.setStatus(jsonRes.getStatus());
+        response.getWriter().write(jsonRes.toJson());
+      }
 
     } catch (ValidationException e) {
 
