@@ -6,6 +6,8 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.Statement;
+import java.util.ArrayList;
+import java.util.List;
 
 public class CategoriesRepository {
 
@@ -37,6 +39,29 @@ public class CategoriesRepository {
       category.setDescricao(categoryInput.getDescricao());
 
       return category;
+
+    } catch (Exception e) {
+      e.printStackTrace();
+      throw e;
+    }
+  }
+
+  public List<Category> listCategories() throws Exception {
+
+    List<Category> categories = new ArrayList<>();
+    String query = CategoriesQueries.listCategoriesQuery;
+
+    try (PreparedStatement ps = con.prepareStatement(query);
+        ResultSet rs = ps.executeQuery()) {
+
+      while (rs.next()) {
+        Category category = new Category();
+        category.setId(rs.getInt("id"));
+        category.setDescricao(rs.getString("descricao"));
+        categories.add(category);
+      }
+
+      return categories;
 
     } catch (Exception e) {
       e.printStackTrace();

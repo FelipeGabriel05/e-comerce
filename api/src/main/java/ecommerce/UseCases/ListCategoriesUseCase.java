@@ -7,19 +7,19 @@ import java.sql.Connection;
 import java.util.List;
 
 public class ListCategoriesUseCase {
-    
-    public ListCategoriesUseCase(){}
-        
-    public List<Category> execute() throws Exception {
-        try {
-            Connection dbConnection = DBConnection.getConnection();
-            CategoriesRepository categoriesRepository = new CategoriesRepository(dbConnection);
 
-            return categoriesRepository.listCategories();
+  public ListCategoriesUseCase() {}
 
-        } catch (Exception e) {
-            e.printStackTrace();
-            throw e;
-        }
+  public List<Category> execute() throws Exception {
+    try {
+      Connection dbConnection = DBConnection.getConnection();
+      CategoriesRepository categoriesRepository = new CategoriesRepository(dbConnection);
+
+      return categoriesRepository.listCategories();
+
+    } catch (Exception e) {
+      e.printStackTrace();
+      throw e;
     }
+  }
 }
