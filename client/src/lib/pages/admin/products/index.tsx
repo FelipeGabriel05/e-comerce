@@ -1,4 +1,3 @@
-import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { useState } from 'react';
 
 import { Button } from '@/components/ui/button';
@@ -11,45 +10,21 @@ import {
   TableHeader,
   TableRow,
 } from '@/components/ui/table';
-import { useProducts } from '@/lib/hooks/use-products';
-import type { ProductFormData } from '@/lib/pages/admin/products/product-validation-schema';
-import { api } from '@/lib/services/constants';
+import { useAdminProducts } from '@/lib/hooks/use-admin-products';
 import type { Product } from '@/lib/types/product';
 
 import { ProductForm } from './components/product-form';
 
-const PRODUCTS_QUERY_KEY = ['products'];
-
 const AdminProducts = () => {
-  const queryClient = useQueryClient();
-  const { products, isLoading } = useProducts();
+  const {
+    products,
+    isLoading,
+    createProduct,
+    updateProduct,
+    deleteProduct,
+    isPending,
+  } = useAdminProducts();
   const [editandoProduct, setEditandoProduct] = useState<Product | null>(null);
-
-  const createMutation = useMutation({
-    mutationFn: async (data: ProductFormData) => {
-      await api.post('/admin/products', data);
-    },
-    onSuccess: () =>
-      queryClient.invalidateQueries({ queryKey: PRODUCTS_QUERY_KEY }),
-  });
-
-  const updateMutation = useMutation({
-    mutationFn: async (data: ProductFormData) => {
-      await api.put(`/admin/products/${editandoProduct?.id}`, data);
-    },
-    onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: PRODUCTS_QUERY_KEY });
-      setEditandoProduct(null);
-    },
-  });
-
-  const deleteMutation = useMutation({
-    mutationFn: async (id: number) => {
-      await api.delete(`/admin/products/${id}`);
-    },
-    onSuccess: () =>
-      queryClient.invalidateQueries({ queryKey: PRODUCTS_QUERY_KEY }),
-  });
 
   if (isLoading) return <p className="p-8 text-white">Carregando...</p>;
 
@@ -66,7 +41,7 @@ const AdminProducts = () => {
         <CardContent>
           <ProductForm
             isEditing={!!editandoProduct}
-            isPending={createMutation.isPending || updateMutation.isPending}
+            isPending={isPending}
             defaultValues={
               editandoProduct
                 ? {
@@ -78,11 +53,14 @@ const AdminProducts = () => {
                   }
                 : undefined
             }
-            onSubmit={(data) =>
-              editandoProduct
-                ? updateMutation.mutate(data)
-                : createMutation.mutate(data)
-            }
+            onSubmit={(data) => {
+              if (editandoProduct) {
+                updateProduct({ id: editandoProduct.id, data });
+                setEditandoProduct(null);
+              } else {
+                createProduct(data);
+              }
+            }}
             onCancel={() => setEditandoProduct(null)}
           />
         </CardContent>
@@ -123,7 +101,7 @@ const AdminProducts = () => {
                     <Button
                       size="sm"
                       variant="destructive"
-                      onClick={() => deleteMutation.mutate(product.id)}
+                      onClick={() => deleteProduct(product.id)}
                     >
                       Deletar
                     </Button>
