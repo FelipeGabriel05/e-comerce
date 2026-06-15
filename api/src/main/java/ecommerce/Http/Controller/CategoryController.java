@@ -15,6 +15,8 @@ import javax.servlet.http.HttpServletResponse;
 @WebServlet("/admin/category")
 public class CategoryController extends HttpServlet {
 
+  public static final int SC_UNPROCESSABLE_ENTITY = 422;
+
   protected void doPost(HttpServletRequest request, HttpServletResponse response)
       throws ServletException, IOException {
 
@@ -38,7 +40,7 @@ public class CategoryController extends HttpServlet {
 
     } catch (ValidationException e) {
 
-      JsonResponse jsonRes = new JsonResponse(HttpServletResponse.SC_BAD_REQUEST, e.getMessage());
+      JsonResponse jsonRes = new JsonResponse(SC_UNPROCESSABLE_ENTITY, e.getMessage());
 
       response.setStatus(jsonRes.getStatus());
       response.getWriter().write(jsonRes.toJson());
