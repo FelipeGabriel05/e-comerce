@@ -1,6 +1,6 @@
 'use client';
 
-import { Link } from '@tanstack/react-router';
+import { useNavigate } from '@tanstack/react-router';
 import { BadgeCheck, ChevronsUpDown, LogOut } from 'lucide-react';
 
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
@@ -30,6 +30,7 @@ export function NavUser({
     avatar: string;
   };
 }) {
+  const navigate = useNavigate();
   const { isMobile } = useSidebar();
   const { logout, isLogoutPending } = useUserProfile();
   const initials = user.name
@@ -90,9 +91,11 @@ export function NavUser({
               </DropdownMenuLabel>
             </DropdownMenuGroup>
             <DropdownMenuGroup>
-              <DropdownMenuItem>
+              <DropdownMenuItem
+                onClick={() => navigate({ to: '/dadosCliente' })}
+              >
                 <BadgeCheck />
-                <Link to="/dadosCliente">Conta</Link>
+                Conta
               </DropdownMenuItem>
             </DropdownMenuGroup>
             <DropdownMenuSeparator />
