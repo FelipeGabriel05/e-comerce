@@ -18,7 +18,7 @@ import { Label } from '@/components/ui/label';
 type DialogEditProps = {
   categoria: {
     id: number;
-    NomeCategoria: string;
+    descricao: string;
   };
 };
 
@@ -44,11 +44,11 @@ function DialogEdit({ categoria }: DialogEditProps) {
           </DialogHeader>
           <FieldGroup>
             <Field>
-              <Label htmlFor="nomeCategoria">Nome da categoria</Label>
+              <Label htmlFor="descricao">Nome da categoria</Label>
               <Input
-                id="nomeCategoria"
-                name="nomeCategoria1"
-                defaultValue={categoria.NomeCategoria}
+                id="descricao"
+                name="descricao"
+                defaultValue={categoria.descricao}
               />
             </Field>
           </FieldGroup>

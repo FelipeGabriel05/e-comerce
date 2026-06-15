@@ -38,8 +38,8 @@ function DialogCategoria() {
           </DialogHeader>
           <FieldGroup>
             <Field>
-              <Label htmlFor="nomeCategoria">Nome da categoria</Label>
-              <Input id="nomeCategoria" name="nomeCategoria1" />
+              <Label htmlFor="descricao">Nome da categoria</Label>
+              <Input id="descricao" name="descricao" />
             </Field>
           </FieldGroup>
           <DialogFooter>

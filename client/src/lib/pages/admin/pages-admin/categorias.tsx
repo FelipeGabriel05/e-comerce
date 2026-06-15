@@ -17,7 +17,7 @@ const Categorias = () => {
   const categorias = useCategoria();
   type Categoria = {
     id: number;
-    NomeCategoria: string;
+    descricao: string;
   };
   return (
     <Layout>
@@ -49,7 +49,7 @@ const Categorias = () => {
                   </TableCell>
 
                   <TableCell className="text-white">
-                    {categoria.NomeCategoria}
+                    {categoria.descricao}
                   </TableCell>
 
                   <TableCell>

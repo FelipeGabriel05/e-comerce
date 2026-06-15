@@ -18,7 +18,7 @@ import { Label } from '@/components/ui/label';
 type DialogDeleteProps = {
   categoria: {
     id: number;
-    NomeCategoria: string;
+    descricao: string;
   };
 };
 
@@ -44,13 +44,11 @@ function DialogDelete({ categoria }: DialogDeleteProps) {
           </DialogHeader>
           <FieldGroup>
             <Field>
-              <Label htmlFor="nomeCategoria">
-                Tem certeza que deseja excluir?
-              </Label>
+              <Label htmlFor="descricao">Tem certeza que deseja excluir?</Label>
               <Input
-                id="nomeCategoria"
-                name="nomeCategoria1"
-                defaultValue={categoria.NomeCategoria}
+                id="descricao"
+                name="descricao"
+                defaultValue={categoria.descricao}
                 readOnly
               />
             </Field>

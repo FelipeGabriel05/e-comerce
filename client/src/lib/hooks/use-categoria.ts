@@ -2,23 +2,23 @@ export function useCategoria() {
   const categorias = [
     {
       id: 1,
-      NomeCategoria: 'Categoria A',
+      descricao: 'Categoria A',
     },
     {
       id: 2,
-      NomeCategoria: 'Categoria B',
+      descricao: 'Categoria B',
     },
     {
       id: 3,
-      NomeCategoria: 'Categoria C',
+      descricao: 'Categoria C',
     },
     {
       id: 4,
-      NomeCategoria: 'Categoria D',
+      descricao: 'Categoria D',
     },
     {
       id: 5,
-      NomeCategoria: 'Categoria E',
+      descricao: 'Categoria E',
     },
   ];
   return categorias;
