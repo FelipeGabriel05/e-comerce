@@ -12,7 +12,7 @@ import {
   TableRow,
 } from '@/components/ui/table';
 import { useProducts } from '@/lib/hooks/use-products';
-import type { ProductFormData } from '@/lib/pages/admin/products/schema';
+import type { ProductFormData } from '@/lib/pages/admin/products/product-validation-schema';
 import { api } from '@/lib/services/constants';
 import type { Product } from '@/lib/types/product';
 

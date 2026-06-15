@@ -10,8 +10,8 @@ import {
   FieldLabel,
 } from '@/components/ui/field';
 import { Input } from '@/components/ui/input';
-import type { ProductFormData } from '@/lib/pages/admin/products/schema';
-import { ProductValidationSchema } from '@/lib/pages/admin/products/schema';
+import type { ProductFormData } from '@/lib/pages/admin/products/product-validation-schema';
+import { ProductValidationSchema } from '@/lib/pages/admin/products/product-validation-schema';
 
 type ProductFormProps = {
   defaultValues?: ProductFormData;
