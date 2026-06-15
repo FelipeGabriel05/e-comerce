@@ -36,7 +36,7 @@ export const ProductForm = ({
       preco: 0,
       foto: '',
       quantidade: 0,
-      categoriaId: 1,
+      categoriaId: 0,
     },
   });
 
@@ -85,6 +85,40 @@ export const ProductForm = ({
                 {...field}
                 type="number"
                 aria-invalid={fieldState.invalid}
+              />
+              {fieldState.invalid && <FieldError errors={[fieldState.error]} />}
+            </Field>
+          )}
+        />
+        <Controller
+          name="categoriaId"
+          control={form.control}
+          render={({ field, fieldState }) => (
+            <Field data-invalid={fieldState.invalid}>
+              <FieldLabel>Categoria</FieldLabel>
+              <Input
+                {...field}
+                type="number"
+                aria-invalid={fieldState.invalid}
+              />
+              {fieldState.invalid && <FieldError errors={[fieldState.error]} />}
+            </Field>
+          )}
+        />
+        <Controller
+          name="foto"
+          control={form.control}
+          render={({ field: { onChange, onBlur, name, ref }, fieldState }) => (
+            <Field data-invalid={fieldState.invalid}>
+              <FieldLabel>Foto</FieldLabel>
+              <Input
+                type="file"
+                accept="image/*"
+                name={name}
+                ref={ref}
+                onBlur={onBlur}
+                aria-invalid={fieldState.invalid}
+                onChange={(e) => onChange(e.target.files?.[0] ?? '')}
               />
               {fieldState.invalid && <FieldError errors={[fieldState.error]} />}
             </Field>
