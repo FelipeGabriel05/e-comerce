@@ -87,4 +87,22 @@ public class CategoriesRepository {
       throw e;
     }
   }
+
+  public boolean deleteCategory(int id) throws Exception {
+
+    String query = CategoriesQueries.deleteCategoryQuery;
+
+    try (PreparedStatement ps = con.prepareStatement(query)) {
+
+      ps.setInt(1, id);
+
+      int rowsAffected = ps.executeUpdate();
+
+      return rowsAffected > 0;
+
+    } catch (Exception e) {
+      e.printStackTrace();
+      throw e;
+    }
+  }
 }
