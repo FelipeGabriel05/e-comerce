@@ -41,4 +41,75 @@ public class ProductController extends HttpServlet {
       response.getWriter().write(jsonRes.toJson());
     }
   }
+
+  @Override
+protected void doPut(
+    HttpServletRequest request,
+    HttpServletResponse response)
+    throws IOException {
+
+  HttpProductValidators validators =
+      new HttpProductValidators();
+
+  response.setContentType("application/json");
+
+  try {
+
+    int id =
+        PathVariableExtractor.extractIntPathVariable(
+            request,
+            "/products/:id/quantity",
+            "id");
+
+    Product productInput =
+        validators.validateUpdateProductQuantity(
+            request,
+            id);
+
+    UpdateProductQuantityUseCase useCase =
+        new UpdateProductQuantityUseCase();
+
+    Product updatedProduct =
+        useCase.execute(productInput);
+
+    JsonResponse jsonRes =
+        new JsonResponse(
+            HttpServletResponse.SC_OK,
+            "Product quantity updated",
+            updatedProduct);
+
+    response.setStatus(jsonRes.getStatus());
+    response.getWriter().write(jsonRes.toJson());
+
+  } catch (ValidationException e) {
+
+    JsonResponse jsonRes =
+        new JsonResponse(422, e.getMessage());
+
+    response.setStatus(jsonRes.getStatus());
+    response.getWriter().write(jsonRes.toJson());
+
+  } catch (NotFoundException e) {
+
+    JsonResponse jsonRes =
+        new JsonResponse(
+            HttpServletResponse.SC_NOT_FOUND,
+            e.getMessage());
+
+    response.setStatus(jsonRes.getStatus());
+    response.getWriter().write(jsonRes.toJson());
+
+  } catch (Exception e) {
+
+    e.printStackTrace();
+
+    JsonResponse jsonRes =
+        new JsonResponse(
+            HttpServletResponse.SC_INTERNAL_SERVER_ERROR,
+            e.getMessage());
+
+    response.setStatus(jsonRes.getStatus());
+    response.getWriter().write(jsonRes.toJson());
+  }
+}
 }
