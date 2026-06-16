@@ -53,9 +53,16 @@ function DialogDelete({ categoria }: DialogDeleteProps) {
               />
             </Field>
           </FieldGroup>
-          <DialogFooter>
-            <DialogClose>Cancelar</DialogClose>
-            <Button type="submit">Excluir</Button>
+          <DialogFooter className="gap-6">
+            <DialogClose className="rounded-md border px-4 py-2 font-medium hover:bg-white/10">
+              Cancelar
+            </DialogClose>
+            <Button
+              className="rounded-md bg-red-600 px-4 py-2 font-medium text-white transition-colors hover:bg-red-700"
+              type="submit"
+            >
+              Excluir
+            </Button>
           </DialogFooter>
         </DialogContent>
       </form>

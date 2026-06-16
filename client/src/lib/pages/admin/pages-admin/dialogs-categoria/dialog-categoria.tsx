@@ -42,9 +42,17 @@ function DialogCategoria() {
               <Input id="descricao" name="descricao" />
             </Field>
           </FieldGroup>
-          <DialogFooter>
-            <DialogClose>Cancelar</DialogClose>
-            <Button type="submit">Inserir</Button>
+          {/* "rounded-md border px-4 py-2 font-medium hover:bg-accent" */}
+          <DialogFooter className="gap-6">
+            <DialogClose className="rounded-md border px-4 py-2 font-medium hover:bg-white/10">
+              Cancelar
+            </DialogClose>
+            <Button
+              className="rounded-md bg-emerald-600 px-4 py-2 font-medium text-white transition-colors hover:bg-emerald-700"
+              type="submit"
+            >
+              Inserir
+            </Button>
           </DialogFooter>
         </DialogContent>
       </form>
