@@ -5,6 +5,7 @@ import ecommerce.Exceptions.ValidationException;
 import ecommerce.Http.IO.Responses.JsonResponse;
 import ecommerce.Http.Validators.HttpCategoryValidators;
 import ecommerce.UseCases.CreateCategoryUseCase;
+import ecommerce.UseCases.DeleteCategoryUseCase;
 import ecommerce.UseCases.UpdateCategoryUseCase;
 import java.io.IOException;
 import javax.servlet.ServletException;
@@ -77,6 +78,55 @@ public class AdminCategoryController extends HttpServlet {
         JsonResponse jsonRes =
             new JsonResponse(
                 HttpServletResponse.SC_OK, "Category updated successfully", categoryInput);
+
+        response.setStatus(jsonRes.getStatus());
+        response.getWriter().write(jsonRes.toJson());
+
+      } else {
+        JsonResponse jsonRes =
+            new JsonResponse(HttpServletResponse.SC_NOT_FOUND, "Category not found");
+
+        response.setStatus(jsonRes.getStatus());
+        response.getWriter().write(jsonRes.toJson());
+      }
+
+    } catch (ValidationException e) {
+
+      JsonResponse jsonRes = new JsonResponse(SC_UNPROCESSABLE_ENTITY, e.getMessage());
+
+      response.setStatus(jsonRes.getStatus());
+      response.getWriter().write(jsonRes.toJson());
+
+    } catch (Exception e) {
+
+      e.printStackTrace();
+
+      JsonResponse jsonRes =
+          new JsonResponse(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, "Internal server error");
+
+      response.setStatus(jsonRes.getStatus());
+      response.getWriter().write(jsonRes.toJson());
+    }
+  }
+
+  protected void doDelete(HttpServletRequest request, HttpServletResponse response)
+      throws ServletException, IOException {
+
+    response.setContentType("application/json");
+
+    HttpCategoryValidators validators = new HttpCategoryValidators();
+
+    try {
+
+      int id = validators.validateDeleteCategory(request);
+
+      DeleteCategoryUseCase useCase = new DeleteCategoryUseCase();
+
+      boolean isDeleted = useCase.execute(id);
+
+      if (isDeleted) {
+        JsonResponse jsonRes =
+            new JsonResponse(HttpServletResponse.SC_OK, "Category deleted successfully");
 
         response.setStatus(jsonRes.getStatus());
         response.getWriter().write(jsonRes.toJson());
