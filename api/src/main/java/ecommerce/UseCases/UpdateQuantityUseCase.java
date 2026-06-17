@@ -1,32 +1,30 @@
 package ecommerce.UseCases;
 
 import ecommerce.Database.DBConnection;
-import ecommerce.Database.Entites.User;
-import ecommerce.Database.Repositories.UsersRepository;
+import ecommerce.Database.Entites.Product;
+import ecommerce.Database.Repositories.ProductRepository;
 import ecommerce.Exceptions.InternalServerException;
 import ecommerce.Exceptions.NotFoundException;
 import java.sql.Connection;
 
-public class UpdateUseCase {
+public class UpdateQuantityUseCase {
 
-  public void execute(User user) throws NotFoundException, InternalServerException {
+  public Product execute(Product productInput) throws NotFoundException, InternalServerException {
 
-    try {
-      Connection con = DBConnection.getConnection();
+    try (Connection con = DBConnection.getConnection()) {
+      ProductRepository repository = new ProductRepository(con);
+      Product updatedProduct = repository.updateProductQuantity(productInput);
 
-      UsersRepository userRepository = new UsersRepository(con);
-
-      boolean updated = userRepository.updateUser(user);
-
-      if (!updated) {
-        throw new NotFoundException("User not found or could not be updated");
+      if (updatedProduct == null) {
+        throw new NotFoundException("Product not found");
       }
+      return updatedProduct;
 
     } catch (NotFoundException e) {
       throw e;
 
     } catch (Exception e) {
-      throw new InternalServerException("Internal error while updating user");
+      throw new InternalServerException("Internal error while updating product quantity");
     }
   }
 }
