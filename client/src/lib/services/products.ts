@@ -17,7 +17,18 @@ export const fetchProducts = async (): Promise<Array<Product>> => {
 export const createProductService = async (
   data: ProductFormData,
 ): Promise<void> => {
-  await api.post('/admin/products', data);
+  const formData = new FormData();
+  formData.append('descricao', data.descricao);
+  formData.append('preco', String(data.preco));
+  formData.append('quantidade', String(data.quantidade));
+  formData.append('categoriaId', String(data.categoriaId));
+  if (data.foto instanceof File) {
+    formData.append('foto', data.foto);
+  }
+
+  await api.post('/admin/products', formData, {
+    headers: { 'Content-Type': 'multipart/form-data' },
+  });
 };
 
 export const updateProductService = async ({
@@ -27,7 +38,18 @@ export const updateProductService = async ({
   id: number;
   data: ProductFormData;
 }): Promise<void> => {
-  await api.put(`/admin/products/${id}`, data);
+  const formData = new FormData();
+  formData.append('descricao', data.descricao);
+  formData.append('preco', String(data.preco));
+  formData.append('quantidade', String(data.quantidade));
+  formData.append('categoriaId', String(data.categoriaId));
+  if (data.foto instanceof File) {
+    formData.append('foto', data.foto);
+  }
+
+  await api.put(`/admin/products/${id}`, formData, {
+    headers: { 'Content-Type': 'multipart/form-data' },
+  });
 };
 
 export const deleteProductService = async (id: number): Promise<void> => {
