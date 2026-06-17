@@ -17,6 +17,12 @@ public class UpdateProductUseCase {
 
       ProductRepository repository = new ProductRepository(con);
 
+      if (product.getFoto() != null && product.getFoto().contains(";base64,")) {
+        UploadImageUseCase imageUseCase = new UploadImageUseCase();
+        String savedFilename = imageUseCase.execute(product.getFoto());
+        product.setFoto(savedFilename);
+      }
+
       Product updatedProduct = repository.updateProduct(product);
 
       if (updatedProduct == null) {
@@ -26,11 +32,8 @@ public class UpdateProductUseCase {
       return updatedProduct;
 
     } catch (NotFoundException e) {
-
       throw e;
-
     } catch (Exception e) {
-
       throw new InternalServerException("Internal error while updating product");
     }
   }
