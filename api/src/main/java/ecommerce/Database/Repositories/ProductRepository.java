@@ -109,25 +109,21 @@ public class ProductRepository {
     }
   }
 
-  public Product updateProductQuantity(Product productInput)
-    throws SQLException {
+  public Product updateProductQuantity(Product productInput) throws SQLException {
 
-  String query =
-      ProductQueries.updateProductQuantityQuery;
+    String query = ProductQueries.updateProductQuantityQuery;
 
-  PreparedStatement ps =
-      con.prepareStatement(query);
+    PreparedStatement ps = con.prepareStatement(query);
 
-  ps.setInt(1, productInput.getQuantidade());
-  ps.setInt(2, productInput.getId());
+    ps.setInt(1, productInput.getQuantidade());
+    ps.setInt(2, productInput.getId());
 
-  int rowsAffected =
-      ps.executeUpdate();
+    int rowsAffected = ps.executeUpdate();
 
-  if (rowsAffected == 0) {
-    return null;
+    if (rowsAffected == 0) {
+      return null;
+    }
+
+    return productInput;
   }
-
-  return productInput;
-}
 }

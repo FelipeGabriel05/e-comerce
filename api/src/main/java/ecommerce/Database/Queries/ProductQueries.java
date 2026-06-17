@@ -10,5 +10,5 @@ public class ProductQueries {
   public static String selectProductByIdQuery = "SELECT * FROM produto WHERE id = ?";
 
   public static String updateProductQuantityQuery =
-    "UPDATE products SET quantidade = ? WHERE id = ?";
+      "UPDATE products SET quantidade = ? WHERE id = ?";
 }
