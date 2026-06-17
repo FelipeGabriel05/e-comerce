@@ -1,8 +1,13 @@
 package ecommerce.Http.Controller;
 
 import ecommerce.Database.Entites.Product;
+import ecommerce.Exceptions.NotFoundException;
+import ecommerce.Exceptions.ValidationException;
+import ecommerce.Http.IO.PathVariableExtractor;
 import ecommerce.Http.IO.Responses.JsonResponse;
+import ecommerce.Http.Validators.HttpProductValidators;
 import ecommerce.UseCases.ListProductsUseCase;
+import ecommerce.UseCases.UpdateQuantityUseCase;
 import java.io.IOException;
 import java.util.List;
 import javax.servlet.annotation.WebServlet;
@@ -10,7 +15,7 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-@WebServlet("/products")
+@WebServlet("/products/*")
 public class ProductController extends HttpServlet {
 
   private static final long serialVersionUID = 1L;
@@ -43,73 +48,53 @@ public class ProductController extends HttpServlet {
   }
 
   @Override
-protected void doPut(
-    HttpServletRequest request,
-    HttpServletResponse response)
-    throws IOException {
+  protected void doPut(HttpServletRequest request, HttpServletResponse response)
+      throws IOException {
 
-  HttpProductValidators validators =
-      new HttpProductValidators();
+    HttpProductValidators validators = new HttpProductValidators();
 
-  response.setContentType("application/json");
+    response.setContentType("application/json");
 
-  try {
+    try {
 
-    int id =
-        PathVariableExtractor.extractIntPathVariable(
-            request,
-            "/products/:id/quantity",
-            "id");
+      int id =
+          PathVariableExtractor.extractIntPathVariable(request, "/products/:id/quantity", "id");
 
-    Product productInput =
-        validators.validateUpdateProductQuantity(
-            request,
-            id);
+      Product productInput = validators.validateUpdateProductQuantity(request, id);
 
-    UpdateProductQuantityUseCase useCase =
-        new UpdateProductQuantityUseCase();
+      UpdateQuantityUseCase useCase = new UpdateQuantityUseCase();
 
-    Product updatedProduct =
-        useCase.execute(productInput);
+      Product updatedProduct = useCase.execute(productInput);
 
-    JsonResponse jsonRes =
-        new JsonResponse(
-            HttpServletResponse.SC_OK,
-            "Product quantity updated",
-            updatedProduct);
+      JsonResponse jsonRes =
+          new JsonResponse(HttpServletResponse.SC_OK, "Product quantity updated", updatedProduct);
 
-    response.setStatus(jsonRes.getStatus());
-    response.getWriter().write(jsonRes.toJson());
+      response.setStatus(jsonRes.getStatus());
+      response.getWriter().write(jsonRes.toJson());
 
-  } catch (ValidationException e) {
+    } catch (ValidationException e) {
 
-    JsonResponse jsonRes =
-        new JsonResponse(422, e.getMessage());
+      JsonResponse jsonRes = new JsonResponse(422, e.getMessage());
 
-    response.setStatus(jsonRes.getStatus());
-    response.getWriter().write(jsonRes.toJson());
+      response.setStatus(jsonRes.getStatus());
+      response.getWriter().write(jsonRes.toJson());
 
-  } catch (NotFoundException e) {
+    } catch (NotFoundException e) {
 
-    JsonResponse jsonRes =
-        new JsonResponse(
-            HttpServletResponse.SC_NOT_FOUND,
-            e.getMessage());
+      JsonResponse jsonRes = new JsonResponse(HttpServletResponse.SC_NOT_FOUND, e.getMessage());
 
-    response.setStatus(jsonRes.getStatus());
-    response.getWriter().write(jsonRes.toJson());
+      response.setStatus(jsonRes.getStatus());
+      response.getWriter().write(jsonRes.toJson());
 
-  } catch (Exception e) {
+    } catch (Exception e) {
 
-    e.printStackTrace();
+      e.printStackTrace();
 
-    JsonResponse jsonRes =
-        new JsonResponse(
-            HttpServletResponse.SC_INTERNAL_SERVER_ERROR,
-            e.getMessage());
+      JsonResponse jsonRes =
+          new JsonResponse(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, e.getMessage());
 
-    response.setStatus(jsonRes.getStatus());
-    response.getWriter().write(jsonRes.toJson());
+      response.setStatus(jsonRes.getStatus());
+      response.getWriter().write(jsonRes.toJson());
+    }
   }
-}
 }
