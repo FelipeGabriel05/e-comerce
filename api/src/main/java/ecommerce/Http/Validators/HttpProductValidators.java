@@ -51,45 +51,36 @@ public class HttpProductValidators {
     return product;
   }
 
-  public Product validateUpdateProductQuantity(
-    HttpServletRequest request,
-    int id)
-    throws ValidationException {
+  public Product validateUpdateProductQuantity(HttpServletRequest request, int id)
+      throws ValidationException {
 
-  List<String> errors =
-      new ArrayList<>();
+    List<String> errors = new ArrayList<>();
 
-  ProductBodyRequest body = null;
+    ProductBodyRequest body = null;
 
-  try {
-    body =
-        BodyFormDataToObject.parse(
-            request,
-            ProductBodyRequest.class);
+    try {
+      body = BodyFormDataToObject.parse(request, ProductBodyRequest.class);
 
-  } catch (Exception e) {
-    throw new ValidationException("Invalid body data");
+    } catch (Exception e) {
+      throw new ValidationException("Invalid body data");
+    }
+
+    if (body.quantidade < 0) {
+
+      errors.add("Quantity cannot be negative");
+    }
+
+    if (!errors.isEmpty()) {
+      String errorMessage = String.join(", ", errors);
+
+      throw new ValidationException(errorMessage);
+    }
+
+    Product product = new Product();
+
+    product.setId(id);
+    product.setQuantidade(body.quantidade);
+
+    return product;
   }
-
-  if (body.quantidade == null
-      || body.quantidade < 0) {
-
-    errors.add("Quantity cannot be negative");
-  }
-
-  if (!errors.isEmpty()) {
-    String errorMessage =
-        String.join(", ", errors);
-
-    throw new ValidationException(errorMessage);
-  }
-
-  Product product =
-      new Product();
-
-  product.setId(id);
-  product.setQuantidade(body.quantidade);
-
-  return product;
-}
 }
