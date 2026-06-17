@@ -42,6 +42,7 @@ const Produtos = () => {
           </CardHeader>
           <CardContent>
             <ProductForm
+              key={editandoProduct?.id ?? 'new'}
               isEditing={!!editandoProduct}
               isPending={isPending}
               defaultValues={

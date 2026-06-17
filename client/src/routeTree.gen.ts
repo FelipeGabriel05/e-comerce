@@ -21,7 +21,6 @@ import { Route as AdminIndexRouteImport } from './routes/admin/index'
 import { Route as AdminVendasRouteImport } from './routes/admin/vendas'
 import { Route as AdminValorRecebidoRouteImport } from './routes/admin/valor-recebido'
 import { Route as AdminProdutosRouteImport } from './routes/admin/produtos'
-import { Route as AdminProductsRouteImport } from './routes/admin/products'
 import { Route as AdminFaltaEstoqueRouteImport } from './routes/admin/falta-estoque'
 import { Route as AdminCompraClienteRouteImport } from './routes/admin/compra-cliente'
 import { Route as AdminCategoriasRouteImport } from './routes/admin/categorias'
@@ -86,11 +85,6 @@ const AdminProdutosRoute = AdminProdutosRouteImport.update({
   path: '/admin/produtos',
   getParentRoute: () => rootRouteImport,
 } as any)
-const AdminProductsRoute = AdminProductsRouteImport.update({
-  id: '/admin/products',
-  path: '/admin/products',
-  getParentRoute: () => rootRouteImport,
-} as any)
 const AdminFaltaEstoqueRoute = AdminFaltaEstoqueRouteImport.update({
   id: '/admin/falta-estoque',
   path: '/admin/falta-estoque',
@@ -119,7 +113,6 @@ export interface FileRoutesByFullPath {
   '/admin/categorias': typeof AdminCategoriasRoute
   '/admin/compra-cliente': typeof AdminCompraClienteRoute
   '/admin/falta-estoque': typeof AdminFaltaEstoqueRoute
-  '/admin/products': typeof AdminProductsRoute
   '/admin/produtos': typeof AdminProdutosRoute
   '/admin/valor-recebido': typeof AdminValorRecebidoRoute
   '/admin/vendas': typeof AdminVendasRoute
@@ -137,7 +130,6 @@ export interface FileRoutesByTo {
   '/admin/categorias': typeof AdminCategoriasRoute
   '/admin/compra-cliente': typeof AdminCompraClienteRoute
   '/admin/falta-estoque': typeof AdminFaltaEstoqueRoute
-  '/admin/products': typeof AdminProductsRoute
   '/admin/produtos': typeof AdminProdutosRoute
   '/admin/valor-recebido': typeof AdminValorRecebidoRoute
   '/admin/vendas': typeof AdminVendasRoute
@@ -156,7 +148,6 @@ export interface FileRoutesById {
   '/admin/categorias': typeof AdminCategoriasRoute
   '/admin/compra-cliente': typeof AdminCompraClienteRoute
   '/admin/falta-estoque': typeof AdminFaltaEstoqueRoute
-  '/admin/products': typeof AdminProductsRoute
   '/admin/produtos': typeof AdminProdutosRoute
   '/admin/valor-recebido': typeof AdminValorRecebidoRoute
   '/admin/vendas': typeof AdminVendasRoute
@@ -176,7 +167,6 @@ export interface FileRouteTypes {
     | '/admin/categorias'
     | '/admin/compra-cliente'
     | '/admin/falta-estoque'
-    | '/admin/products'
     | '/admin/produtos'
     | '/admin/valor-recebido'
     | '/admin/vendas'
@@ -194,7 +184,6 @@ export interface FileRouteTypes {
     | '/admin/categorias'
     | '/admin/compra-cliente'
     | '/admin/falta-estoque'
-    | '/admin/products'
     | '/admin/produtos'
     | '/admin/valor-recebido'
     | '/admin/vendas'
@@ -212,7 +201,6 @@ export interface FileRouteTypes {
     | '/admin/categorias'
     | '/admin/compra-cliente'
     | '/admin/falta-estoque'
-    | '/admin/products'
     | '/admin/produtos'
     | '/admin/valor-recebido'
     | '/admin/vendas'
@@ -231,7 +219,6 @@ export interface RootRouteChildren {
   AdminCategoriasRoute: typeof AdminCategoriasRoute
   AdminCompraClienteRoute: typeof AdminCompraClienteRoute
   AdminFaltaEstoqueRoute: typeof AdminFaltaEstoqueRoute
-  AdminProductsRoute: typeof AdminProductsRoute
   AdminProdutosRoute: typeof AdminProdutosRoute
   AdminValorRecebidoRoute: typeof AdminValorRecebidoRoute
   AdminVendasRoute: typeof AdminVendasRoute
@@ -324,13 +311,6 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AdminProdutosRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/admin/products': {
-      id: '/admin/products'
-      path: '/admin/products'
-      fullPath: '/admin/products'
-      preLoaderRoute: typeof AdminProductsRouteImport
-      parentRoute: typeof rootRouteImport
-    }
     '/admin/falta-estoque': {
       id: '/admin/falta-estoque'
       path: '/admin/falta-estoque'
@@ -367,7 +347,6 @@ const rootRouteChildren: RootRouteChildren = {
   AdminCategoriasRoute: AdminCategoriasRoute,
   AdminCompraClienteRoute: AdminCompraClienteRoute,
   AdminFaltaEstoqueRoute: AdminFaltaEstoqueRoute,
-  AdminProductsRoute: AdminProductsRoute,
   AdminProdutosRoute: AdminProdutosRoute,
   AdminValorRecebidoRoute: AdminValorRecebidoRoute,
   AdminVendasRoute: AdminVendasRoute,
