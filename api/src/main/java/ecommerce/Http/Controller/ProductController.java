@@ -1,6 +1,9 @@
 package ecommerce.Http.Controller;
 
 import ecommerce.Database.Entites.Product;
+import ecommerce.Exceptions.NotFoundException;
+import ecommerce.Exceptions.ValidationException;
+import ecommerce.Http.IO.PathVariableExtractor;
 import ecommerce.Http.IO.Responses.JsonResponse;
 import ecommerce.Http.Validators.HttpProductValidators;
 import ecommerce.UseCases.CreateProductUseCase;
@@ -15,7 +18,7 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-@WebServlet("/admin/products")
+@WebServlet("/admin/products/*")
 @MultipartConfig
 public class ProductController extends HttpServlet {
 
@@ -94,8 +97,8 @@ public class ProductController extends HttpServlet {
     response.setContentType("application/json");
 
     try {
-
-      Product productInput = validators.validateUpdateProduct(request);
+      int id = PathVariableExtractor.extractIntPathVariable(request,"/products/:id","id");
+      Product productInput = validators.validateUpdateProduct(request,id);
 
       UpdateProductUseCase useCase = new UpdateProductUseCase();
 
@@ -109,23 +112,36 @@ public class ProductController extends HttpServlet {
         response.setStatus(jsonRes.getStatus());
         response.getWriter().write(jsonRes.toJson());
 
-      } else {
+      } } catch (ValidationException e) {
 
-        JsonResponse jsonRes =
-            new JsonResponse(HttpServletResponse.SC_NOT_FOUND, "Product Not Found");
+  JsonResponse jsonRes =
+      new JsonResponse(422, e.getMessage());
 
-        response.setStatus(jsonRes.getStatus());
-        response.getWriter().write(jsonRes.toJson());
-      }
+  response.setStatus(jsonRes.getStatus());
+  response.getWriter().write(jsonRes.toJson());
 
-    } catch (Exception e) {
+} catch (NotFoundException e) {
 
-      e.printStackTrace();
+  JsonResponse jsonRes =
+      new JsonResponse(
+          HttpServletResponse.SC_NOT_FOUND,
+          e.getMessage());
 
-      JsonResponse jsonRes = new JsonResponse(HttpServletResponse.SC_BAD_REQUEST, e.getMessage());
+  response.setStatus(jsonRes.getStatus());
+  response.getWriter().write(jsonRes.toJson());
 
-      response.setStatus(jsonRes.getStatus());
-      response.getWriter().write(jsonRes.toJson());
+} catch (Exception e) {
+
+  e.printStackTrace();
+
+  JsonResponse jsonRes =
+      new JsonResponse(
+          HttpServletResponse.SC_INTERNAL_SERVER_ERROR,
+          e.getMessage());
+
+  response.setStatus(jsonRes.getStatus());
+  response.getWriter().write(jsonRes.toJson());
+
     }
   }
 }
