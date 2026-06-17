@@ -3,8 +3,8 @@ package ecommerce.Http.Validators;
 import ecommerce.Database.Entites.Category;
 import ecommerce.Exceptions.ValidationException;
 import ecommerce.Http.IO.BodyJsonToObject;
+import ecommerce.Http.IO.PathVariableExtractor;
 import ecommerce.Http.IO.Requests.CreateCategoryBodyRequest;
-import ecommerce.Http.IO.Requests.DeleteCategoryBodyRequest;
 import ecommerce.Http.IO.Requests.UpdateCategoryBodyRequest;
 import java.util.ArrayList;
 import java.util.List;
@@ -54,14 +54,18 @@ public class HttpCategoryValidators {
 
     UpdateCategoryBodyRequest body = null;
 
+    int id = 0;
+
+    try {
+      id = PathVariableExtractor.extractIntPathVariable(request, "/admin/category/:id", "id");
+    } catch (Exception e) {
+      errors.add("Valid ID is riquired in URL");
+    }
+
     try {
       body = BodyJsonToObject.parse(request, UpdateCategoryBodyRequest.class);
     } catch (Exception e) {
       throw new ValidationException("Invalid body data");
-    }
-
-    if (body.id <= 0) {
-      errors.add("Valid ID is required");
     }
 
     if (body.descricao == null || body.descricao.isBlank()) {
@@ -81,25 +85,20 @@ public class HttpCategoryValidators {
     }
 
     Category category = new Category();
-    category.setId(body.id);
+    category.setId(id);
     category.setDescricao(body.descricao);
 
     return category;
   }
 
   public int validateDeleteCategory(HttpServletRequest request) throws ValidationException {
-    DeleteCategoryBodyRequest body = null;
 
     try {
-      body = BodyJsonToObject.parse(request, DeleteCategoryBodyRequest.class);
-    } catch (Exception e) {
-      throw new ValidationException("Invalid body data");
-    }
 
-    if (body == null || body.id <= 0) {
+      return PathVariableExtractor.extractIntPathVariable(request, "/admin/category/:id", "id");
+
+    } catch (Exception e) {
       throw new ValidationException("Valid ID is required for deletion");
     }
-
-    return body.id;
   }
 }
