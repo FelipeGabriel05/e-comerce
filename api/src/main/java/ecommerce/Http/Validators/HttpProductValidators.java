@@ -3,6 +3,7 @@ package ecommerce.Http.Validators;
 import ecommerce.Database.Entites.Product;
 import ecommerce.Exceptions.ValidationException;
 import ecommerce.Http.IO.BodyFormDataToObject;
+import ecommerce.Http.IO.PathVariableExtractor;
 import ecommerce.Http.IO.Requests.ProductBodyRequest;
 import java.util.ArrayList;
 import java.util.List;
@@ -102,4 +103,16 @@ public class HttpProductValidators {
 
     return product;
   }
+
+  public int validateDeleteProduct(HttpServletRequest request) throws ValidationException {
+
+    try {
+
+      return PathVariableExtractor.extractIntPathVariable(request, "/admin/product/:id", "id");
+
+    } catch (Exception e) {
+      throw new ValidationException("Valid ID is required for deletion");
+    }
+  }
+
 }
