@@ -12,5 +12,5 @@ public class ProductQueries {
   public static String updateProductQuery =
       "UPDATE produto SET descricao = ?, preco = ?, foto = ?, quantidade = ?, categoria_id = ?, WHERE id =?";
 
-  public static String deleteCategoryQuery = "DELETE FROM produto WHERE id = ?";
+  public static String deleteProductQuery = "DELETE FROM produto WHERE id = ?";
 }

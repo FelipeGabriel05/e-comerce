@@ -130,4 +130,22 @@ public class ProductRepository {
 
     return productInput;
   }
+
+  public boolean deleteProduct(int id) throws Exception {
+
+    String query = CategoriesQueries.deleteProductQuery;
+
+    try (PreparedStatement ps = con.prepareStatement(query)) {
+
+      ps.setInt(1, id);
+
+      int rowsAffected = ps.executeUpdate();
+
+      return rowsAffected > 0;
+
+    } catch (Exception e) {
+      e.printStackTrace();
+      throw e;
+    }
+  }
 }
