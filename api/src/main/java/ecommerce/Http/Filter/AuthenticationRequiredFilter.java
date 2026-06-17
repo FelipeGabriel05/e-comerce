@@ -30,11 +30,11 @@ public class AuthenticationRequiredFilter implements Filter {
           new Route("POST", "/sales"),
           new Route("POST", "/admin/category"),
           new Route("POST", "/admin/products"),
+          new Route("POST", "/logout"),
           new Route("DELETE", "/admin/category"),
           new Route("DELETE", "/admin/products"),
           new Route("PUT", "/admin/category"),
-          new Route("PUT", "/admin/products"),
-          new Route("POST", "/logout"));
+          new Route("PUT", "/admin/products"));
 
   @Override
   public void init(FilterConfig filterConfig) throws ServletException {}
