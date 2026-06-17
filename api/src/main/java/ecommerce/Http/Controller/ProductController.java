@@ -97,8 +97,9 @@ public class ProductController extends HttpServlet {
     response.setContentType("application/json");
 
     try {
-      int id = PathVariableExtractor.extractIntPathVariable(request,"/products/:id","id");
-      Product productInput = validators.validateUpdateProduct(request,id);
+      int id = PathVariableExtractor.extractIntPathVariable(request, "/admin/products/:id", "id");
+
+      Product productInput = validators.validateUpdateProduct(request, id);
 
       UpdateProductUseCase useCase = new UpdateProductUseCase();
 
@@ -111,37 +112,37 @@ public class ProductController extends HttpServlet {
 
         response.setStatus(jsonRes.getStatus());
         response.getWriter().write(jsonRes.toJson());
+      }
 
-      } } catch (ValidationException e) {
+    } catch (ValidationException e) {
 
-  JsonResponse jsonRes =
-      new JsonResponse(422, e.getMessage());
+      JsonResponse jsonRes =
+          new JsonResponse(422, e.getMessage());
 
-  response.setStatus(jsonRes.getStatus());
-  response.getWriter().write(jsonRes.toJson());
+      response.setStatus(jsonRes.getStatus());
+      response.getWriter().write(jsonRes.toJson());
 
-} catch (NotFoundException e) {
+    } catch (NotFoundException e) {
 
-  JsonResponse jsonRes =
-      new JsonResponse(
-          HttpServletResponse.SC_NOT_FOUND,
-          e.getMessage());
+      JsonResponse jsonRes =
+       new JsonResponse(
+        HttpServletResponse.SC_NOT_FOUND,
+        e.getMessage());
 
-  response.setStatus(jsonRes.getStatus());
-  response.getWriter().write(jsonRes.toJson());
+      response.setStatus(jsonRes.getStatus());
+      response.getWriter().write(jsonRes.toJson());
 
-} catch (Exception e) {
+    } catch (Exception e) {
 
-  e.printStackTrace();
+      e.printStackTrace();
 
-  JsonResponse jsonRes =
-      new JsonResponse(
-          HttpServletResponse.SC_INTERNAL_SERVER_ERROR,
-          e.getMessage());
+      JsonResponse jsonRes =
+          new JsonResponse(
+            HttpServletResponse.SC_INTERNAL_SERVER_ERROR,
+             e.getMessage());
 
-  response.setStatus(jsonRes.getStatus());
-  response.getWriter().write(jsonRes.toJson());
-
+      response.setStatus(jsonRes.getStatus());
+      response.getWriter().write(jsonRes.toJson());
     }
   }
 }

@@ -4,7 +4,6 @@ import ecommerce.Database.Entites.Product;
 import ecommerce.Exceptions.ValidationException;
 import ecommerce.Http.IO.BodyFormDataToObject;
 import ecommerce.Http.IO.Requests.ProductBodyRequest;
-import ecommerce.Http.IO.Requests.UpdateProductBodyRequest;
 import java.util.ArrayList;
 import java.util.List;
 import javax.servlet.http.HttpServletRequest;
@@ -52,7 +51,8 @@ public class HttpProductValidators {
     return product;
   }
 
-  public Product validateUpdateProduct(HttpServletRequest request, int id) throws ValidationException {
+  public Product validateUpdateProduct(HttpServletRequest request, int id)
+      throws ValidationException {
 
     List<String> errors = new ArrayList<String>();
 
@@ -67,8 +67,11 @@ public class HttpProductValidators {
       throw new ValidationException("Invalid body data");
     }
 
-    if (body.descricao == null || body.descricao.trim().length() < 10) {
-      errors.add("Description must contain at least 10 characters");
+    if (body.descricao == null
+        || body.descricao.trim().length() < 10
+        || body.descricao.trim().length() > 300) {
+
+      errors.add("Description must have between 10 and 300 characters");
     }
 
     if (body.quantidade <= 0) {
@@ -84,9 +87,9 @@ public class HttpProductValidators {
     }
 
     if (!errors.isEmpty()) {
-    String errorMessage = String.join(", ", errors);
-    throw new ValidationException(errorMessage);
-}
+      String errorMessage = String.join(", ", errors);
+      throw new ValidationException(errorMessage);
+    }
 
     Product product = new Product();
 
