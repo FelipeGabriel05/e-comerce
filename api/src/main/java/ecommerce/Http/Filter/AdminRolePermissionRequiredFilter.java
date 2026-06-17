@@ -24,9 +24,9 @@ public class AdminRolePermissionRequiredFilter implements Filter {
           new Route("POST", "/image/upload"),
           new Route("POST", "/admin/category"),
           new Route("POST", "/admin/products"),
-          new Route("DELETE", "/admin/category"),
+          new Route("DELETE", "/admin/category/*"),
           new Route("DELETE", "/admin/products"),
-          new Route("PUT", "/admin/category"),
+          new Route("PUT", "/admin/category/*"),
           new Route("PUT", "/admin/products/*"));
 
   @Override
