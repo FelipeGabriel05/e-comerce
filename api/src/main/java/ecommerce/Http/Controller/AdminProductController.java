@@ -83,6 +83,12 @@ public class AdminProductController extends HttpServlet {
 
         response.setStatus(jsonRes.getStatus());
         response.getWriter().write(jsonRes.toJson());
+      } else {
+        JsonResponse jsonRes =
+            new JsonResponse(HttpServletResponse.SC_NOT_FOUND, "Product not found");
+
+        response.setStatus(jsonRes.getStatus());
+        response.getWriter().write(jsonRes.toJson());
       }
 
     } catch (ValidationException e) {
