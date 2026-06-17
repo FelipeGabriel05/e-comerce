@@ -8,4 +8,7 @@ public class ProductQueries {
       "SELECT id, descricao, preco, foto, quantidade, categoria_id "
           + "FROM produto WHERE quantidade > 0";
   public static String selectProductByIdQuery = "SELECT * FROM produto WHERE id = ?";
+
+  public static String updateProductQuery =
+      "UPDATE produto SET descricao = ?, preco = ?, foto = ?, quantidade = ?, categoria_id = ?, WHERE id =?";
 }
