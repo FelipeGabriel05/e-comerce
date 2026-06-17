@@ -133,7 +133,7 @@ public class ProductRepository {
 
   public boolean deleteProduct(int id) throws Exception {
 
-    String query = CategoriesQueries.deleteProductQuery;
+    String query = ProductQueries.deleteProductQuery;
 
     try (PreparedStatement ps = con.prepareStatement(query)) {
 
