@@ -4,6 +4,7 @@ import ecommerce.Database.Entites.Product;
 import ecommerce.Exceptions.ValidationException;
 import ecommerce.Http.IO.BodyFormDataToObject;
 import ecommerce.Http.IO.Requests.ProductBodyRequest;
+import ecommerce.Http.IO.Requests.UpdateProductBodyRequest;
 import java.util.ArrayList;
 import java.util.List;
 import javax.servlet.http.HttpServletRequest;
@@ -51,7 +52,7 @@ public class HttpProductValidators {
     return product;
   }
 
-  public Product validateUpdateProduct(HttpServletRequest request) throws ValidationException {
+  public Product validateUpdateProduct(HttpServletRequest request, int id) throws ValidationException {
 
     List<String> errors = new ArrayList<String>();
 
@@ -66,35 +67,30 @@ public class HttpProductValidators {
       throw new ValidationException("Invalid body data");
     }
 
-    if (body.id <= 0) {
-      errors.add("ID is required");
-    }
-
-    if (body.descricao == null || body.descricao.isEmpty()) {
-      errors.add("Description is required");
+    if (body.descricao == null || body.descricao.trim().length() < 10) {
+      errors.add("Description must contain at least 10 characters");
     }
 
     if (body.quantidade <= 0) {
       errors.add("Quantity must be greater than zero");
     }
 
-    if (body.preco <= 0) {
-      errors.add("Price must be greater than zero");
+    if (body.preco < 0) {
+      errors.add("Price cannot be negative");
     }
 
     if (body.categoriaId <= 0) {
       errors.add("Category ID is required");
     }
 
+    if (!errors.isEmpty()) {
     String errorMessage = String.join(", ", errors);
-
-    if (!errorMessage.isEmpty()) {
-      throw new ValidationException(errorMessage);
-    }
+    throw new ValidationException(errorMessage);
+}
 
     Product product = new Product();
 
-    product.setId(body.id);
+    product.setId(id);
     product.setDescricao(body.descricao);
     product.setPreco(body.preco);
     product.setFoto(body.foto);
