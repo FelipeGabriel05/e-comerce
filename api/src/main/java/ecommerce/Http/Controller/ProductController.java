@@ -5,13 +5,13 @@ import ecommerce.Exceptions.NotFoundException;
 import ecommerce.Exceptions.ValidationException;
 import ecommerce.Http.IO.PathVariableExtractor;
 import ecommerce.Http.IO.Responses.JsonResponse;
+import ecommerce.Http.Validators.HttpProductValidators;
 import ecommerce.UseCases.ListProductsUseCase;
 import ecommerce.UseCases.UpdateProductUseCase;
-import ecommerce.Http.Validators.HttpProductValidators;
 import java.io.IOException;
 import java.util.List;
-import javax.servlet.annotation.WebServlet;
 import javax.servlet.annotation.MultipartConfig;
+import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -77,18 +77,14 @@ public class ProductController extends HttpServlet {
 
     } catch (ValidationException e) {
 
-      JsonResponse jsonRes =
-          new JsonResponse(422, e.getMessage());
+      JsonResponse jsonRes = new JsonResponse(422, e.getMessage());
 
       response.setStatus(jsonRes.getStatus());
       response.getWriter().write(jsonRes.toJson());
 
     } catch (NotFoundException e) {
 
-      JsonResponse jsonRes =
-       new JsonResponse(
-        HttpServletResponse.SC_NOT_FOUND,
-        e.getMessage());
+      JsonResponse jsonRes = new JsonResponse(HttpServletResponse.SC_NOT_FOUND, e.getMessage());
 
       response.setStatus(jsonRes.getStatus());
       response.getWriter().write(jsonRes.toJson());
@@ -98,9 +94,7 @@ public class ProductController extends HttpServlet {
       e.printStackTrace();
 
       JsonResponse jsonRes =
-          new JsonResponse(
-            HttpServletResponse.SC_INTERNAL_SERVER_ERROR,
-             e.getMessage());
+          new JsonResponse(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, e.getMessage());
 
       response.setStatus(jsonRes.getStatus());
       response.getWriter().write(jsonRes.toJson());
