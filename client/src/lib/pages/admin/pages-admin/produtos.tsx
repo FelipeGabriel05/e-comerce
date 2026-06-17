@@ -38,7 +38,7 @@ const Produtos = () => {
         </h1>
 
         {(showForm || editandoProduct) && (
-          <div className="rounded-xl bg-white/5 border border-white/10 p-6">
+          <div className="rounded-xl bg-white/5 border border-white/10 backdrop-blur-md p-6">
             <h2 className="text-lg font-semibold text-white mb-4">
               {editandoProduct ? 'Alterar Produto' : 'Inserir novo produto'}
             </h2>
@@ -74,7 +74,7 @@ const Produtos = () => {
           </div>
         )}
 
-        <div className="rounded-xl bg-white/5 border border-white/10 overflow-hidden">
+        <div className="rounded-xl bg-white/5 border border-white/10 backdrop-blur-md overflow-hidden">
           <div className="flex justify-center p-4 border-b border-white/10">
             <Button
               className="bg-violet-600 hover:bg-violet-500 text-white px-8"
@@ -137,7 +137,11 @@ const Produtos = () => {
                     <Button
                       size="sm"
                       variant="destructive"
-                      onClick={() => deleteProduct(product.id)}
+                      onClick={() => {
+                        if (confirm(`Deseja excluir "${product.descricao}"?`)) {
+                          deleteProduct(product.id);
+                        }
+                      }}
                     >
                       Excluir
                     </Button>
