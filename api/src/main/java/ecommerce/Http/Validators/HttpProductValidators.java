@@ -38,6 +38,10 @@ public class HttpProductValidators {
       errors.add("Category ID is required");
     }
 
+    if (body.foto != null && !body.foto.isEmpty() && !body.foto.contains(";base64,")) {
+      errors.add("Photo must be a valid image");
+    }
+
     String errorMessage = String.join(", ", errors);
     if (!errorMessage.isEmpty()) {
       throw new ValidationException(errorMessage);
@@ -85,6 +89,13 @@ public class HttpProductValidators {
 
     if (body.categoriaId <= 0) {
       errors.add("Category ID is required");
+    }
+
+    if (body.foto != null
+        && !body.foto.isEmpty()
+        && !body.foto.startsWith("http")
+        && !body.foto.contains(";base64,")) {
+      errors.add("Photo must be a URL or a valid image");
     }
 
     if (!errors.isEmpty()) {

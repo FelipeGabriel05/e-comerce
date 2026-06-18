@@ -72,9 +72,12 @@ public class AdminProductController extends HttpServlet {
 
       Product productInput = validators.validateUpdateProduct(request, id);
 
+      String baseUrl =
+          request.getScheme() + "://" + request.getServerName() + ":" + request.getServerPort();
+
       UpdateProductUseCase useCase = new UpdateProductUseCase();
 
-      Product updatedProduct = useCase.execute(productInput);
+      Product updatedProduct = useCase.execute(productInput, baseUrl);
 
       if (updatedProduct != null) {
 
