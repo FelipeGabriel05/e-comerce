@@ -6,9 +6,10 @@ public class ProductQueries {
 
   public static String listAvailableProductsQuery =
       "SELECT id, descricao, preco, foto, quantidade, categoria_id "
-          + "FROM produto WHERE quantidade > 0";
+          + "FROM produto WHERE quantidade > 0 ORDER BY id ASC";
+
   public static String selectProductByIdQuery = "SELECT * FROM produto WHERE id = ?";
 
   public static String updateProductQuery =
-      "UPDATE produto SET descricao = ?, preco = ?, foto = ?, quantidade = ?, categoria_id = ?, WHERE id =?";
+      "UPDATE produto SET descricao = ?, preco = ?, foto = ?, quantidade = ?, categoria_id = ? WHERE id =?";
 }
