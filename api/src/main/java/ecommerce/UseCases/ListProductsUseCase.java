@@ -10,11 +10,17 @@ import java.util.List;
 public class ListProductsUseCase {
   public ListProductsUseCase() {}
 
-  public List<Product> execute() throws ValidationException {
+  public List<Product> execute(String baseUrl) throws ValidationException {
     try {
       Connection con = DBConnection.getConnection();
       ProductRepository repository = new ProductRepository(con);
-      return repository.listAvailableProducts();
+      List<Product> products = repository.listAvailableProducts();
+      for (Product p : products) {
+        if (p.getFoto() != null && !p.getFoto().isEmpty() && !p.getFoto().startsWith("http")) {
+          p.setFoto(baseUrl + "/image/" + p.getFoto());
+        }
+      }
+      return products;
 
     } catch (Exception e) {
       e.printStackTrace();

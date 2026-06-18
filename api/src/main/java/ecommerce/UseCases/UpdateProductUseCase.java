@@ -9,13 +9,19 @@ import java.sql.Connection;
 
 public class UpdateProductUseCase {
 
-  public Product execute(Product product) throws NotFoundException, InternalServerException {
+  public Product execute(Product product, String baseUrl)
+      throws NotFoundException, InternalServerException, Exception {
 
     try {
 
       Connection con = DBConnection.getConnection();
 
       ProductRepository repository = new ProductRepository(con);
+
+      if (product.getFoto() != null && product.getFoto().startsWith(baseUrl)) {
+        String filename = product.getFoto().substring(product.getFoto().lastIndexOf('/') + 1);
+        product.setFoto(filename);
+      }
 
       if (product.getFoto() != null && product.getFoto().contains(";base64,")) {
         UploadImageUseCase imageUseCase = new UploadImageUseCase();
@@ -34,7 +40,7 @@ public class UpdateProductUseCase {
     } catch (NotFoundException e) {
       throw e;
     } catch (Exception e) {
-      throw new InternalServerException("Internal error while updating product");
+      throw e;
     }
   }
 }
