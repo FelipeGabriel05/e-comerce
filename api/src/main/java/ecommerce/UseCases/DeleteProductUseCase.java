@@ -19,7 +19,6 @@ public class DeleteProductUseCase {
       return productRepository.deleteProduct(id);
 
     } catch (Exception e) {
-      e.printStackTrace();
       throw e;
     }
   }

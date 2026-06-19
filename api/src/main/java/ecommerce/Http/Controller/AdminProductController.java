@@ -7,6 +7,7 @@ import ecommerce.Http.IO.PathVariableExtractor;
 import ecommerce.Http.IO.Responses.JsonResponse;
 import ecommerce.Http.Validators.HttpProductValidators;
 import ecommerce.UseCases.CreateProductUseCase;
+import ecommerce.UseCases.DeleteProductUseCase;
 import ecommerce.UseCases.UpdateProductUseCase;
 import java.io.IOException;
 import javax.servlet.ServletException;
@@ -21,6 +22,8 @@ import javax.servlet.http.HttpServletResponse;
 public class AdminProductController extends HttpServlet {
 
   private static final long serialVersionUID = 1L;
+
+  public static final int SC_UNPROCESSABLE_ENTITY = 422;
 
   protected void doPost(HttpServletRequest request, HttpServletResponse response)
       throws ServletException, IOException {
@@ -93,7 +96,7 @@ public class AdminProductController extends HttpServlet {
 
     } catch (ValidationException e) {
 
-      JsonResponse jsonRes = new JsonResponse(422, e.getMessage());
+      JsonResponse jsonRes = new JsonResponse(SC_UNPROCESSABLE_ENTITY, e.getMessage());
 
       response.setStatus(jsonRes.getStatus());
       response.getWriter().write(jsonRes.toJson());
@@ -111,6 +114,56 @@ public class AdminProductController extends HttpServlet {
 
       JsonResponse jsonRes =
           new JsonResponse(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, e.getMessage());
+
+      response.setStatus(jsonRes.getStatus());
+      response.getWriter().write(jsonRes.toJson());
+    }
+  }
+
+  @Override
+  protected void doDelete(HttpServletRequest request, HttpServletResponse response)
+      throws ServletException, IOException {
+
+    response.setContentType("application/json");
+
+    HttpProductValidators validators = new HttpProductValidators();
+
+    try {
+
+      int id = validators.validateDeleteProduct(request);
+
+      DeleteProductUseCase useCase = new DeleteProductUseCase();
+
+      boolean isDeleted = useCase.execute(id);
+
+      if (isDeleted) {
+        JsonResponse jsonRes =
+            new JsonResponse(HttpServletResponse.SC_OK, "Product deleted successfully");
+
+        response.setStatus(jsonRes.getStatus());
+        response.getWriter().write(jsonRes.toJson());
+
+      } else {
+        JsonResponse jsonRes =
+            new JsonResponse(HttpServletResponse.SC_NOT_FOUND, "Product not found");
+
+        response.setStatus(jsonRes.getStatus());
+        response.getWriter().write(jsonRes.toJson());
+      }
+
+    } catch (ValidationException e) {
+
+      JsonResponse jsonRes = new JsonResponse(SC_UNPROCESSABLE_ENTITY, e.getMessage());
+
+      response.setStatus(jsonRes.getStatus());
+      response.getWriter().write(jsonRes.toJson());
+
+    } catch (Exception e) {
+
+      e.printStackTrace();
+
+      JsonResponse jsonRes =
+          new JsonResponse(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, "Internal server error");
 
       response.setStatus(jsonRes.getStatus());
       response.getWriter().write(jsonRes.toJson());
