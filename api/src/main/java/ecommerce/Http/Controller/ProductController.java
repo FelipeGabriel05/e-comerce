@@ -24,7 +24,9 @@ public class ProductController extends HttpServlet {
     try {
       ListProductsUseCase useCase = new ListProductsUseCase();
 
-      List<Product> products = useCase.execute();
+      String baseUrl =
+          request.getScheme() + "://" + request.getServerName() + ":" + request.getServerPort();
+      List<Product> products = useCase.execute(baseUrl);
 
       JsonResponse jsonRes =
           new JsonResponse(HttpServletResponse.SC_OK, "Products listed", products);
