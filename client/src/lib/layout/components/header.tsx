@@ -2,6 +2,7 @@ import { Link as LinkRouter } from '@tanstack/react-router';
 import { LogIn, ShoppingCart } from 'lucide-react';
 import { useState } from 'react';
 
+import { buttonVariants } from '@/components/ui/button';
 import SearchHeader from '@/lib/components/search-header';
 import { useAuth } from '@/lib/hooks/use-auth';
 import { LogoutDialog } from '@/lib/layout/components/logout-dialog';
