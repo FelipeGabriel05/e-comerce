@@ -1,5 +1,4 @@
-import { Button } from '@base-ui/react/button';
-import { Link, Link as LinkRouter } from '@tanstack/react-router';
+import { Link as LinkRouter } from '@tanstack/react-router';
 import { LogIn, ShoppingCart } from 'lucide-react';
 import { useState } from 'react';
 
@@ -39,20 +38,21 @@ export const Header = () => {
             <UserMenuDropdown onRequestLogout={() => setLogoutOpen(true)} />
           ) : (
             <>
-              <Button
-                render={<Link to="/login" />}
+              <LinkRouter
+                to="/login"
                 className="w-48 h-10 rounded-md bg-purple-700 font-bold hover:bg-purple-400 flex justify-center items-center gap-5"
               >
                 Login
                 <LogIn />
-              </Button>
-              <Button
-                render={<Link to="/carrinho" />}
+              </LinkRouter>
+
+              <LinkRouter
+                to="/carrinho"
                 className="w-48 h-10 rounded-md bg-purple-700 font-bold hover:bg-purple-400 flex justify-center items-center gap-5"
               >
                 Carrinho
                 <ShoppingCart />
-              </Button>
+              </LinkRouter>
             </>
           )}
         </div>
