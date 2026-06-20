@@ -1,6 +1,6 @@
 import { api } from './constants';
 
-export interface CategoriesResponse {
+interface CategoriesResponse {
   status: number;
   code: string;
   message: string;
