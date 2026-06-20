@@ -1,4 +1,6 @@
 import { Button } from '@base-ui/react/button';
+import { zodResolver } from '@hookform/resolvers/zod';
+import { Controller, useForm } from 'react-hook-form';
 
 import {
   Dialog,
@@ -10,14 +12,39 @@ import {
   DialogTitle,
   DialogTrigger,
 } from '@/components/ui/dialog';
-import { Field, FieldGroup } from '@/components/ui/field';
+import { Field, FieldError, FieldGroup } from '@/components/ui/field';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
+import { useCategories } from '@/lib/hooks/use-categories';
+import { useUserProfile } from '@/lib/hooks/use-user-profile';
+
+import type { CategoriaFormData } from './schemas/categoria-schema';
+import { CategoriaValidationSchema } from './schemas/categoria-schema';
 
 function DialogCategoria() {
+  const user = useUserProfile();
+  const { createCategory, isPending } = useCategories();
+  const InsertCategoriaForm = useForm({
+    resolver: zodResolver(CategoriaValidationSchema),
+    mode: 'onChange',
+    defaultValues: {
+      descricao: '',
+    },
+  });
+
+  function onSubmit(data: CategoriaFormData) {
+    if (!user) return null;
+
+    createCategory(data);
+  }
   return (
     <Dialog>
-      <form>
+      <form
+        onSubmit={(e) => {
+          e.preventDefault();
+          InsertCategoriaForm.handleSubmit(onSubmit)(e);
+        }}
+      >
         <DialogTrigger
           render={
             <Button className="h-12 w-full rounded-md bg-emerald-600 text-lg font-bold hover:bg-emerald-500">
@@ -37,12 +64,26 @@ function DialogCategoria() {
             </DialogDescription>
           </DialogHeader>
           <FieldGroup>
-            <Field>
-              <Label htmlFor="descricao">Nome da categoria</Label>
-              <Input id="descricao" name="descricao" />
-            </Field>
+            <Controller
+              name="descricao"
+              control={InsertCategoriaForm.control}
+              render={({ field, fieldState }) => (
+                <Field data-invalid={fieldState.invalid}>
+                  <Label htmlFor="descricao">Nome da categoria</Label>
+                  <Input
+                    {...field}
+                    id="descricao"
+                    name="descricao"
+                    required
+                    aria-invalid={fieldState.invalid}
+                  />
+                  {fieldState.invalid && (
+                    <FieldError errors={[fieldState.error]} />
+                  )}
+                </Field>
+              )}
+            />
           </FieldGroup>
-          {/* "rounded-md border px-4 py-2 font-medium hover:bg-accent" */}
           <DialogFooter className="gap-6">
             <DialogClose className="rounded-md border px-4 py-2 font-medium hover:bg-white/10">
               Cancelar
@@ -51,7 +92,7 @@ function DialogCategoria() {
               className="rounded-md bg-emerald-600 px-4 py-2 font-medium text-white transition-colors hover:bg-emerald-700"
               type="submit"
             >
-              Inserir
+              {isPending ? 'Inserindo...' : 'Inserir'}
             </Button>
           </DialogFooter>
         </DialogContent>

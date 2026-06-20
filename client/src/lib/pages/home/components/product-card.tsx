@@ -17,7 +17,7 @@ export const ProductCard = ({ product }: ProductCardProps) => {
   }).format(product.preco);
 
   return (
-    <div className="flex flex-col rounded-xl border border-white/10 bg-white/5 hover:border-white/25 hover:bg-white/10 transition-all overflow-hidden w-64">
+    <div className="flex flex-col rounded-xl border border-white/10 bg-white/5 hover:border-white/25 hover:bg-white/10 transition-all overflow-hidden w-64 backdrop-blur-sm">
       <div className="w-full h-40 bg-white/10 flex items-center justify-center overflow-hidden">
         {product.foto ? (
           <img

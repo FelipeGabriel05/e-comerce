@@ -4,7 +4,10 @@ const MAX_FILE_SIZE = 5 * 1024 * 1024;
 
 export const ProductValidationSchema = z.object({
   descricao: z.string().min(1, 'Descrição é obrigatória'),
-  preco: z.coerce.number().min(0, 'Preço deve ser maior ou igual a 0'),
+  preco: z.coerce
+    .number()
+    .min(0, 'Preço deve ser maior ou igual a 0')
+    .multipleOf(0.01, 'Máximo 2 casas decimais'),
   foto: z
     .union([
       z.string().url('URL da foto inválida'),

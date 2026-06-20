@@ -6,7 +6,7 @@ import {
   TableHeader,
   TableRow,
 } from '@/components/ui/table';
-import { useCategoria } from '@/lib/hooks/use-categoria';
+import { useCategories } from '@/lib/hooks/use-categories';
 
 import Layout from '../layout-sidebar';
 import DialogCategoria from './dialogs-categoria/dialog-categoria';
@@ -14,7 +14,7 @@ import DialogDelete from './dialogs-categoria/dialog-delete';
 import DialogEdit from './dialogs-categoria/dialog-edit';
 
 const Categorias = () => {
-  const categorias = useCategoria();
+  const { categories } = useCategories();
   type Categoria = {
     id: number;
     descricao: string;
@@ -42,7 +42,7 @@ const Categorias = () => {
             </TableHeader>
 
             <TableBody className="bg-indigo-800">
-              {categorias.map((categoria: Categoria) => (
+              {categories.map((categoria: Categoria) => (
                 <TableRow key={categoria.id}>
                   <TableCell className="font-medium text-white">
                     {categoria.id}

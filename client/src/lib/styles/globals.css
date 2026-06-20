@@ -16,6 +16,8 @@ body {
   -moz-osx-font-smoothing: grayscale;
   background-image: url("../../../public/background.png");
   background-repeat: no-repeat;
+  background-attachment: fixed;
+  background-position: center;
   background-size: cover;
   color: white;
 }
@@ -58,7 +60,7 @@ code {
     @apply border-border outline-ring/50;
   }
   body {
-    @apply bg-background text-foreground;
+    @apply bg-transparent text-foreground;
   }
   html {
     @apply font-sans;
@@ -225,9 +227,9 @@ code {
   --card-foreground:
     oklch(0.985 0 0);
   --popover:
-    oklch(0.205 0 0);
+    oklch(0.18 0.03 280 / 95%);
   --popover-foreground:
-    oklch(0.985 0 0);
+    oklch(0.97 0.01 280);
   --primary:
     oklch(0.922 0 0);
   --primary-foreground:

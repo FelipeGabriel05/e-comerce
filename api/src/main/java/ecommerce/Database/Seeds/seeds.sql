@@ -1,7 +1,9 @@
 -- Dev seeds — run after all CREATE TABLE scripts
--- Clears data and resets sequences
 
-TRUNCATE TABLE venda_produto, venda, produto, usuario, categoria
+BEGIN;
+
+-- Clears data and resets sequences
+TRUNCATE TABLE venda_produto, venda, produto, sessions, usuario, categoria
     RESTART IDENTITY CASCADE;
 
 -- Categorias
@@ -16,7 +18,7 @@ INSERT INTO categoria (descricao) VALUES
 -- Usuarios
 INSERT INTO usuario (nome, endereco, email, login, senha, administrador) VALUES
     ('Admin',       'Rua Admin, 1',       'admin@dev.local', 'admin', 'admin123', TRUE),
-    ('João Silva',  'Rua das Flores, 42', 'joao@dev.local',  'joao',  'joao123',  FALSE);
+    ('João Silva',  'Rua das Flores, 42', 'joao@dev.local',  'joaozinho_gameplays',  'Joao@123',  FALSE);
 
 -- Produtos
 INSERT INTO produto (descricao, preco, quantidade, categoria_id, foto) VALUES
@@ -42,4 +44,6 @@ INSERT INTO venda_produto (venda_id, produto_id, preco, quantidade) VALUES
     (1, 7, 229.90, 1),   -- venda 1: Baldur's Gate 3
     (2, 1,  34.90, 1),   -- venda 2: CS2
     (2, 6,  79.90, 1),   -- venda 2: Witcher 3
-    (2, 11, 27.90, 1);   -- venda 2: Stardew Valley
+    (2, 9,  27.90, 1);   -- venda 2: Stardew Valley
+
+COMMIT;
