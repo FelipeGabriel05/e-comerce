@@ -119,7 +119,7 @@ public class HttpProductValidators {
 
     try {
 
-      return PathVariableExtractor.extractIntPathVariable(request, "/admin/product/:id", "id");
+      return PathVariableExtractor.extractIntPathVariable(request, "/admin/products/:id", "id");
 
     } catch (Exception e) {
       throw new ValidationException("Valid ID is required for deletion");
