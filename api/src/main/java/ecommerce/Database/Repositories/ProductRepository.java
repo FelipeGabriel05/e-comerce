@@ -108,4 +108,44 @@ public class ProductRepository {
       return null;
     }
   }
+
+  public Product updateProduct(Product productInput) throws SQLException {
+
+    String query = ProductQueries.updateProductQuery;
+
+    PreparedStatement ps = con.prepareStatement(query);
+
+    ps.setString(1, productInput.getDescricao());
+    ps.setDouble(2, productInput.getPreco());
+    ps.setString(3, productInput.getFoto());
+    ps.setInt(4, productInput.getQuantidade());
+    ps.setInt(5, productInput.getCategoriaId());
+    ps.setInt(6, productInput.getId());
+
+    int rowsAffected = ps.executeUpdate();
+
+    if (rowsAffected == 0) {
+      return null;
+    }
+
+    return productInput;
+  }
+
+  public boolean deleteProduct(int id) throws Exception {
+
+    String query = ProductQueries.deleteProductQuery;
+
+    try (PreparedStatement ps = con.prepareStatement(query)) {
+
+      ps.setInt(1, id);
+
+      int rowsAffected = ps.executeUpdate();
+
+      return rowsAffected > 0;
+
+    } catch (Exception e) {
+      e.printStackTrace();
+      throw e;
+    }
+  }
 }

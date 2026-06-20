@@ -1,6 +1,7 @@
 import type { AuthUser } from '../hooks/use-auth';
+import type { LoginFormData } from '@/lib/pages/login/schema';
+
 import type { RegisterFormDataEdit } from '../pages/clients/schema-dados-pessoais';
-import type { LoginFormData } from '../pages/login/schema';
 import type { RegisterFormData } from '../pages/register/schema';
 import { api } from './constants';
 

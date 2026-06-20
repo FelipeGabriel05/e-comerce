@@ -12,10 +12,9 @@ import {
   FieldLabel,
 } from '@/components/ui/field';
 import { Input } from '@/components/ui/input';
+import type { LoginFormData } from '@/lib/pages/login/schema';
+import { LoginValidationSchema } from '@/lib/pages/login/schema';
 import { loginService } from '@/lib/services/auth.services';
-
-import type { LoginFormData } from './schema';
-import { LoginValidationSchema } from './schema';
 
 const Login = () => {
   const LoginForm = useForm({
