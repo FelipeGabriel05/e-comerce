@@ -168,6 +168,107 @@ paths:
                   foto: 12acff6a-92cf-4cee-8667-a24f32c3798c.png
                   quantidade: 200
                   categoriaId: 1
+    /admin/products/{id}:
+    delete:
+      summary: Delete Product
+      description: ''
+      operationId: delete_Delete_Product
+      tags:
+        - products
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        404:
+          description: Not Found
+          content:
+            application/json:
+              example:
+                status: 404
+                code: '20260620220032508'
+                message: Product not found
+                data: null
+  /admin/category:
+    post:
+      summary: Create Category
+      description: ''
+      operationId: post_Create_Category
+      tags:
+        - category
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+            example:
+              descricao: Ação
+      responses:
+        401:
+          description: Unauthorized
+          content:
+            application/json:
+              example:
+                status: 401
+                code: '20260620211105103'
+                message: Authentication required
+                data: null
+  /admin/category/{id}:
+    put:
+      summary: Update Category
+      description: ''
+      operationId: put_Update_Category
+      tags:
+        - category
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+            example:
+              descricao: Ação
+      responses:
+        403:
+          description: Forbidden - 403
+          content:
+            application/json:
+              example:
+                status: 403
+                code: '20260620211737118'
+                message: Admin permission required
+                data: null
+    delete:
+      summary: Delete Category
+      description: ''
+      operationId: delete_Delete_Category
+      tags:
+        - category
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        403:
+          description: Forbidden - 403
+          content:
+            application/json:
+              example:
+                status: 403
+                code: '20260620211844496'
+                message: Admin permission required
+                data: null
   /image/{image_filename}:
     get:
       summary: Get image
@@ -519,3 +620,21 @@ paths:
                 code: '20260602234848598'
                 message: User not found
                 data: null
+  /category:
+    get:
+      summary: Read Category
+      description: ''
+      operationId: get_Read_Category
+      tags:
+        - category
+      responses:
+        200:
+          description: OK - Categories Listed
+          content:
+            application/json:
+              example:
+                status: 200
+                code: '20260620212459717'
+                message: Categories listed
+                data:[]
+components:{}
