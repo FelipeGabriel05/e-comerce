@@ -168,7 +168,7 @@ paths:
                   foto: 12acff6a-92cf-4cee-8667-a24f32c3798c.png
                   quantidade: 200
                   categoriaId: 1
-    /admin/products/{id}:
+  /admin/products/{id}:
     delete:
       summary: Delete Product
       description: ''
