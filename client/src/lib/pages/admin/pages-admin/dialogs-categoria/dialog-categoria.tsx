@@ -33,30 +33,31 @@ function DialogCategoria() {
   });
 
   function onSubmit(data: CategoriaFormData) {
+    console.log(data);
     if (!user) return null;
     console.log('Dados enviados:', data);
     createCategory(data);
   }
   return (
     <Dialog>
-      <form
-        onSubmit={(e) => {
-          e.preventDefault();
-          console.log('Entrou aqui');
-          InsertCategoriaForm.handleSubmit(onSubmit)(e);
-        }}
+      <DialogTrigger
+        render={
+          <Button className="h-12 w-full rounded-md bg-emerald-600 text-lg font-bold hover:bg-emerald-500">
+            Inserir nova categoria
+          </Button>
+        }
+      />
+      <DialogContent
+        className="sm:max-w-sm  bg-[oklch(0.18_0.03_280/95%)]
+          text-[oklch(0.97_0.01_280)]
+          border-[oklch(0.45_0.06_290/25%)] "
       >
-        <DialogTrigger
-          render={
-            <Button className="h-12 w-full rounded-md bg-emerald-600 text-lg font-bold hover:bg-emerald-500">
-              Inserir nova categoria
-            </Button>
-          }
-        />
-        <DialogContent
-          className="sm:max-w-sm  bg-[oklch(0.18_0.03_280/95%)]
-            text-[oklch(0.97_0.01_280)]
-            border-[oklch(0.45_0.06_290/25%)]"
+        <form
+          className="flex flex-col gap-6"
+          onSubmit={(e) => {
+            console.log('inserindo');
+            InsertCategoriaForm.handleSubmit(onSubmit)(e);
+          }}
         >
           <DialogHeader>
             <DialogTitle>Nova categoria</DialogTitle>
@@ -96,8 +97,8 @@ function DialogCategoria() {
               {isPending ? 'Inserindo...' : 'Inserir'}
             </Button>
           </DialogFooter>
-        </DialogContent>
-      </form>
+        </form>
+      </DialogContent>
     </Dialog>
   );
 }

@@ -57,16 +57,17 @@ function DialogEdit({ categoria }: DialogEditProps) {
           </Button>
         }
       />
-      <form
-        onSubmit={(e) => {
-          e.preventDefault();
-          UpdateCategoriaForm.handleSubmit(onSubmit)(e);
-        }}
+      <DialogContent
+        className="sm:max-w-sm  bg-[oklch(0.18_0.03_280/95%)]
+          text-[oklch(0.97_0.01_280)]
+          border-[oklch(0.45_0.06_290/25%)]"
       >
-        <DialogContent
-          className="sm:max-w-sm  bg-[oklch(0.18_0.03_280/95%)]
-            text-[oklch(0.97_0.01_280)]
-            border-[oklch(0.45_0.06_290/25%)]"
+        <form
+          className="flex flex-col gap-6"
+          onSubmit={(e) => {
+            e.preventDefault();
+            UpdateCategoriaForm.handleSubmit(onSubmit)(e);
+          }}
         >
           <DialogHeader>
             <DialogTitle>Editar categoria</DialogTitle>
@@ -105,8 +106,8 @@ function DialogEdit({ categoria }: DialogEditProps) {
               {isPending ? 'Salvando alterações ...' : 'Salvar alterações'}
             </Button>
           </DialogFooter>
-        </DialogContent>
-      </form>
+        </form>
+      </DialogContent>
     </Dialog>
   );
 }
