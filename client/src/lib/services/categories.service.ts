@@ -8,7 +8,7 @@ interface CategoriesResponse {
 }
 
 export interface Category {
-  id: string;
+  id: number;
   descricao: string;
 }
 
