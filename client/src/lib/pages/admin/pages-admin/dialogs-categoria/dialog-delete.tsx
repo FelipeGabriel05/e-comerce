@@ -14,6 +14,7 @@ import {
 import { Field, FieldGroup } from '@/components/ui/field';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
+import { useCategories } from '@/lib/hooks/use-categories';
 
 type DialogDeleteProps = {
   categoria: {
@@ -23,6 +24,10 @@ type DialogDeleteProps = {
 };
 
 function DialogDelete({ categoria }: DialogDeleteProps) {
+  const { deleteCategory } = useCategories();
+  function handleDeleteCategory() {
+    deleteCategory(categoria.id);
+  }
   return (
     <Dialog>
       <DialogTrigger
@@ -60,6 +65,7 @@ function DialogDelete({ categoria }: DialogDeleteProps) {
             <Button
               className="rounded-md bg-red-600 px-4 py-2 font-medium text-white transition-colors hover:bg-red-700"
               type="submit"
+              onClick={handleDeleteCategory}
             >
               Excluir
             </Button>

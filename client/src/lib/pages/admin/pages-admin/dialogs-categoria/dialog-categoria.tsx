@@ -34,7 +34,7 @@ function DialogCategoria() {
 
   function onSubmit(data: CategoriaFormData) {
     if (!user) return null;
-
+    console.log('Dados enviados:', data);
     createCategory(data);
   }
   return (
@@ -42,6 +42,7 @@ function DialogCategoria() {
       <form
         onSubmit={(e) => {
           e.preventDefault();
+          console.log('Entrou aqui');
           InsertCategoriaForm.handleSubmit(onSubmit)(e);
         }}
       >
