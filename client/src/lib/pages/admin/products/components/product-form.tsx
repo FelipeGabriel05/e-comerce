@@ -10,8 +10,16 @@ import {
   FieldLabel,
 } from '@/components/ui/field';
 import { Input } from '@/components/ui/input';
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from '@/components/ui/select';
 import type { ProductFormData } from '@/lib/pages/admin/products/product-validation-schema';
 import { ProductValidationSchema } from '@/lib/pages/admin/products/product-validation-schema';
+import type { Category } from '@/lib/services/categories.service';
 
 type ProductFormProps = {
   defaultValues?: ProductFormData;
@@ -19,6 +27,7 @@ type ProductFormProps = {
   onCancel?: () => void;
   isEditing?: boolean;
   isPending?: boolean;
+  categories?: Array<Category>;
 };
 
 export const ProductForm = ({
@@ -27,6 +36,7 @@ export const ProductForm = ({
   onCancel,
   isEditing = false,
   isPending = false,
+  categories = [],
 }: ProductFormProps) => {
   const form = useForm<ProductFormData>({
     resolver: zodResolver(ProductValidationSchema) as Resolver<ProductFormData>,
@@ -96,11 +106,30 @@ export const ProductForm = ({
           render={({ field, fieldState }) => (
             <Field data-invalid={fieldState.invalid}>
               <FieldLabel>Categoria</FieldLabel>
-              <Input
-                {...field}
-                type="number"
-                aria-invalid={fieldState.invalid}
-              />
+              <Select
+                value={field.value ? String(field.value) : ''}
+                onValueChange={(val) => field.onChange(Number(val))}
+              >
+                <SelectTrigger
+                  className="w-full"
+                  aria-invalid={fieldState.invalid}
+                >
+                  <SelectValue placeholder="Selecione uma categoria">
+                    {
+                      categories.find(
+                        (c) => String(c.id) === String(field.value),
+                      )?.descricao
+                    }
+                  </SelectValue>
+                </SelectTrigger>
+                <SelectContent>
+                  {categories.map((cat) => (
+                    <SelectItem key={cat.id} value={String(cat.id)}>
+                      {cat.descricao}
+                    </SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
               {fieldState.invalid && <FieldError errors={[fieldState.error]} />}
             </Field>
           )}

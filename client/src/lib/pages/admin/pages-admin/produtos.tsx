@@ -10,6 +10,7 @@ import {
   TableRow,
 } from '@/components/ui/table';
 import { useAdminProducts } from '@/lib/hooks/use-admin-products';
+import { useCategories } from '@/lib/hooks/use-categories';
 import { ProductForm } from '@/lib/pages/admin/products/components/product-form';
 import type { Product } from '@/lib/types/product';
 
@@ -24,6 +25,8 @@ const Produtos = () => {
     deleteProduct,
     isPending,
   } = useAdminProducts();
+
+  const { categories } = useCategories();
 
   const [editandoProduct, setEditandoProduct] = useState<Product | null>(null);
   const [showForm, setShowForm] = useState(false);
@@ -46,6 +49,7 @@ const Produtos = () => {
               key={editandoProduct?.id ?? 'new'}
               isEditing={!!editandoProduct}
               isPending={isPending}
+              categories={categories}
               defaultValues={
                 editandoProduct
                   ? {
