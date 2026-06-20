@@ -636,5 +636,12 @@ paths:
                 status: 200
                 code: '20260620212459717'
                 message: Categories listed
-                data:[]
-components:{}
+                data:
+                  type: array
+                  items:
+                    type: object
+                    properties:
+                      id:
+                        type: integer
+                      descricao:
+                        type: string
