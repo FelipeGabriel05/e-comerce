@@ -1,4 +1,5 @@
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
+import { toast } from 'sonner';
 
 import {
   createProductService,
@@ -20,20 +21,29 @@ export const useAdminProducts = () => {
 
   const createMutation = useMutation({
     mutationFn: createProductService,
-    onSuccess: () =>
-      queryClient.invalidateQueries({ queryKey: PRODUCTS_QUERY_KEY }),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: PRODUCTS_QUERY_KEY });
+      toast.success('Produto criado com sucesso');
+    },
+    onError: () => toast.error('Erro ao criar produto'),
   });
 
   const updateMutation = useMutation({
     mutationFn: updateProductService,
-    onSuccess: () =>
-      queryClient.invalidateQueries({ queryKey: PRODUCTS_QUERY_KEY }),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: PRODUCTS_QUERY_KEY });
+      toast.success('Produto atualizado com sucesso');
+    },
+    onError: () => toast.error('Erro ao atualizar produto'),
   });
 
   const deleteMutation = useMutation({
     mutationFn: deleteProductService,
-    onSuccess: () =>
-      queryClient.invalidateQueries({ queryKey: PRODUCTS_QUERY_KEY }),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: PRODUCTS_QUERY_KEY });
+      toast.success('Produto excluído com sucesso');
+    },
+    onError: () => toast.error('Erro ao excluir produto'),
   });
 
   return {
