@@ -79,6 +79,8 @@ export const ProductForm = ({
               <Input
                 {...field}
                 type="number"
+                step="0.01"
+                min="0"
                 aria-invalid={fieldState.invalid}
               />
               {fieldState.invalid && <FieldError errors={[fieldState.error]} />}
