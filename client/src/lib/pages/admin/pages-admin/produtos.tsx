@@ -1,6 +1,7 @@
 import { useState } from 'react';
 
 import { Button } from '@/components/ui/button';
+import { ConfirmDialog } from '@/components/ui/confirm-dialog';
 import {
   Table,
   TableBody,
@@ -31,6 +32,7 @@ const Produtos = () => {
 
   const [editandoProduct, setEditandoProduct] = useState<Product | null>(null);
   const [showForm, setShowForm] = useState(false);
+  const [deletingProduct, setDeletingProduct] = useState<Product | null>(null);
 
   if (isLoading) return <p className="p-8 text-white">Carregando...</p>;
 
@@ -144,11 +146,7 @@ const Produtos = () => {
                     <Button
                       size="sm"
                       variant="destructive"
-                      onClick={() => {
-                        if (confirm(`Deseja excluir "${product.descricao}"?`)) {
-                          deleteProduct(product.id);
-                        }
-                      }}
+                      onClick={() => setDeletingProduct(product)}
                     >
                       Excluir
                     </Button>
@@ -159,6 +157,27 @@ const Produtos = () => {
           </Table>
         </div>
       </div>
+
+      {deletingProduct && (
+        <ConfirmDialog
+          title="Confirmar exclusão"
+          description={
+            <>
+              Deseja excluir{' '}
+              <span className="text-white font-medium">
+                "{deletingProduct.descricao}"
+              </span>
+              ? Esta ação não pode ser desfeita.
+            </>
+          }
+          confirmLabel="Excluir"
+          onConfirm={() => {
+            deleteProduct(deletingProduct.id);
+            setDeletingProduct(null);
+          }}
+          onCancel={() => setDeletingProduct(null)}
+        />
+      )}
     </Layout>
   );
 };
