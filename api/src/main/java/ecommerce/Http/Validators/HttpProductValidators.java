@@ -22,8 +22,11 @@ public class HttpProductValidators {
       throw new ValidationException("Invalid body data");
     }
 
-    if (body.descricao == null || body.descricao.isEmpty()) {
-      errors.add("Description is required");
+    if (body.descricao == null
+        || body.descricao.trim().length() < 3
+        || body.descricao.trim().length() > 300) {
+
+      errors.add("Description must have between 3 and 300 characters");
     }
 
     if (body.quantidade <= 0) {
@@ -73,14 +76,14 @@ public class HttpProductValidators {
     }
 
     if (body.descricao == null
-        || body.descricao.trim().length() < 10
+        || body.descricao.trim().length() < 3
         || body.descricao.trim().length() > 300) {
 
-      errors.add("Description must have between 10 and 300 characters");
+      errors.add("Description must have between 3 and 300 characters");
     }
 
-    if (body.quantidade <= 0) {
-      errors.add("Quantity must be greater than zero");
+    if (body.quantidade < 0) {
+      errors.add("Quantity cannot be negative");
     }
 
     if (body.preco < 0) {
