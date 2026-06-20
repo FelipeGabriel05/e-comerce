@@ -1,4 +1,5 @@
 import { zodResolver } from '@hookform/resolvers/zod';
+import { useEffect, useState } from 'react';
 import type { Resolver } from 'react-hook-form';
 import { Controller, useForm } from 'react-hook-form';
 
@@ -50,6 +51,23 @@ export const ProductForm = ({
     },
   });
 
+  const fotoValue = form.watch('foto');
+  const [previewUrl, setPreviewUrl] = useState<string | null>(() => {
+    const foto = defaultValues?.foto;
+    return typeof foto === 'string' && foto ? foto : null;
+  });
+
+  useEffect(() => {
+    if (fotoValue instanceof File) {
+      const url = URL.createObjectURL(fotoValue);
+      setPreviewUrl(url);
+      return () => URL.revokeObjectURL(url);
+    }
+    if (typeof fotoValue === 'string' && fotoValue) {
+      setPreviewUrl(fotoValue);
+    }
+  }, [fotoValue]);
+
   return (
     <form
       onSubmit={(e) => {
@@ -64,7 +82,9 @@ export const ProductForm = ({
           control={form.control}
           render={({ field, fieldState }) => (
             <Field data-invalid={fieldState.invalid}>
-              <FieldLabel>Descrição</FieldLabel>
+              <FieldLabel>
+                Descrição <span className="text-red-400">*</span>
+              </FieldLabel>
               <Input {...field} aria-invalid={fieldState.invalid} />
               {fieldState.invalid && <FieldError errors={[fieldState.error]} />}
             </Field>
@@ -75,7 +95,9 @@ export const ProductForm = ({
           control={form.control}
           render={({ field, fieldState }) => (
             <Field data-invalid={fieldState.invalid}>
-              <FieldLabel>Preço</FieldLabel>
+              <FieldLabel>
+                Preço <span className="text-red-400">*</span>
+              </FieldLabel>
               <Input
                 {...field}
                 type="number"
@@ -92,7 +114,9 @@ export const ProductForm = ({
           control={form.control}
           render={({ field, fieldState }) => (
             <Field data-invalid={fieldState.invalid}>
-              <FieldLabel>Quantidade</FieldLabel>
+              <FieldLabel>
+                Quantidade <span className="text-red-400">*</span>
+              </FieldLabel>
               <Input
                 {...field}
                 type="number"
@@ -107,7 +131,9 @@ export const ProductForm = ({
           control={form.control}
           render={({ field, fieldState }) => (
             <Field data-invalid={fieldState.invalid}>
-              <FieldLabel>Categoria</FieldLabel>
+              <FieldLabel>
+                Categoria <span className="text-red-400">*</span>
+              </FieldLabel>
               <Select
                 value={field.value ? String(field.value) : ''}
                 onValueChange={(val) => field.onChange(Number(val))}
@@ -117,11 +143,7 @@ export const ProductForm = ({
                   aria-invalid={fieldState.invalid}
                 >
                   <SelectValue placeholder="Selecione uma categoria">
-                    {
-                      categories.find(
-                        (c) => String(c.id) === String(field.value),
-                      )?.descricao
-                    }
+                    {categories.find((c) => c.id === field.value)?.descricao}
                   </SelectValue>
                 </SelectTrigger>
                 <SelectContent>
@@ -142,6 +164,13 @@ export const ProductForm = ({
           render={({ field: { onChange, onBlur, name, ref }, fieldState }) => (
             <Field data-invalid={fieldState.invalid}>
               <FieldLabel>Foto</FieldLabel>
+              {previewUrl && (
+                <img
+                  src={previewUrl}
+                  alt="Preview"
+                  className="w-full max-h-48 object-contain rounded-md border"
+                />
+              )}
               <Input
                 type="file"
                 accept="image/*"
