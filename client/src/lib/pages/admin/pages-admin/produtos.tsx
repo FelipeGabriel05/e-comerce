@@ -3,6 +3,12 @@ import { useState } from 'react';
 import { Button } from '@/components/ui/button';
 import { ConfirmDialog } from '@/components/ui/confirm-dialog';
 import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+} from '@/components/ui/dialog';
+import {
   Table,
   TableBody,
   TableCell,
@@ -31,8 +37,13 @@ const Produtos = () => {
   const { categories } = useCategories();
 
   const [editandoProduct, setEditandoProduct] = useState<Product | null>(null);
-  const [showForm, setShowForm] = useState(false);
+  const [formOpen, setFormOpen] = useState(false);
   const [deletingProduct, setDeletingProduct] = useState<Product | null>(null);
+
+  const closeForm = () => {
+    setFormOpen(false);
+    setEditandoProduct(null);
+  };
 
   if (isLoading) return <p className="p-8 text-white">Carregando...</p>;
 
@@ -43,11 +54,18 @@ const Produtos = () => {
           Gerenciamento de Produtos
         </h1>
 
-        {(showForm || editandoProduct) && (
-          <div className="rounded-xl bg-white/5 border border-white/10 backdrop-blur-md p-6">
-            <h2 className="text-lg font-semibold text-white mb-4">
-              {editandoProduct ? 'Alterar Produto' : 'Inserir novo produto'}
-            </h2>
+        <Dialog
+          open={formOpen}
+          onOpenChange={(open) => {
+            if (!open) closeForm();
+          }}
+        >
+          <DialogContent className="sm:max-w-lg overflow-y-auto max-h-[90vh]">
+            <DialogHeader>
+              <DialogTitle>
+                {editandoProduct ? 'Alterar Produto' : 'Inserir novo produto'}
+              </DialogTitle>
+            </DialogHeader>
             <ProductForm
               key={editandoProduct?.id ?? 'new'}
               isEditing={!!editandoProduct}
@@ -67,19 +85,15 @@ const Produtos = () => {
               onSubmit={(data) => {
                 if (editandoProduct) {
                   updateProduct({ id: editandoProduct.id, data });
-                  setEditandoProduct(null);
                 } else {
                   createProduct(data);
-                  setShowForm(false);
                 }
+                closeForm();
               }}
-              onCancel={() => {
-                setEditandoProduct(null);
-                setShowForm(false);
-              }}
+              onCancel={closeForm}
             />
-          </div>
-        )}
+          </DialogContent>
+        </Dialog>
 
         <div className="rounded-xl bg-white/5 border border-white/10 backdrop-blur-md overflow-hidden">
           <div className="flex justify-center p-4 border-b border-white/10">
@@ -87,7 +101,7 @@ const Produtos = () => {
               className="bg-violet-600 hover:bg-violet-500 text-white px-8"
               onClick={() => {
                 setEditandoProduct(null);
-                setShowForm(true);
+                setFormOpen(true);
               }}
             >
               + Inserir novo produto
@@ -137,8 +151,8 @@ const Produtos = () => {
                       size="sm"
                       className="bg-violet-600 hover:bg-violet-500 text-white"
                       onClick={() => {
-                        setShowForm(false);
                         setEditandoProduct(product);
+                        setFormOpen(true);
                       }}
                     >
                       Alterar
