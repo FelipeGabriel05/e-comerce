@@ -33,9 +33,7 @@ function DialogCategoria() {
   });
 
   function onSubmit(data: CategoriaFormData) {
-    console.log(data);
     if (!user) return null;
-    console.log('Dados enviados:', data);
     createCategory(data);
   }
   return (
@@ -55,7 +53,6 @@ function DialogCategoria() {
         <form
           className="flex flex-col gap-6"
           onSubmit={(e) => {
-            console.log('inserindo');
             InsertCategoriaForm.handleSubmit(onSubmit)(e);
           }}
         >

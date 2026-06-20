@@ -1,6 +1,25 @@
 import type { CategoriaFormData } from '../pages/admin/pages-admin/dialogs-categoria/schemas/categoria-schema';
 import { api } from './constants';
 
+export type Categoria = {
+  id: number;
+  descricao: string;
+};
+
+export type DialogEditProps = {
+  categoria: {
+    id: number;
+    descricao: string;
+  };
+};
+
+export type DialogDeleteProps = {
+  categoria: {
+    id: number;
+    descricao: string;
+  };
+};
+
 interface CategoriesResponse {
   status: number;
   code: string;

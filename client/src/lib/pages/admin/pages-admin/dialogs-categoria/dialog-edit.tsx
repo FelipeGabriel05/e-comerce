@@ -18,16 +18,10 @@ import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { useCategories } from '@/lib/hooks/use-categories';
 import { useUserProfile } from '@/lib/hooks/use-user-profile';
+import type { DialogEditProps } from '@/lib/services/categories.service';
 
 import type { CategoriaFormData } from './schemas/categoria-schema';
 import { CategoriaValidationSchema } from './schemas/categoria-schema';
-
-type DialogEditProps = {
-  categoria: {
-    id: number;
-    descricao: string;
-  };
-};
 
 function DialogEdit({ categoria }: DialogEditProps) {
   const user = useUserProfile();

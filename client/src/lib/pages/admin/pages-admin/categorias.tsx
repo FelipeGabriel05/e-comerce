@@ -7,6 +7,7 @@ import {
   TableRow,
 } from '@/components/ui/table';
 import { useCategories } from '@/lib/hooks/use-categories';
+import type { Categoria } from '@/lib/services/categories.service';
 
 import Layout from '../layout-sidebar';
 import DialogCategoria from './dialogs-categoria/dialog-categoria';
@@ -15,10 +16,7 @@ import DialogEdit from './dialogs-categoria/dialog-edit';
 
 const Categorias = () => {
   const { categories } = useCategories();
-  type Categoria = {
-    id: number;
-    descricao: string;
-  };
+
   return (
     <Layout>
       <div className="flex justify-center py-10">

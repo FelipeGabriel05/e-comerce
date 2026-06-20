@@ -15,13 +15,7 @@ import { Field, FieldGroup } from '@/components/ui/field';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { useCategories } from '@/lib/hooks/use-categories';
-
-type DialogDeleteProps = {
-  categoria: {
-    id: number;
-    descricao: string;
-  };
-};
+import type { DialogDeleteProps } from '@/lib/services/categories.service';
 
 function DialogDelete({ categoria }: DialogDeleteProps) {
   const { deleteCategory } = useCategories();
