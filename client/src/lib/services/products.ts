@@ -43,9 +43,7 @@ export const updateProductService = async ({
   formData.append('preco', String(data.preco));
   formData.append('quantidade', String(data.quantidade));
   formData.append('categoriaId', String(data.categoriaId));
-  if (data.foto instanceof File) {
-    formData.append('foto', data.foto);
-  }
+  formData.append('foto', data.foto);
 
   await api.put(`/admin/products/${id}`, formData, {
     headers: { 'Content-Type': 'multipart/form-data' },
