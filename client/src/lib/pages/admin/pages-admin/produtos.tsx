@@ -12,6 +12,7 @@ import {
 import { useAdminProducts } from '@/lib/hooks/use-admin-products';
 import { useCategories } from '@/lib/hooks/use-categories';
 import { ProductForm } from '@/lib/pages/admin/products/components/product-form';
+import { StockBadge } from '@/lib/pages/admin/products/components/stock-badge';
 import type { Product } from '@/lib/types/product';
 
 import Layout from '../layout-sidebar';
@@ -126,7 +127,9 @@ const Produtos = () => {
                       currency: 'BRL',
                     }).format(product.preco)}
                   </TableCell>
-                  <TableCell>{product.quantidade}</TableCell>
+                  <TableCell>
+                    <StockBadge quantidade={product.quantidade} />
+                  </TableCell>
                   <TableCell className="flex gap-2">
                     <Button
                       size="sm"
