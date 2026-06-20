@@ -1,11 +1,12 @@
 import { Button } from '@base-ui/react/button';
 import { Link, Link as LinkRouter } from '@tanstack/react-router';
-import { LogIn, LogOut, ShoppingCart } from 'lucide-react';
+import { LogIn, ShoppingCart } from 'lucide-react';
 import { useState } from 'react';
 
 import SearchHeader from '@/lib/components/search-header';
 import { useAuth } from '@/lib/hooks/use-auth';
 import { LogoutDialog } from '@/lib/layout/components/logout-dialog';
+import { UserMenuDropdown } from '@/lib/layout/components/user-menu-dropdown';
 
 export const Header = () => {
   const { isAuthenticated, logout, isLogoutPending } = useAuth() as {
@@ -35,13 +36,7 @@ export const Header = () => {
 
         <div className="flex items-center gap-4">
           {isAuthenticated ? (
-            <Button
-              onClick={() => setLogoutOpen(true)}
-              className="w-48 h-10 rounded-md bg-purple-700 font-bold hover:bg-purple-400 flex justify-center items-center gap-3"
-            >
-              Desconectar
-              <LogOut size={18} />
-            </Button>
+            <UserMenuDropdown onRequestLogout={() => setLogoutOpen(true)} />
           ) : (
             <>
               <Button
