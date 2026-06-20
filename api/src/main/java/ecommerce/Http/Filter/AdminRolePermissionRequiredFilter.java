@@ -24,10 +24,10 @@ public class AdminRolePermissionRequiredFilter implements Filter {
           new Route("POST", "/image/upload"),
           new Route("POST", "/admin/category"),
           new Route("POST", "/admin/products"),
-          new Route("DELETE", "/admin/category"),
+          new Route("DELETE", "/admin/category/*"),
           new Route("DELETE", "/admin/products"),
-          new Route("PUT", "/admin/category"),
-          new Route("PUT", "/admin/products"));
+          new Route("PUT", "/admin/category/*"),
+          new Route("PUT", "/admin/products/*"));
 
   @Override
   public void init(FilterConfig filterConfig) throws ServletException {}
@@ -43,7 +43,7 @@ public class AdminRolePermissionRequiredFilter implements Filter {
 
     boolean isAdminRoute =
         adminRoutes.stream()
-            .anyMatch(r -> r.method().equalsIgnoreCase(method) && r.path().equals(path));
+            .anyMatch(r -> r.method().equalsIgnoreCase(method) && matchesPath(r.path(), path));
 
     if (!isAdminRoute) {
       chain.doFilter(request, response);
@@ -62,6 +62,19 @@ public class AdminRolePermissionRequiredFilter implements Filter {
         new JsonResponse(HttpServletResponse.SC_FORBIDDEN, "Admin permission required");
     res.setStatus(jsonRes.getStatus());
     res.getWriter().write(jsonRes.toJson());
+  }
+
+  private boolean matchesPath(String pattern, String path) {
+    String[] patternParts = pattern.split("/");
+    String[] pathParts = path.split("/");
+
+    if (patternParts.length != pathParts.length) return false;
+
+    for (int i = 0; i < patternParts.length; i++) {
+      if (patternParts[i].equals("*")) continue;
+      if (!patternParts[i].equals(pathParts[i])) return false;
+    }
+    return true;
   }
 
   @Override

@@ -26,7 +26,7 @@ public class UpdateUseCase {
       throw e;
 
     } catch (Exception e) {
-      throw new InternalServerException("Internal error while updating user");
+      throw e;
     }
   }
 }
