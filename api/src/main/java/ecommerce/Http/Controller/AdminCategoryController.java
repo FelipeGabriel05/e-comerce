@@ -1,6 +1,7 @@
 package ecommerce.Http.Controller;
 
 import ecommerce.Database.Entites.Category;
+import ecommerce.Exceptions.CategoryInUseException;
 import ecommerce.Exceptions.ValidationException;
 import ecommerce.Http.IO.Responses.JsonResponse;
 import ecommerce.Http.Validators.HttpCategoryValidators;
@@ -138,6 +139,13 @@ public class AdminCategoryController extends HttpServlet {
         response.setStatus(jsonRes.getStatus());
         response.getWriter().write(jsonRes.toJson());
       }
+
+    } catch (CategoryInUseException e) {
+
+      JsonResponse jsonRes = new JsonResponse(HttpServletResponse.SC_CONFLICT, e.getMessage());
+
+      response.setStatus(jsonRes.getStatus());
+      response.getWriter().write(jsonRes.toJson());
 
     } catch (ValidationException e) {
 
