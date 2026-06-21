@@ -35,6 +35,7 @@ public class AuthenticationRequiredFilter implements Filter {
           new Route("DELETE", "/admin/products/*"),
           new Route("PUT", "/admin/category/*"),
           new Route("PUT", "/admin/products/*"),
+          new Route("POST", "/checkout"),
           new Route("POST", "/logout"));
 
   @Override
