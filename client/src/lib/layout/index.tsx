@@ -20,7 +20,7 @@ export const Layout = ({ children }: LayoutProps) => {
   return (
     <>
       {/* <Meta /> */}
-      <div className="flex min-h-screen flex-col dark:bg-black dark:text-white">
+      <div className="flex min-h-screen flex-col dark:bg-transparent dark:text-white">
         <Header />
         <main className="wrapper">{children}</main>
         <Footer />
