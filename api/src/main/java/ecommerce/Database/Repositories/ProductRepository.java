@@ -130,4 +130,35 @@ public class ProductRepository {
 
     return productInput;
   }
+
+  public Product updateProductQuantity(Product productInput) throws SQLException {
+
+    String query = ProductQueries.updateProductQuantityQuery;
+
+    PreparedStatement ps = con.prepareStatement(query);
+
+    ps.setInt(1, productInput.getQuantidade());
+    ps.setInt(2, productInput.getId());
+
+    int rowsAffected = ps.executeUpdate();
+
+    if (rowsAffected == 0) {
+      return null;
+    }
+
+    return productInput;
+  }
+
+  public boolean decreaseProductStock(int productId, int quantity) throws SQLException {
+
+    PreparedStatement ps = con.prepareStatement(ProductQueries.decreaseProductStockQuery);
+
+    ps.setInt(1, quantity);
+    ps.setInt(2, productId);
+    ps.setInt(3, quantity);
+
+    int rowsAffected = ps.executeUpdate();
+
+    return rowsAffected > 0;
+  }
 }

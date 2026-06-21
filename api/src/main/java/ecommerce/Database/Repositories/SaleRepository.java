@@ -85,4 +85,30 @@ public class SaleRepository {
       stmt.executeBatch();
     }
   }
+
+  public int createSale(int userId) throws SQLException {
+
+    PreparedStatement ps = con.prepareStatement(SaleQueries.createSaleQuery);
+
+    ps.setInt(1, userId);
+
+    ResultSet rs = ps.executeQuery();
+
+    rs.next();
+
+    return rs.getInt("id");
+  }
+
+  public void createSaleProduct(int saleId, int productId, double price, int quantity)
+      throws SQLException {
+
+    PreparedStatement ps = con.prepareStatement(SaleQueries.createSaleProductQuery);
+
+    ps.setInt(1, saleId);
+    ps.setInt(2, productId);
+    ps.setDouble(3, price);
+    ps.setInt(4, quantity);
+
+    ps.executeUpdate();
+  }
 }
