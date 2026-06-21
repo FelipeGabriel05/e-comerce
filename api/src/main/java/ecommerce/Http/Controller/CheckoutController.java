@@ -1,14 +1,16 @@
 package ecommerce.Http.Controller;
 
+import com.google.gson.Gson;
+import ecommerce.Database.Entites.Cart.Cart;
 import ecommerce.Database.Entites.User;
 import ecommerce.Exceptions.NotFoundException;
-import ecommerce.Exceptions.ValidationException;
-import ecommerce.Http.IO.Requests.CheckoutBodyRequest;
 import ecommerce.Http.IO.Responses.JsonResponse;
-import ecommerce.Http.Validators.HttpCheckoutValidators;
 import ecommerce.UseCases.FinishPurchaseUseCase;
 import java.io.IOException;
+import java.nio.charset.StandardCharsets;
+import java.util.Base64;
 import javax.servlet.annotation.WebServlet;
+import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -16,41 +18,29 @@ import javax.servlet.http.HttpServletResponse;
 @WebServlet("/checkout")
 public class CheckoutController extends HttpServlet {
 
+  private final Gson gson = new Gson();
+
+  private static final String CART_COOKIE_NAME = "cart";
+
   @Override
   protected void doPost(HttpServletRequest request, HttpServletResponse response)
       throws IOException {
 
     response.setContentType("application/json");
 
-    HttpCheckoutValidators validators = new HttpCheckoutValidators();
-
     try {
       User user = (User) request.getAttribute("user");
 
-      if (user == null) {
-        JsonResponse jsonRes =
-            new JsonResponse(HttpServletResponse.SC_UNAUTHORIZED, "Unauthorized");
-
-        response.setStatus(jsonRes.getStatus());
-        response.getWriter().write(jsonRes.toJson());
-        return;
-      }
-
-      CheckoutBodyRequest checkout = validators.validateCheckout(request);
+      Cart cart = getCartFromCookie(request);
 
       FinishPurchaseUseCase useCase = new FinishPurchaseUseCase();
 
-      useCase.execute(user.getId(), checkout);
+      useCase.execute(user.getId(), cart);
+
+      clearCartCookie(response);
 
       JsonResponse jsonRes =
           new JsonResponse(HttpServletResponse.SC_OK, "Purchase finished successfully");
-
-      response.setStatus(jsonRes.getStatus());
-      response.getWriter().write(jsonRes.toJson());
-
-    } catch (ValidationException e) {
-
-      JsonResponse jsonRes = new JsonResponse(422, e.getMessage());
 
       response.setStatus(jsonRes.getStatus());
       response.getWriter().write(jsonRes.toJson());
@@ -72,5 +62,35 @@ public class CheckoutController extends HttpServlet {
       response.setStatus(jsonRes.getStatus());
       response.getWriter().write(jsonRes.toJson());
     }
+  }
+
+  private Cart getCartFromCookie(HttpServletRequest request) {
+    Cookie[] cookies = request.getCookies();
+
+    if (cookies != null) {
+      for (Cookie cookie : cookies) {
+        if (CART_COOKIE_NAME.equals(cookie.getName())) {
+          try {
+            String decoded =
+                new String(Base64.getDecoder().decode(cookie.getValue()), StandardCharsets.UTF_8);
+
+            return gson.fromJson(decoded, Cart.class);
+
+          } catch (Exception e) {
+            return new Cart();
+          }
+        }
+      }
+    }
+
+    return new Cart();
+  }
+
+  private void clearCartCookie(HttpServletResponse response) {
+    Cookie cookie = new Cookie(CART_COOKIE_NAME, "");
+    cookie.setPath("/");
+    cookie.setMaxAge(0);
+    cookie.setHttpOnly(true);
+    response.addCookie(cookie);
   }
 }

@@ -1,38 +1,27 @@
 package ecommerce.Http.Validators;
 
+import ecommerce.Database.Entites.Cart.Cart;
+import ecommerce.Database.Entites.Cart.CartItem;
 import ecommerce.Exceptions.ValidationException;
-import ecommerce.Http.IO.BodyJsonToObject;
-import ecommerce.Http.IO.Requests.CheckoutBodyRequest;
 import java.util.ArrayList;
 import java.util.List;
-import javax.servlet.http.HttpServletRequest;
 
 public class HttpCheckoutValidators {
 
-  public CheckoutBodyRequest validateCheckout(HttpServletRequest request)
-      throws ValidationException {
+  public Cart validateCheckout(Cart cart) throws ValidationException {
 
     List<String> errors = new ArrayList<>();
 
-    CheckoutBodyRequest body = null;
-
-    try {
-      body = BodyJsonToObject.parse(request, CheckoutBodyRequest.class);
-
-    } catch (Exception e) {
-      throw new ValidationException("Invalid body data");
-    }
-
-    if (body.products == null || body.products.isEmpty()) {
-      errors.add("Products are required");
+    if (cart == null || cart.getItems() == null || cart.getItems().isEmpty()) {
+      errors.add("Cart is empty");
     } else {
-      for (CheckoutBodyRequest.CheckoutProductItemRequest item : body.products) {
+      for (CartItem item : cart.getItems()) {
 
-        if (item.productId <= 0) {
+        if (item.getProduct() == null || item.getProduct().getId() <= 0) {
           errors.add("Product ID is required");
         }
 
-        if (item.quantity <= 0) {
+        if (item.getQuantity() <= 0) {
           errors.add("Quantity must be greater than zero");
         }
       }
@@ -44,6 +33,6 @@ public class HttpCheckoutValidators {
       throw new ValidationException(errorMessage);
     }
 
-    return body;
+    return cart;
   }
 }
