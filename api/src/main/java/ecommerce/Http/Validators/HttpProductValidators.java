@@ -118,69 +118,6 @@ public class HttpProductValidators {
     return product;
   }
 
-  public Product validateStock(HttpServletRequest request, int id) throws ValidationException {
-
-    List<String> errors = new ArrayList<>();
-
-    ProductBodyRequest body = null;
-
-    try {
-      body = BodyFormDataToObject.parse(request, ProductBodyRequest.class);
-
-    } catch (Exception e) {
-      throw new ValidationException("Invalid body data");
-    }
-
-    if (body.quantidade <= 0) {
-      errors.add("Quantity must be greater than zero");
-    }
-
-    if (!errors.isEmpty()) {
-      String errorMessage = String.join(", ", errors);
-
-      throw new ValidationException(errorMessage);
-    }
-
-    Product product = new Product();
-
-    product.setId(id);
-    product.setQuantidade(body.quantidade);
-
-    return product;
-  }
-
-  public Product validateUpdateProductQuantity(HttpServletRequest request, int id)
-      throws ValidationException {
-
-    List<String> errors = new ArrayList<>();
-
-    ProductBodyRequest body = null;
-
-    try {
-      body = BodyFormDataToObject.parse(request, ProductBodyRequest.class);
-
-    } catch (Exception e) {
-      throw new ValidationException("Invalid body data");
-    }
-
-    if (body.quantidade < 0) {
-      errors.add("Quantity cannot be negative");
-    }
-
-    if (!errors.isEmpty()) {
-      String errorMessage = String.join(", ", errors);
-
-      throw new ValidationException(errorMessage);
-    }
-
-    Product product = new Product();
-
-    product.setId(id);
-    product.setQuantidade(body.quantidade);
-
-    return product;
-  }
-
   public int validateDeleteProduct(HttpServletRequest request) throws ValidationException {
 
     try {
