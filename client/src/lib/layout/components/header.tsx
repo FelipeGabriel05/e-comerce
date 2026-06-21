@@ -1,12 +1,13 @@
+// client/src/lib/layout/components/header.tsx
 import { Link as LinkRouter } from '@tanstack/react-router';
 import { LogIn, ShoppingCart } from 'lucide-react';
 import { useState } from 'react';
 
-import { buttonVariants } from '@/components/ui/button';
 import SearchHeader from '@/lib/components/search-header';
 import { useAuth } from '@/lib/hooks/use-auth';
 import { LogoutDialog } from '@/lib/layout/components/logout-dialog';
-import { UserMenuDropdown } from '@/lib/layout/components/user-menu-dropdown';
+
+import { UserMenuDropdown } from './user-menu-dropdown';
 
 export const Header = () => {
   const { isAuthenticated, logout, isLogoutPending } = useAuth() as {
