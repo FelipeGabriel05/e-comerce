@@ -160,8 +160,8 @@ public class ProductRepository {
     int rowsAffected = ps.executeUpdate();
 
     return rowsAffected > 0;
-
   }
+
   public boolean deleteProduct(int id) throws Exception {
 
     String query = ProductQueries.deleteProductQuery;

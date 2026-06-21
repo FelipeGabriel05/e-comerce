@@ -180,6 +180,7 @@ public class HttpProductValidators {
 
     return product;
   }
+
   public int validateDeleteProduct(HttpServletRequest request) throws ValidationException {
 
     try {
