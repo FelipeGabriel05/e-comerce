@@ -1,5 +1,6 @@
 import { Button } from '@base-ui/react/button';
 import { Trash } from 'lucide-react';
+import { useState } from 'react';
 
 import {
   Dialog,
@@ -18,12 +19,22 @@ import { useCategories } from '@/lib/hooks/use-categories';
 import type { DialogDeleteProps } from '@/lib/services/categories.service';
 
 function DialogDelete({ categoria }: DialogDeleteProps) {
+  const [formOpen, setFormOpen] = useState(false);
   const { deleteCategory } = useCategories();
+  const closeForm = () => {
+    setFormOpen(false);
+  };
+
   function handleDeleteCategory() {
-    deleteCategory(categoria.id);
+    deleteCategory(categoria.id, {
+      onSuccess: () => {
+        closeForm();
+      },
+    });
   }
+
   return (
-    <Dialog>
+    <Dialog open={formOpen} onOpenChange={setFormOpen}>
       <DialogTrigger
         render={
           <Button className="flex h-10 w-10 items-center justify-center rounded-md bg-red-600 hover:bg-red-800">

@@ -1,6 +1,7 @@
 import { Button } from '@base-ui/react/button';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { SquarePen } from 'lucide-react';
+import { useState } from 'react';
 import { Controller, useForm } from 'react-hook-form';
 
 import {
@@ -24,26 +25,38 @@ import type { CategoriaFormData } from './schemas/categoria-schema';
 import { CategoriaValidationSchema } from './schemas/categoria-schema';
 
 function DialogEdit({ categoria }: DialogEditProps) {
+  const [formOpen, setFormOpen] = useState(false);
   const user = useUserProfile();
   const { updateCategory, isPending } = useCategories();
   const UpdateCategoriaForm = useForm({
     resolver: zodResolver(CategoriaValidationSchema),
     mode: 'onChange',
     defaultValues: {
-      descricao: '',
+      descricao: categoria.descricao,
     },
   });
+
+  const closeForm = () => {
+    setFormOpen(false);
+  };
 
   function onSubmit(data: CategoriaFormData) {
     if (!user) return null;
 
-    updateCategory({
-      id: categoria.id,
-      data: data,
-    });
+    updateCategory(
+      {
+        id: categoria.id,
+        data: data,
+      },
+      {
+        onSuccess: () => {
+          closeForm();
+        },
+      },
+    );
   }
   return (
-    <Dialog>
+    <Dialog open={formOpen} onOpenChange={setFormOpen}>
       <DialogTrigger
         render={
           <Button className="flex h-10 w-10 items-center justify-center rounded-md bg-blue-600 hover:bg-blue-800">
@@ -79,7 +92,6 @@ function DialogEdit({ categoria }: DialogEditProps) {
                     id="descricao"
                     name="descricao"
                     required
-                    defaultValue={categoria.descricao}
                     aria-invalid={fieldState.invalid}
                   />
                   {fieldState.invalid && (
