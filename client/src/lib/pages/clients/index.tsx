@@ -19,7 +19,7 @@ const MainClientPage = () => {
           </div>
           <div>
             <h1 className="text-xl font-bold text-white">
-              {user?.name ?? '—'}
+              {user?.nome ?? '—'}
             </h1>
             <p className="text-sm text-white/50">@{user?.login}</p>
           </div>
