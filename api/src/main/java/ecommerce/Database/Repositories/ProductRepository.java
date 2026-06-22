@@ -2,6 +2,7 @@ package ecommerce.Database.Repositories;
 
 import ecommerce.Database.Entites.Product;
 import ecommerce.Database.Queries.ProductQueries;
+import ecommerce.Exceptions.ProductInUseException;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -11,6 +12,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class ProductRepository {
+
+  private static final String SQLSTATE_FOREIGN_KEY_VIOLATION = "23503";
 
   private Connection con;
 
@@ -144,7 +147,7 @@ public class ProductRepository {
     return rowsAffected > 0;
   }
 
-  public boolean deleteProduct(int id) throws Exception {
+  public boolean deleteProduct(int id) throws ProductInUseException, Exception {
 
     String query = ProductQueries.deleteProductQuery;
 
@@ -156,6 +159,12 @@ public class ProductRepository {
 
       return rowsAffected > 0;
 
+    } catch (SQLException e) {
+      if (SQLSTATE_FOREIGN_KEY_VIOLATION.equals(e.getSQLState())) {
+        throw new ProductInUseException("Product is in use and cannot be deleted");
+      }
+      e.printStackTrace();
+      throw e;
     } catch (Exception e) {
       e.printStackTrace();
       throw e;
