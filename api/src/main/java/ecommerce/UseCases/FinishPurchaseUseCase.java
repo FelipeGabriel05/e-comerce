@@ -28,34 +28,7 @@ public class FinishPurchaseUseCase {
       Sale sale = new Sale();
       sale.setUserId(userId);
 
-      double total = 0.0;
-
-      for (CartItem item : cart.getItems()) {
-        Product cartProduct = item.getProduct();
-
-        Product product = productRepository.findById(cartProduct.getId());
-
-        if (product == null) {
-          throw new NotFoundException("Product not found");
-        }
-
-        if (product.getQuantidade() < item.getQuantity()) {
-          throw new NotFoundException("Insufficient stock");
-        }
-
-        SaleItem saleItem = new SaleItem(product.getId(), product.getPreco(), item.getQuantity());
-
-        sale.getItems().add(saleItem);
-
-        total += product.getPreco() * item.getQuantity();
-
-        boolean stockUpdated =
-            productRepository.decreaseProductStock(product.getId(), item.getQuantity());
-
-        if (!stockUpdated) {
-          throw new NotFoundException("Insufficient stock");
-        }
-      }
+      double total = processCartItems(cart, sale, productRepository);
 
       sale.setTotal(total);
 
@@ -81,6 +54,41 @@ public class FinishPurchaseUseCase {
 
       enableAutoCommit(con);
     }
+  }
+
+  private double processCartItems(Cart cart, Sale sale, ProductRepository productRepository)
+      throws NotFoundException {
+
+    double total = 0.0;
+
+    for (CartItem item : cart.getItems()) {
+      Product cartProduct = item.getProduct();
+
+      Product product = productRepository.findById(cartProduct.getId());
+
+      if (product == null) {
+        throw new NotFoundException("Product not found");
+      }
+
+      if (product.getQuantidade() < item.getQuantity()) {
+        throw new NotFoundException("Insufficient stock");
+      }
+
+      SaleItem saleItem = new SaleItem(product.getId(), product.getPreco(), item.getQuantity());
+
+      sale.getItems().add(saleItem);
+
+      total += product.getPreco() * item.getQuantity();
+
+      boolean stockUpdated =
+          productRepository.decreaseProductStock(product.getId(), item.getQuantity());
+
+      if (!stockUpdated) {
+        throw new NotFoundException("Insufficient stock");
+      }
+    }
+
+    return total;
   }
 
   private void rollback(Connection con) {
