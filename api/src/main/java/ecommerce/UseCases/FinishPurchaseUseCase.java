@@ -57,7 +57,7 @@ public class FinishPurchaseUseCase {
   }
 
   private double processCartItems(Cart cart, Sale sale, ProductRepository productRepository)
-      throws NotFoundException {
+      throws NotFoundException, Exception {
 
     double total = 0.0;
 
