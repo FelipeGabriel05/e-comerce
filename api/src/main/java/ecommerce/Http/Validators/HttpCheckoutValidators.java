@@ -15,15 +15,21 @@ public class HttpCheckoutValidators {
     if (cart == null || cart.getItems() == null || cart.getItems().isEmpty()) {
       errors.add("Cart is empty");
     } else {
+      int index = 1;
+
       for (CartItem item : cart.getItems()) {
 
         if (item.getProduct() == null || item.getProduct().getId() <= 0) {
-          errors.add("Product ID is required");
+
+          errors.add("Product " + index + ": Product ID is required");
         }
 
         if (item.getQuantity() <= 0) {
-          errors.add("Quantity must be greater than zero");
+
+          errors.add("Product " + index + ": Quantity must be greater than zero");
         }
+
+        index++;
       }
     }
 
