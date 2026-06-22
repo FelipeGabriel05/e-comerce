@@ -4,7 +4,9 @@ import com.google.gson.Gson;
 import ecommerce.Database.Entites.Cart.Cart;
 import ecommerce.Database.Entites.User;
 import ecommerce.Exceptions.NotFoundException;
+import ecommerce.Exceptions.ValidationException;
 import ecommerce.Http.IO.Responses.JsonResponse;
+import ecommerce.Http.Validators.HttpCheckoutValidators;
 import ecommerce.UseCases.FinishPurchaseUseCase;
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
@@ -33,14 +35,26 @@ public class CheckoutController extends HttpServlet {
 
       Cart cart = getCartFromCookie(request);
 
+      HttpCheckoutValidators validators = new HttpCheckoutValidators();
+
+      Cart validatedCart = validators.validateCheckout(cart);
+
       FinishPurchaseUseCase useCase = new FinishPurchaseUseCase();
 
-      useCase.execute(user.getId(), cart);
+      useCase.execute(user.getId(), validatedCart);
 
       clearCartCookie(response);
 
       JsonResponse jsonRes =
           new JsonResponse(HttpServletResponse.SC_OK, "Purchase finished successfully");
+
+      response.setStatus(jsonRes.getStatus());
+      response.getWriter().write(jsonRes.toJson());
+
+    } catch (ValidationException e) {
+
+      JsonResponse jsonRes =
+          new JsonResponse(HttpServletResponse.SC_UNPROCESSABLE_ENTITY, e.getMessage());
 
       response.setStatus(jsonRes.getStatus());
       response.getWriter().write(jsonRes.toJson());
