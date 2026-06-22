@@ -11,10 +11,15 @@ public class ListProductsUseCase {
   public ListProductsUseCase() {}
 
   public List<Product> execute(String baseUrl) throws ValidationException {
+    return execute(baseUrl, true);
+  }
+
+  public List<Product> execute(String baseUrl, boolean onlyAvailable) throws ValidationException {
     try {
       Connection con = DBConnection.getConnection();
       ProductRepository repository = new ProductRepository(con);
-      List<Product> products = repository.listAvailableProducts();
+      List<Product> products =
+          onlyAvailable ? repository.listAvailableProducts() : repository.listAllProducts();
       for (Product p : products) {
         if (p.getFoto() != null && !p.getFoto().isEmpty() && !p.getFoto().startsWith("http")) {
           p.setFoto(baseUrl + "/image/" + p.getFoto());
