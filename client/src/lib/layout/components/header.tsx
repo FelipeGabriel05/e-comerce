@@ -3,17 +3,16 @@ import { LogIn, Settings, ShoppingCart } from 'lucide-react';
 import { useState } from 'react';
 
 import { buttonVariants } from '@/components/ui/button';
+import { ConfirmDialog } from '@/components/ui/confirm-dialog';
 import SearchHeader from '@/lib/components/search-header';
 import { useCart } from '@/lib/hooks/use-cart';
 import { useUserProfile } from '@/lib/hooks/use-user-profile';
+import { UserMenuDropdown } from '@/lib/layout/components/user-menu-dropdown';
 import { cn } from '@/lib/utils';
-
-import { LogoutDialog } from './logout-dialog';
-import { UserMenuDropdown } from './user-menu-dropdown';
 
 export const Header = () => {
   const { total } = useCart();
-  const { user, logout, isLogoutPending } = useUserProfile();
+  const { user, logout } = useUserProfile();
   const [logoutOpen, setLogoutOpen] = useState(false);
 
   function handleLogoutConfirm() {
@@ -79,12 +78,15 @@ export const Header = () => {
         </div>
       </header>
 
-      <LogoutDialog
-        open={logoutOpen}
-        onConfirm={handleLogoutConfirm}
-        onCancel={() => setLogoutOpen(false)}
-        isPending={isLogoutPending}
-      />
+      {logoutOpen && (
+        <ConfirmDialog
+          title="Sair da conta"
+          description="Tem certeza que deseja encerrar a sessão?"
+          confirmLabel="Sair"
+          onConfirm={handleLogoutConfirm}
+          onCancel={() => setLogoutOpen(false)}
+        />
+      )}
     </>
   );
 };
