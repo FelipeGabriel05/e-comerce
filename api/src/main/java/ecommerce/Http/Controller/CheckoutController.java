@@ -53,8 +53,7 @@ public class CheckoutController extends HttpServlet {
 
     } catch (ValidationException e) {
 
-      JsonResponse jsonRes =
-          new JsonResponse(422, e.getMessage());
+      JsonResponse jsonRes = new JsonResponse(422, e.getMessage());
 
       response.setStatus(jsonRes.getStatus());
       response.getWriter().write(jsonRes.toJson());
