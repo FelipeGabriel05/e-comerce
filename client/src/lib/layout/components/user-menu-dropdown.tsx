@@ -1,7 +1,7 @@
 import { Link } from '@tanstack/react-router';
 import { LogOutIcon, UserIcon } from 'lucide-react';
 
-import { Button } from '@/components/ui/button';
+import { Button, buttonVariants } from '@/components/ui/button';
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -9,6 +9,7 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
+import { cn } from '@/lib/utils';
 
 type UserMenuDropdownProps = {
   onRequestLogout: () => void;
@@ -19,7 +20,13 @@ export function UserMenuDropdown({ onRequestLogout }: UserMenuDropdownProps) {
     <DropdownMenu>
       <DropdownMenuTrigger
         render={
-          <Button className="w-48 h-10 rounded-md bg-purple-700 font-bold hover:bg-purple-400 flex justify-center items-center gap-3">
+          <Button
+            className={cn(
+              buttonVariants(),
+              'bg-purple-700 font-bold hover:bg-purple-600 text-white gap-2 px-4',
+            )}
+          >
+            <UserIcon size={16} />
             Minha conta
           </Button>
         }
@@ -30,11 +37,7 @@ export function UserMenuDropdown({ onRequestLogout }: UserMenuDropdownProps) {
           Meus dados
         </DropdownMenuItem>
         <DropdownMenuSeparator />
-        <DropdownMenuItem
-          variant="destructive"
-          onClick={onRequestLogout}
-          className="text-slate-300 bg-slate-700/40 hover:bg-slate-600/60 hover:text-white focus:text-white focus:bg-slate-600/60"
-        >
+        <DropdownMenuItem variant="destructive" onClick={onRequestLogout}>
           <LogOutIcon />
           Desconectar
         </DropdownMenuItem>
