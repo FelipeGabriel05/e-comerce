@@ -2,6 +2,7 @@ package ecommerce.Http.Controller;
 
 import ecommerce.Database.Entites.Product;
 import ecommerce.Exceptions.NotFoundException;
+import ecommerce.Exceptions.ProductInUseException;
 import ecommerce.Exceptions.ValidationException;
 import ecommerce.Http.IO.PathVariableExtractor;
 import ecommerce.Http.IO.Responses.JsonResponse;
@@ -185,6 +186,13 @@ public class AdminProductController extends HttpServlet {
         response.setStatus(jsonRes.getStatus());
         response.getWriter().write(jsonRes.toJson());
       }
+
+    } catch (ProductInUseException e) {
+
+      JsonResponse jsonRes = new JsonResponse(HttpServletResponse.SC_CONFLICT, e.getMessage());
+
+      response.setStatus(jsonRes.getStatus());
+      response.getWriter().write(jsonRes.toJson());
 
     } catch (ValidationException e) {
 
