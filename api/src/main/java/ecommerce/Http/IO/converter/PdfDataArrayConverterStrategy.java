@@ -10,7 +10,7 @@ public class PdfDataArrayConverterStrategy implements DataArrayConverterStrategy
 
   @Override
   public byte[] convert(List<Map<String, Object>> data) {
-    String htmlTable = new HtmlDataArrayConverterStrategy().buildHtmlTable(data);
+    String htmlTable = new HtmlDataArrayConverterStrategy().buildTableFragment(data);
     String xhtml =
         "<?xml version=\"1.0\" encoding=\"UTF-8\"?>"
             + "<!DOCTYPE html PUBLIC \"-//W3C//DTD XHTML 1.0 Strict//EN\" "
