@@ -1,72 +1,81 @@
-import {
-  Table,
-  TableBody,
-  TableCell,
-  TableHead,
-  TableHeader,
-  TableRow,
-} from '@/components/ui/table';
-import { useCategories } from '@/lib/hooks/use-categories';
-import type { Categoria } from '@/lib/services/categories.service';
+import { Pencil, Trash2 } from 'lucide-react';
 
-import Layout from '../layout-sidebar';
-import DialogCategoria from './dialogs-categoria/dialog-categoria';
-import DialogDelete from './dialogs-categoria/dialog-delete';
-import DialogEdit from './dialogs-categoria/dialog-edit';
+import { Button } from '@/components/ui/button';
+import { TableCell, TableRow } from '@/components/ui/table';
+import { useCategories } from '@/lib/hooks/use-categories';
+import type { Category } from '@/lib/services/categories.service';
+
+import { AdminCrudPage } from '../components/admin-crud-page';
+import { CategoriaForm } from './forms/categoria-form';
+
+const COLUMNS = [
+  { label: 'ID' },
+  { label: 'Nome da Categoria' },
+  { label: 'Ações', className: 'text-right' },
+];
 
 const Categorias = () => {
-  const { categories } = useCategories();
+  const { categories, isLoading, deleteCategory } = useCategories();
 
   return (
-    <Layout>
-      <div className="flex justify-center py-10">
-        <div className="w-full max-w-6xl rounded-xl bg-indigo-900/80 p-8 shadow-2xl">
-          <h1 className="mb-4 text-3xl font-bold text-white">
-            Gerenciamento de categorias
-          </h1>
-          <Table>
-            <TableHeader className="bg-indigo-950">
-              <TableRow>
-                <TableHead className="text-zinc-100">ID</TableHead>
-
-                <TableHead className="text-zinc-100">
-                  Nome da Categoria
-                </TableHead>
-
-                <TableHead className="text-right text-zinc-100">
-                  Ações
-                </TableHead>
-              </TableRow>
-            </TableHeader>
-
-            <TableBody className="bg-indigo-800">
-              {categories.map((categoria: Categoria) => (
-                <TableRow key={categoria.id}>
-                  <TableCell className="font-medium text-white">
-                    {categoria.id}
-                  </TableCell>
-
-                  <TableCell className="text-white">
-                    {categoria.descricao}
-                  </TableCell>
-
-                  <TableCell>
-                    <div className="flex justify-end gap-2">
-                      <DialogEdit categoria={categoria} />
-                      <DialogDelete categoria={categoria} />
-                    </div>
-                  </TableCell>
-                </TableRow>
-              ))}
-            </TableBody>
-          </Table>
-          <div className="mt-8">
-            <DialogCategoria />
-          </div>
-        </div>
-      </div>
-    </Layout>
+    <AdminCrudPage<Category>
+      title="Gerenciamento de categorias"
+      items={categories}
+      isLoading={isLoading}
+      columns={COLUMNS}
+      renderRow={renderRow}
+      renderForm={(item, onClose) => (
+        <CategoriaForm item={item} onClose={onClose} />
+      )}
+      getFormTitle={getFormTitle}
+      getDeleteDescription={getDeleteDescription}
+      onDelete={(categoria) => deleteCategory(categoria.id)}
+    />
   );
 };
+
+const getFormTitle = (item: Category | null | undefined) =>
+  item ? 'Editar categoria' : 'Nova categoria';
+
+const getDeleteDescription = (categoria: Category) => (
+  <span>
+    Excluir a categoria <strong>{categoria.descricao}</strong>?
+  </span>
+);
+
+const renderRow = (
+  categoria: Category,
+  onEdit: ((item: Category) => void) | undefined,
+  onDelete: ((item: Category) => void) | undefined,
+) => (
+  <TableRow key={categoria.id}>
+    <TableCell className="font-medium">{categoria.id}</TableCell>
+    <TableCell>{categoria.descricao}</TableCell>
+    <TableCell>
+      <div className="flex justify-end gap-2">
+        {onEdit && (
+          <Button
+            size="icon"
+            className="bg-violet-600 hover:bg-violet-500 text-white"
+            onClick={() => onEdit(categoria)}
+            title="Alterar"
+          >
+            <Pencil className="w-4 h-4" />
+          </Button>
+        )}
+        {onDelete && (
+          <Button
+            size="icon"
+            variant="destructive"
+            onClick={() => onDelete(categoria)}
+            title="Excluir"
+          >
+            <Trash2 className="w-4 h-4" />
+          </Button>
+        )}
+      </div>
+    </TableCell>
+  </TableRow>
+);
 
 export default Categorias;
