@@ -4,8 +4,12 @@ import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.regex.Pattern;
 
 public class HtmlDataArrayConverterStrategy implements DataArrayConverterStrategy {
+
+  private static final Pattern URL_PATTERN =
+      Pattern.compile("^https?://\\S+$", Pattern.CASE_INSENSITIVE);
 
   @Override
   public byte[] convert(List<Map<String, Object>> data) {
@@ -37,12 +41,22 @@ public class HtmlDataArrayConverterStrategy implements DataArrayConverterStrateg
       sb.append("<tr>");
       for (String header : headers) {
         Object value = row.get(header);
-        sb.append("<td>").append(value != null ? escapeHtml(value.toString()) : "").append("</td>");
+        sb.append("<td>")
+            .append(value != null ? linkifyValue(value.toString()) : "")
+            .append("</td>");
       }
       sb.append("</tr>");
     }
     sb.append("</tbody></table>");
     return sb.toString();
+  }
+
+  private String linkifyValue(String value) {
+    String escaped = escapeHtml(value);
+    if (URL_PATTERN.matcher(value).matches()) {
+      return "<a href=\"" + escaped + "\" target=\"_blank\">" + escaped + "</a>";
+    }
+    return escaped;
   }
 
   private String escapeHtml(String value) {
