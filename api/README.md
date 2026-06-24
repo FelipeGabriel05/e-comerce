@@ -221,26 +221,26 @@ flowchart TD
 
 To implement a new feature or endpoint, follow this structured process:
 
-1.  **Controller** (`ecommerce.Http.Controller`): Create or update a servlet.
+1. **Controller** (`ecommerce.Http.Controller`): Create or update a servlet.
     - Annotate with `@WebServlet("/path")`.
     - Implement `doGet`, `doPost`, `doPut`, or `doDelete`.
-2.  **Validator** (`ecommerce.Http.Validators`): Create an input validator if needed.
+2. **Validator** (`ecommerce.Http.Validators`): Create an input validator if needed.
     - Extract parameters from `HttpServletRequest`.
     - Throw `ValidationException` for invalid data.
     - Return a clean object or the original data if valid.
-3.  **Use Case** (`ecommerce.UseCases`): Define the business logic.
+3. **Use Case** (`ecommerce.UseCases`): Define the business logic.
     - Orchestrate calls between repositories.
     - Handle complex logic that doesn't belong in the controller or repository.
-4.  **Repository** (`ecommerce.Database.Repositories`): Create a data access class.
+4. **Repository** (`ecommerce.Database.Repositories`): Create a data access class.
     - Use `DBConnection.getConnection()` to interact with the database.
     - Map ResultSet rows to Entity objects.
-5.  **Query** (`ecommerce.Database.Queries`): Define raw SQL constants.
+5. **Query** (`ecommerce.Database.Queries`): Define raw SQL constants.
     - Keep SQL strings centralized in dedicated query classes.
-6.  **Table** (`ecommerce.Database.Tables`): Create the `.sql` file for the table.
+6. **Table** (`ecommerce.Database.Tables`): Create the `.sql` file for the table.
     - Define the schema (schema, types, constraints).
-7.  **Entity** (`ecommerce.Database.Entites`): Create the Java representation of the data.
+7. **Entity** (`ecommerce.Database.Entites`): Create the Java representation of the data.
     - Include getters/setters and JSON serialization logic (e.g., `toJson()` method).
-8.  **Initialization**: Ensure the new table is registered in `Database.DatabaseInitializer.java` to be created on startup if it doesn't exist.
+8. **Initialization**: Ensure the new table is registered in `Database.DatabaseInitializer.java` to be created on startup if it doesn't exist.
 
 ### Protect Routes from Unauthenticated Users
 
@@ -531,3 +531,46 @@ public class AuthMeController extends HttpServlet {
   }
 }
 ```
+
+### Exporting Data as File
+
+Use `DataArrayConverter` to serialize any entity list as HTML, plain text (CSV) or PDF and stream it as a file download.
+
+**Supported MIME types:**
+
+| `mimetype`        | Output       | File extension |
+| ----------------- | ------------ | -------------- |
+| `text/html`       | HTML table   | `.html`        |
+| `text/plain`      | CSV          | `.csv`         |
+| `application/pdf` | PDF table    | `.pdf`         |
+
+**Example:**
+
+```java
+@WebServlet("/products")
+public class ProductController extends HttpServlet {
+  protected void doGet(HttpServletRequest request, HttpServletResponse response)
+      throws IOException {
+
+    ListProductsUseCase useCase = new ListProductsUseCase();
+    String baseUrl = request.getScheme() + "://" + request.getServerName() + ":" + request.getServerPort();
+    List<Product> products = useCase.execute(baseUrl);
+
+    String mimetype = "application/pdf"; // or "text/html" / "text/plain"
+    String extension = "pdf";            // match the mimetype above
+
+    byte[] bytes = DataArrayConverter.convert(products, Product.class, mimetype);
+    response.setContentType(mimetype);
+    response.setContentLength(bytes.length);
+    response.setHeader("Content-Disposition", "attachment; filename=\"products." + extension + "\"");
+
+    try (ServletOutputStream out = response.getOutputStream()) {
+      out.write(bytes);
+    }
+  }
+}
+```
+
+`DataArrayConverter.convert` reflects all declared fields of the entity class — no extra configuration needed.
+
+To add a new format, implement `DataArrayConverterStrategy` and register it in the `switch` inside `DataArrayConverter`.
