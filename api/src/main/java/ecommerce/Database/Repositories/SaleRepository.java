@@ -124,6 +124,40 @@ public class SaleRepository {
     }
   }
 
+  private List<Sale> findAllSales() {
+
+    List<Sale> sales = new ArrayList<>();
+
+    try {
+
+      PreparedStatement ps = con.prepareStatement(SaleQueries.selectAllSalesQuery);
+
+      ResultSet rs = ps.executeQuery();
+
+      while (rs.next()) {
+        Sale sale = new Sale();
+
+        sale.setId(rs.getInt("id"));
+        sale.setDataHora(rs.getTimestamp("data_hora").toString());
+        sale.setUserId(rs.getInt("usuario_id"));
+
+        List<SaleItem> items = findItemsBySaleId(sale.getId());
+        sale.setItems(items);
+
+        double total =
+            items.stream().mapToDouble(item -> item.getPrice() * item.getQuantity()).sum();
+        sale.setTotal(total);
+
+        sales.add(sale);
+      }
+
+      return sales;
+
+    } catch (SQLException e) {
+      throw new RuntimeException(e);
+    }
+  }
+
   private List<SaleItem> findItemsBySaleId(int saleId) throws SQLException {
 
     List<SaleItem> items = new ArrayList<>();
