@@ -124,7 +124,7 @@ public class SaleRepository {
     }
   }
 
-  private List<Sale> findAllSales() {
+  public List<Sale> findAllSales() {
 
     List<Sale> sales = new ArrayList<>();
 
