@@ -8,4 +8,7 @@ public class SaleQueries {
 
   public static String selectSalesByUserIdQuery =
       "SELECT id, data_hora, usuario_id FROM venda WHERE usuario_id = ? ORDER BY data_hora DESC";
+
+  public static String selectSaleItemsBySaleIdQuery =
+      "SELECT produto_id, preco, quantidade FROM venda_produto WHERE venda_id = ?";
 }

@@ -8,12 +8,19 @@ import java.util.List;
 
 public class ListCustomerSalesUseCase {
 
-  public List<Sale> execute(int userId) {
+  public ListCustomerSalesUseCase() {}
 
-    Connection dbConnection = new DBConnection.getConnection();
+  public List<Sale> execute(int userId) throws Exception {
 
-    SaleRepository repository = new SaleRepository(dbConnection);
+    try {
+      Connection dbConnection = DBConnection.getConnection();
+      SaleRepository saleRepository = new SaleRepository(dbConnection);
 
-    return repository.findSalesByUserId(userId);
+      return saleRepository.findSalesByUserId(userId);
+
+    } catch (Exception e) {
+      e.printStackTrace();
+      throw e;
+    }
   }
 }
