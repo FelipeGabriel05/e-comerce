@@ -8,6 +8,8 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.util.ArrayList;
+import java.util.List;
 
 public class SaleRepository {
 
@@ -83,6 +85,34 @@ public class SaleRepository {
         stmt.addBatch();
       }
       stmt.executeBatch();
+    }
+  }
+
+  public List<Sale> findSalesByUserId(int userId) {
+    try {
+
+      PreparedStatement ps = con.prepareStatement(SaleQueries.selectSalesByUserIdQuery);
+
+      ps.setInt(1, userId);
+
+      ResultSet rs = ps.executeQuery();
+
+      List<Sale> sales = new ArrayList<>();
+
+      while (rs.next()) {
+        Sale sale = new Sale();
+
+        sale.setId(rs.getInt("id"));
+        sale.setDataHora(rs.getTimestamp("data_hora").toString());
+        sale.setUserId(rs.getInt("usuario_id"));
+
+        sales.add(sale);
+      }
+
+      return sales;
+
+    } catch (SQLException e) {
+      throw new RuntimeException(e);
     }
   }
 }
