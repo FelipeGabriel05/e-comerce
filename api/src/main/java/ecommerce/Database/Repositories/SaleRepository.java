@@ -137,11 +137,8 @@ public class SaleRepository {
       ResultSet rs = ps.executeQuery();
 
       while (rs.next()) {
-        SaleItem item = new SaleItem(
-          rs.getInt("produto_id"),
-          rs.getDouble("preco"),
-          rs.getInt("quantidade")
-        );
+        SaleItem item =
+            new SaleItem(rs.getInt("produto_id"), rs.getDouble("preco"), rs.getInt("quantidade"));
 
         items.add(item);
       }
