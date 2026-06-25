@@ -36,7 +36,8 @@ public class AuthenticationRequiredFilter implements Filter {
           new Route("PUT", "/admin/category/*"),
           new Route("PUT", "/admin/products/*"),
           new Route("POST", "/logout"),
-          new Route("GET", "/sales"));
+          new Route("GET", "/sales")
+          new Route("GET", "/admin/sales"));
 
   @Override
   public void init(FilterConfig filterConfig) throws ServletException {}
