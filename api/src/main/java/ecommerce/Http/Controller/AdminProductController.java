@@ -44,15 +44,13 @@ public class AdminProductController extends HttpServlet {
 
       JsonResponse jsonRes =
           new JsonResponse(HttpServletResponse.SC_OK, "Products listed", products);
-
       response.setStatus(jsonRes.getStatus());
       response.getWriter().write(jsonRes.toJson());
-
     } catch (Exception e) {
       e.printStackTrace();
 
-      JsonResponse jsonRes = new JsonResponse(HttpServletResponse.SC_BAD_REQUEST, e.getMessage());
-
+      JsonResponse jsonRes =
+          new JsonResponse(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, e.getMessage());
       response.setStatus(jsonRes.getStatus());
       response.getWriter().write(jsonRes.toJson());
     }
