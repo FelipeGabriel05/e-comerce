@@ -4,19 +4,19 @@ import { toast } from 'sonner';
 import {
   createProductService,
   deleteProductService,
-  fetchProducts,
+  fetchAllProducts,
   updateProductService,
 } from '@/lib/services/products';
 import type { Product } from '@/lib/types/product';
 
-const PRODUCTS_QUERY_KEY = ['products'];
+const PRODUCTS_QUERY_KEY = ['admin', 'products'];
 
 export const useAdminProducts = () => {
   const queryClient = useQueryClient();
 
   const { data, isLoading } = useQuery<Array<Product>>({
     queryKey: PRODUCTS_QUERY_KEY,
-    queryFn: fetchProducts,
+    queryFn: fetchAllProducts,
   });
 
   const createMutation = useMutation({

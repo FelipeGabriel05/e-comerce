@@ -11,12 +11,10 @@ import javax.servlet.FilterConfig;
 import javax.servlet.ServletException;
 import javax.servlet.ServletRequest;
 import javax.servlet.ServletResponse;
-import javax.servlet.annotation.WebFilter;
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-@WebFilter("/*")
 public class AuthenticationRequiredFilter implements Filter {
 
   private record Route(String method, String path) {}
@@ -35,6 +33,7 @@ public class AuthenticationRequiredFilter implements Filter {
           new Route("DELETE", "/admin/products/*"),
           new Route("PUT", "/admin/category/*"),
           new Route("PUT", "/admin/products/*"),
+          new Route("GET", "/admin/products/*"),
           new Route("POST", "/logout"));
 
   @Override
