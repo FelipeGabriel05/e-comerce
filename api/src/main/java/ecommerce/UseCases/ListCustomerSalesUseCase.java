@@ -4,6 +4,7 @@ import ecommerce.Database.DBConnection;
 import ecommerce.Database.Entites.Sale.Sale;
 import ecommerce.Database.Repositories.SaleRepository;
 import java.sql.Connection;
+import java.sql.SQLException;
 import java.util.List;
 
 public class ListCustomerSalesUseCase {
