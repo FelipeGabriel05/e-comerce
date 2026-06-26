@@ -14,6 +14,11 @@ export const fetchProducts = async (): Promise<Array<Product>> => {
   return response.data.data;
 };
 
+export const fetchAllProducts = async (): Promise<Array<Product>> => {
+  const response = await api.get<ProductsResponse>('/admin/products');
+  return response.data.data;
+};
+
 export const createProductService = async (
   data: ProductFormData,
 ): Promise<void> => {
