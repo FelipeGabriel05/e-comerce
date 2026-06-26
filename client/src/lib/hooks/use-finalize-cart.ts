@@ -12,7 +12,7 @@ export const useFinalizeCart = () => {
     try {
       await api.post('/checkout');
       toast.success('Compra finalizada com sucesso!');
-    } catch (error) {
+    } catch (_error) {
       toast.error('Erro ao finalizar compra. Tente novamente.');
     } finally {
       setIsSubmitting(false);

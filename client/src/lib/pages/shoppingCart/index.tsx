@@ -9,6 +9,7 @@ import {
   TableHeader,
   TableRow,
 } from '@/components/ui/table';
+import { H1, P } from '@/components/ui/typography';
 import { useCart } from '@/lib/hooks/use-cart';
 import { useFinalizeCart } from '@/lib/hooks/use-finalize-cart';
 
@@ -27,9 +28,7 @@ const CarrinhoPage = () => {
     return (
       <div className="flex justify-center py-10">
         <div className="w-full max-w-6xl rounded-xl bg-indigo-900/80 p-8 shadow-2xl">
-          <h1 className="mb-4 text-3xl font-bold text-white">
-            Carrinho de Compras
-          </h1>
+          <H1 className="mb-4 text-white">Carrinho de Compras</H1>
           <LinkRouter
             to="/"
             className="mb-6 flex items-center gap-2 text-white/70 hover:text-white"
@@ -37,7 +36,7 @@ const CarrinhoPage = () => {
             <ArrowLeft size={16} />
             Voltar para Página Inicial
           </LinkRouter>
-          <p className="text-white/70">Seu carrinho está vazio.</p>
+          <P className="text-white/70">Seu carrinho está vazio.</P>
         </div>
       </div>
     );
@@ -46,9 +45,7 @@ const CarrinhoPage = () => {
   return (
     <div className="flex justify-center py-10">
       <div className="w-full max-w-6xl rounded-xl bg-indigo-900/80 p-8 shadow-2xl">
-        <h1 className="mb-2 text-3xl font-bold text-white">
-          Carrinho de Compras
-        </h1>
+        <H1 className="mb-2 text-white">Carrinho de Compras</H1>
 
         <LinkRouter
           to="/"
@@ -149,16 +146,14 @@ const CarrinhoPage = () => {
         </Table>
 
         <div className="mt-8 rounded-xl bg-indigo-800/60 backdrop-blur-md p-6">
-          <h2 className="mb-4 text-center text-xl font-bold text-white">
-            Resumo do Pedido
-          </h2>
+          <H1 className="mb-4 text-center text-white">Resumo do Pedido</H1>
           <div className="flex flex-col items-end gap-1 text-white/80">
-            <p>Subtotal: {formatCurrency(cart.total)}</p>
+            <P>Subtotal: {formatCurrency(cart.total)}</P>
           </div>
           <div className="mt-2 flex justify-end">
-            <p className="text-2xl font-bold text-white">
+            <P className="text-2xl font-bold text-white">
               Total Geral: {formatCurrency(cart.total)}
-            </p>
+            </P>
           </div>
 
           <button
@@ -169,9 +164,9 @@ const CarrinhoPage = () => {
           >
             {isSubmitting ? 'Finalizando...' : 'Finalizar Compra'}
           </button>
-          <p className="mt-2 text-center text-sm text-white/60">
+          <P className="mt-2 text-center text-sm text-white/60">
             ⚠ Requer sessão de usuário ativa (cliente logado)
-          </p>
+          </P>
         </div>
       </div>
     </div>
