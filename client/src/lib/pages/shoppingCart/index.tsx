@@ -1,6 +1,8 @@
 import { Link as LinkRouter } from '@tanstack/react-router';
 import { ArrowLeft, Trash } from 'lucide-react';
+import { useState } from 'react';
 
+import { ConfirmDialog } from '@/components/ui/confirm-dialog';
 import {
   Table,
   TableBody,
@@ -12,6 +14,7 @@ import {
 import { H1, P } from '@/components/ui/typography';
 import { useCart } from '@/lib/hooks/use-cart';
 import { useFinalizeCart } from '@/lib/hooks/use-finalize-cart';
+import type { CartItem } from '@/lib/services/cart.service';
 
 const currencyFormatter = new Intl.NumberFormat('pt-BR', {
   style: 'currency',
@@ -23,6 +26,8 @@ const formatCurrency = (value: number) => currencyFormatter.format(value);
 const CarrinhoPage = () => {
   const { cart, updateCart, removeFromCart } = useCart();
   const { finalizeCart, isSubmitting } = useFinalizeCart();
+  const [itemToRemove, setItemToRemove] = useState<CartItem | null>(null);
+  const [confirmFinalize, setConfirmFinalize] = useState(false);
 
   if (!cart || cart.items.length === 0) {
     return (
@@ -125,15 +130,7 @@ const CarrinhoPage = () => {
                   <div className="flex justify-end">
                     <button
                       type="button"
-                      onClick={() => {
-                        if (
-                          confirm(
-                            `Remover "${item.product.descricao}" do carrinho?`,
-                          )
-                        ) {
-                          removeFromCart(item.product.id);
-                        }
-                      }}
+                      onClick={() => setItemToRemove(item)}
                       className="flex h-10 w-10 items-center justify-center rounded-md bg-red-600 hover:bg-red-800 text-white"
                     >
                       <Trash size={16} />
@@ -158,7 +155,7 @@ const CarrinhoPage = () => {
 
           <button
             type="button"
-            onClick={finalizeCart}
+            onClick={() => setConfirmFinalize(true)}
             disabled={isSubmitting}
             className="mt-6 h-12 w-full rounded-md bg-emerald-600 text-lg font-bold text-white hover:bg-emerald-500 disabled:opacity-50 disabled:cursor-not-allowed"
           >
@@ -169,6 +166,32 @@ const CarrinhoPage = () => {
           </P>
         </div>
       </div>
+
+      {itemToRemove && (
+        <ConfirmDialog
+          title="Remover item"
+          description={`Deseja remover "${itemToRemove.product.descricao}" do carrinho?`}
+          confirmLabel="Remover"
+          onConfirm={() => {
+            removeFromCart(itemToRemove.product.id);
+            setItemToRemove(null);
+          }}
+          onCancel={() => setItemToRemove(null)}
+        />
+      )}
+
+      {confirmFinalize && (
+        <ConfirmDialog
+          title="Finalizar compra"
+          description="Deseja confirmar a finalização da compra?"
+          confirmLabel="Confirmar"
+          onConfirm={() => {
+            setConfirmFinalize(false);
+            finalizeCart();
+          }}
+          onCancel={() => setConfirmFinalize(false)}
+        />
+      )}
     </div>
   );
 };

@@ -7,7 +7,6 @@ export const useFinalizeCart = () => {
   const [isSubmitting, setIsSubmitting] = useState(false);
 
   const finalizeCart = async () => {
-    if (!confirm('Deseja finalizar a compra?')) return;
     setIsSubmitting(true);
     try {
       await api.post('/checkout');
