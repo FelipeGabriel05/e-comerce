@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import { toast } from 'sonner';
 
 import { api } from '@/lib/services/constants';
 
@@ -10,8 +11,9 @@ export const useFinalizeCart = () => {
     setIsSubmitting(true);
     try {
       await api.post('/checkout');
+      toast.success('Compra finalizada com sucesso!');
     } catch (error) {
-      console.error('Erro ao finalizar compra:', error);
+      toast.error('Erro ao finalizar compra. Tente novamente.');
     } finally {
       setIsSubmitting(false);
     }
