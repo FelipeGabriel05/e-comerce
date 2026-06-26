@@ -52,7 +52,25 @@
     <filter-name>CorsFilter</filter-name>
     <url-pattern>/*</url-pattern>
   </filter-mapping>
-  
+
+  <filter>
+    <filter-name>AuthenticationRequiredFilter</filter-name>
+    <filter-class>ecommerce.Http.Filter.AuthenticationRequiredFilter</filter-class>
+  </filter>
+  <filter-mapping>
+    <filter-name>AuthenticationRequiredFilter</filter-name>
+    <url-pattern>/*</url-pattern>
+  </filter-mapping>
+
+  <filter>
+    <filter-name>AdminRolePermissionRequiredFilter</filter-name>
+    <filter-class>ecommerce.Http.Filter.AdminRolePermissionRequiredFilter</filter-class>
+  </filter>
+  <filter-mapping>
+    <filter-name>AdminRolePermissionRequiredFilter</filter-name>
+    <url-pattern>/*</url-pattern>
+  </filter-mapping>
+
   <listener>
     <listener-class>ecommerce.Database.DatabaseInitializer</listener-class>
   </listener>

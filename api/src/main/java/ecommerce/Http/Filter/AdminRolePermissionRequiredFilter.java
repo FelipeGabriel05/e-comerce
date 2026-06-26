@@ -10,11 +10,9 @@ import javax.servlet.FilterConfig;
 import javax.servlet.ServletException;
 import javax.servlet.ServletRequest;
 import javax.servlet.ServletResponse;
-import javax.servlet.annotation.WebFilter;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-@WebFilter("/*")
 public class AdminRolePermissionRequiredFilter implements Filter {
 
   private record Route(String method, String path) {}
@@ -24,6 +22,7 @@ public class AdminRolePermissionRequiredFilter implements Filter {
           new Route("POST", "/image/upload"),
           new Route("POST", "/admin/category"),
           new Route("POST", "/admin/products"),
+          new Route("GET", "/admin/products/*"),
           new Route("DELETE", "/admin/category/*"),
           new Route("DELETE", "/admin/products/*"),
           new Route("PUT", "/admin/category/*"),

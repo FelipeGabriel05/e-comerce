@@ -4,7 +4,7 @@ const Admin = () => {
   return (
     <Layout>
       <div>
-        <h1>Esse é a tela de admin</h1>
+        <h1>Esse é a tela de administrador</h1>
       </div>
     </Layout>
   );
