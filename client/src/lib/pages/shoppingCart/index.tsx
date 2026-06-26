@@ -1,6 +1,5 @@
 import { Link as LinkRouter } from '@tanstack/react-router';
 import { ArrowLeft, Trash } from 'lucide-react';
-import { useState } from 'react';
 
 import {
   Table,
@@ -11,7 +10,7 @@ import {
   TableRow,
 } from '@/components/ui/table';
 import { useCart } from '@/lib/hooks/use-cart';
-import { api } from '@/lib/services/constants';
+import { useFinalizeCart } from '@/lib/hooks/use-finalize-cart';
 
 const currencyFormatter = new Intl.NumberFormat('pt-BR', {
   style: 'currency',
@@ -22,19 +21,7 @@ const formatCurrency = (value: number) => currencyFormatter.format(value);
 
 const CarrinhoPage = () => {
   const { cart, updateCart, removeFromCart } = useCart();
-  const [isSubmitting, setIsSubmitting] = useState(false);
-
-  const handleFinalizarCompra = async () => {
-    if (!confirm('Deseja finalizar a compra?')) return;
-    setIsSubmitting(true);
-    try {
-      await api.post('/sales');
-    } catch (error) {
-      console.error('Erro ao finalizar compra:', error);
-    } finally {
-      setIsSubmitting(false);
-    }
-  };
+  const { finalizeCart, isSubmitting } = useFinalizeCart();
 
   if (!cart || cart.items.length === 0) {
     return (
@@ -176,7 +163,7 @@ const CarrinhoPage = () => {
 
           <button
             type="button"
-            onClick={handleFinalizarCompra}
+            onClick={finalizeCart}
             disabled={isSubmitting}
             className="mt-6 h-12 w-full rounded-md bg-emerald-600 text-lg font-bold text-white hover:bg-emerald-500 disabled:opacity-50 disabled:cursor-not-allowed"
           >
