@@ -1,5 +1,6 @@
 package ecommerce.Database.Repositories;
 
+import ecommerce.Database.Entites.Product;
 import ecommerce.Database.Entites.Sale.Sale;
 import ecommerce.Database.Entites.Sale.SaleItem;
 import ecommerce.Database.Queries.SaleQueries;
@@ -173,6 +174,15 @@ public class SaleRepository {
       while (rs.next()) {
         SaleItem item =
             new SaleItem(rs.getInt("produto_id"), rs.getDouble("preco"), rs.getInt("quantidade"));
+
+        Product product = new Product();
+        product.setId(rs.getInt("produto_id"));
+        product.setDescricao(rs.getString("descricao"));
+        product.setPreco(rs.getDouble("preco"));
+        product.setFoto(rs.getString("foto"));
+        product.setCategoriaId(rs.getInt("categoria_id"));
+
+        item.setProduct(product);
 
         items.add(item);
       }
