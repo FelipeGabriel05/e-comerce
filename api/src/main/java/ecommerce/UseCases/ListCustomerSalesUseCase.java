@@ -13,10 +13,9 @@ public class ListCustomerSalesUseCase {
 
   public List<Sale> execute(int userId) throws SQLException {
 
-      Connection dbConnection = DBConnection.getConnection();
-      SaleRepository saleRepository = new SaleRepository(dbConnection);
-
-      return saleRepository.findSalesByUserId(userId);
+    Connection dbConnection = DBConnection.getConnection();
+    SaleRepository saleRepository = new SaleRepository(dbConnection);
+    return saleRepository.findSalesByUserId(userId);
 
   }
 }
