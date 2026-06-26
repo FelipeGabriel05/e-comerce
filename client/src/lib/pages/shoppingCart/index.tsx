@@ -1,5 +1,6 @@
 import { Link as LinkRouter } from '@tanstack/react-router';
 import { ArrowLeft, Trash } from 'lucide-react';
+import { useState } from 'react';
 
 import {
   Table,
@@ -12,17 +13,26 @@ import {
 import { useCart } from '@/lib/hooks/use-cart';
 import { api } from '@/lib/services/constants';
 
-const formatCurrency = (value: number) =>
-  new Intl.NumberFormat('pt-BR', { style: 'currency', currency: 'BRL' }).format(
-    value,
-  );
+const currencyFormatter = new Intl.NumberFormat('pt-BR', {
+  style: 'currency',
+  currency: 'BRL',
+});
+
+const formatCurrency = (value: number) => currencyFormatter.format(value);
 
 const CarrinhoPage = () => {
   const { cart, updateCart, removeFromCart } = useCart();
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
   const handleFinalizarCompra = async () => {
-    if (confirm('Deseja finalizar a compra?')) {
+    if (!confirm('Deseja finalizar a compra?')) return;
+    setIsSubmitting(true);
+    try {
       await api.post('/sales');
+    } catch (error) {
+      console.error('Erro ao finalizar compra:', error);
+    } finally {
+      setIsSubmitting(false);
     }
   };
 
@@ -167,9 +177,10 @@ const CarrinhoPage = () => {
           <button
             type="button"
             onClick={handleFinalizarCompra}
-            className="mt-6 h-12 w-full rounded-md bg-emerald-600 text-lg font-bold text-white hover:bg-emerald-500"
+            disabled={isSubmitting}
+            className="mt-6 h-12 w-full rounded-md bg-emerald-600 text-lg font-bold text-white hover:bg-emerald-500 disabled:opacity-50 disabled:cursor-not-allowed"
           >
-            Finalizar Compra
+            {isSubmitting ? 'Finalizando...' : 'Finalizar Compra'}
           </button>
           <p className="mt-2 text-center text-sm text-white/60">
             ⚠ Requer sessão de usuário ativa (cliente logado)
