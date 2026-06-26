@@ -10,17 +10,12 @@ public class ListAllSalesUseCase {
 
   public ListAllSalesUseCase() {}
 
-  public List<Sale> execute() throws Exception {
+  public List<Sale> execute() throws SQLException {
 
-    try {
       Connection dbConnection = DBConnection.getConnection();
       SaleRepository saleRepository = new SaleRepository(dbConnection);
 
       return saleRepository.findAllSales();
 
-    } catch (Exception e) {
-      e.printStackTrace();
-      throw e;
-    }
   }
 }
