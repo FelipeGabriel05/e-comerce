@@ -154,7 +154,7 @@ public class SaleRepository {
       return sales;
 
     } catch (SQLException e) {
-      throw new RuntimeException(e);
+      throw e;
     }
   }
 
