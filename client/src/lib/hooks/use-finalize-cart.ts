@@ -9,7 +9,7 @@ export const useFinalizeCart = () => {
     if (!confirm('Deseja finalizar a compra?')) return;
     setIsSubmitting(true);
     try {
-      await api.post('/sales');
+      await api.post('/checkout');
     } catch (error) {
       console.error('Erro ao finalizar compra:', error);
     } finally {
