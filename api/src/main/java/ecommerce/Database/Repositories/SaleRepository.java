@@ -124,7 +124,7 @@ public class SaleRepository {
     }
   }
 
-  public List<Sale> findAllSales() {
+  public List<Sale> findAllSales() throws SQLException {
 
     List<Sale> sales = new ArrayList<>();
 
