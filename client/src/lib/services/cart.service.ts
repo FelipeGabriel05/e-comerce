@@ -1,6 +1,6 @@
 import { api } from './constants';
 
-export interface CartProduct {
+interface CartProduct {
   id: number;
   descricao: string;
   preco: number;
