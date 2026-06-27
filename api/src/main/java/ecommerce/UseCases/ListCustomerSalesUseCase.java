@@ -16,6 +16,5 @@ public class ListCustomerSalesUseCase {
     Connection dbConnection = DBConnection.getConnection();
     SaleRepository saleRepository = new SaleRepository(dbConnection);
     return saleRepository.findSalesByUserId(userId);
-
   }
 }

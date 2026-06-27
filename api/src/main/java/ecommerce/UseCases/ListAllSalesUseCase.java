@@ -16,6 +16,5 @@ public class ListAllSalesUseCase {
     Connection dbConnection = DBConnection.getConnection();
     SaleRepository saleRepository = new SaleRepository(dbConnection);
     return saleRepository.findAllSales();
-
   }
 }
