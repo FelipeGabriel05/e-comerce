@@ -1,7 +1,8 @@
 import { Link as LinkRouter } from '@tanstack/react-router';
-import { ArrowLeft, Trash } from 'lucide-react';
+import { ArrowLeft, Trash2 } from 'lucide-react';
 import { useState } from 'react';
 
+import { Button } from '@/components/ui/button';
 import { ConfirmDialog } from '@/components/ui/confirm-dialog';
 import {
   Table,
@@ -32,7 +33,7 @@ const CarrinhoPage = () => {
   if (!cart || cart.items.length === 0) {
     return (
       <div className="flex justify-center py-10">
-        <div className="w-full max-w-6xl rounded-xl bg-indigo-900/80 p-8 shadow-2xl">
+        <div className="w-full max-w-6xl rounded-xl bg-white/5 border border-white/10 backdrop-blur-md p-8">
           <H1 className="mb-4 text-white">Carrinho de Compras</H1>
           <LinkRouter
             to="/"
@@ -49,100 +50,108 @@ const CarrinhoPage = () => {
 
   return (
     <div className="flex justify-center py-10">
-      <div className="w-full max-w-6xl rounded-xl bg-indigo-900/80 p-8 shadow-2xl">
-        <H1 className="mb-2 text-white">Carrinho de Compras</H1>
+      <div className="w-full max-w-6xl flex flex-col gap-6">
+        <div className="rounded-xl bg-white/5 border border-white/10 backdrop-blur-md overflow-hidden">
+          <div className="flex items-center justify-between px-6 py-5 border-b border-white/10">
+            <div className="flex flex-col gap-0.5">
+              <H1 className="text-white">Carrinho de Compras</H1>
+              <p className="text-xs text-white/40">
+                {cart.items.length} {cart.items.length === 1 ? 'item' : 'itens'}
+              </p>
+            </div>
+            <LinkRouter
+              to="/"
+              className="flex items-center gap-2 text-white/70 hover:text-white text-sm"
+            >
+              <ArrowLeft size={16} />
+              Voltar para Página Inicial
+            </LinkRouter>
+          </div>
 
-        <LinkRouter
-          to="/"
-          className="mb-6 flex items-center gap-2 text-white/70 hover:text-white"
-        >
-          <ArrowLeft size={16} />
-          Voltar para Página Inicial
-        </LinkRouter>
-
-        <Table>
-          <TableHeader className="bg-indigo-950">
-            <TableRow>
-              <TableHead className="text-zinc-100">Produto</TableHead>
-              <TableHead className="text-zinc-100">Preço Unit.</TableHead>
-              <TableHead className="text-zinc-100">Quantidade</TableHead>
-              <TableHead className="text-right text-zinc-100">
-                Total Item
-              </TableHead>
-              <TableHead className="text-right text-zinc-100">Ações</TableHead>
-            </TableRow>
-          </TableHeader>
-
-          <TableBody className="bg-indigo-800">
-            {cart.items.map((item) => (
-              <TableRow key={item.product.id}>
-                <TableCell className="flex items-center gap-3 font-medium text-white">
-                  {item.product.foto ? (
-                    <img
-                      src={item.product.foto}
-                      alt={item.product.descricao}
-                      className="h-12 w-12 rounded-md object-cover"
-                    />
-                  ) : (
-                    <div className="flex h-12 w-12 items-center justify-center rounded-md bg-indigo-700 text-white/30 text-xs">
-                      Sem foto
-                    </div>
-                  )}
-                  {item.product.descricao}
-                </TableCell>
-
-                <TableCell className="text-white">
-                  {formatCurrency(item.product.preco)}
-                </TableCell>
-
-                <TableCell className="text-white">
-                  <div className="flex items-center gap-2">
-                    <button
-                      type="button"
-                      onClick={() =>
-                        updateCart(
-                          item.product.id,
-                          Math.max(1, item.quantity - 1),
-                        )
-                      }
-                      className="flex h-7 w-7 items-center justify-center rounded bg-indigo-700 text-white hover:bg-indigo-600"
-                    >
-                      -
-                    </button>
-                    <span className="w-6 text-center">{item.quantity}</span>
-                    <button
-                      type="button"
-                      onClick={() =>
-                        updateCart(item.product.id, item.quantity + 1)
-                      }
-                      className="flex h-7 w-7 items-center justify-center rounded bg-indigo-700 text-white hover:bg-indigo-600"
-                    >
-                      +
-                    </button>
-                  </div>
-                </TableCell>
-
-                <TableCell className="text-right text-white">
-                  {formatCurrency(item.subtotal)}
-                </TableCell>
-
-                <TableCell>
-                  <div className="flex justify-end">
-                    <button
-                      type="button"
-                      onClick={() => setItemToRemove(item)}
-                      className="flex h-10 w-10 items-center justify-center rounded-md bg-red-600 hover:bg-red-800 text-white"
-                    >
-                      <Trash size={16} />
-                    </button>
-                  </div>
-                </TableCell>
+          <Table>
+            <TableHeader>
+              <TableRow>
+                <TableHead>Produto</TableHead>
+                <TableHead>Preço Unit.</TableHead>
+                <TableHead>Quantidade</TableHead>
+                <TableHead className="text-right">Total Item</TableHead>
+                <TableHead className="text-right">Ações</TableHead>
               </TableRow>
-            ))}
-          </TableBody>
-        </Table>
+            </TableHeader>
 
-        <div className="mt-8 rounded-xl bg-indigo-800/60 backdrop-blur-md p-6">
+            <TableBody>
+              {cart.items.map((item) => (
+                <TableRow key={item.product.id}>
+                  <TableCell className="flex items-center gap-3 font-medium">
+                    {item.product.foto ? (
+                      <img
+                        src={item.product.foto}
+                        alt={item.product.descricao}
+                        className="h-12 w-12 rounded-md object-cover"
+                      />
+                    ) : (
+                      <div className="flex h-12 w-12 items-center justify-center rounded-md bg-white/10 text-white/30 text-xs">
+                        Sem foto
+                      </div>
+                    )}
+                    {item.product.descricao}
+                  </TableCell>
+
+                  <TableCell>{formatCurrency(item.product.preco)}</TableCell>
+
+                  <TableCell>
+                    <div className="flex items-center gap-2">
+                      <Button
+                        size="icon-sm"
+                        variant="outline"
+                        type="button"
+                        onClick={() =>
+                          updateCart(
+                            item.product.id,
+                            Math.max(1, item.quantity - 1),
+                          )
+                        }
+                      >
+                        -
+                      </Button>
+                      <span className="w-6 text-center">{item.quantity}</span>
+                      <Button
+                        size="icon-sm"
+                        variant="outline"
+                        type="button"
+                        onClick={() =>
+                          updateCart(item.product.id, item.quantity + 1)
+                        }
+                      >
+                        +
+                      </Button>
+                    </div>
+                  </TableCell>
+
+                  <TableCell className="text-right">
+                    {formatCurrency(item.subtotal)}
+                  </TableCell>
+
+                  <TableCell>
+                    <div className="flex justify-end">
+                      <Button
+                        size="icon"
+                        variant="destructive"
+                        type="button"
+                        onClick={() => setItemToRemove(item)}
+                        title="Remover"
+                      >
+                        <Trash2 className="w-4 h-4" />
+                      </Button>
+                    </div>
+                  </TableCell>
+                </TableRow>
+              ))}
+            </TableBody>
+          </Table>
+        </div>
+
+        <div className="rounded-xl bg-white/5 border border-white/10 backdrop-blur-md p-6">
           <H1 className="mb-4 text-center text-white">Resumo do Pedido</H1>
           <div className="flex flex-col items-end gap-1 text-white/80">
             <P>Subtotal: {formatCurrency(cart.total)}</P>
@@ -153,14 +162,14 @@ const CarrinhoPage = () => {
             </P>
           </div>
 
-          <button
+          <Button
             type="button"
             onClick={() => setConfirmFinalize(true)}
             disabled={isSubmitting}
-            className="mt-6 h-12 w-full rounded-md bg-emerald-600 text-lg font-bold text-white hover:bg-emerald-500 disabled:opacity-50 disabled:cursor-not-allowed"
+            className="mt-6 h-12 w-full bg-emerald-600 text-lg font-bold text-white hover:bg-emerald-500 disabled:opacity-50 disabled:cursor-not-allowed"
           >
             {isSubmitting ? 'Finalizando...' : 'Finalizar Compra'}
-          </button>
+          </Button>
           <P className="mt-2 text-center text-sm text-white/60">
             ⚠ Requer sessão de usuário ativa (cliente logado)
           </P>
@@ -170,7 +179,12 @@ const CarrinhoPage = () => {
       {itemToRemove && (
         <ConfirmDialog
           title="Remover item"
-          description={`Deseja remover "${itemToRemove.product.descricao}" do carrinho?`}
+          description={
+            <span>
+              Deseja remover <strong>{itemToRemove.product.descricao}</strong>{' '}
+              do carrinho?
+            </span>
+          }
           confirmLabel="Remover"
           onConfirm={() => {
             removeFromCart(itemToRemove.product.id);
