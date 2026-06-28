@@ -23,6 +23,7 @@ public class CheckoutController extends HttpServlet {
   private final Gson gson = new Gson();
 
   private static final String CART_COOKIE_NAME = "cart";
+  private static final int EMPTY_COOKIE_MAX_AGE = 0;
 
   @Override
   protected void doPost(HttpServletRequest request, HttpServletResponse response)
@@ -102,7 +103,7 @@ public class CheckoutController extends HttpServlet {
   private void clearCartCookie(HttpServletResponse response) {
     Cookie cookie = new Cookie(CART_COOKIE_NAME, "");
     cookie.setPath("/");
-    cookie.setMaxAge(0);
+    cookie.setMaxAge(EMPTY_COOKIE_MAX_AGE);
     cookie.setHttpOnly(true);
     response.addCookie(cookie);
   }
