@@ -10,11 +10,15 @@ import ecommerce.Database.Repositories.ProductRepository;
 import ecommerce.Database.Repositories.SaleRepository;
 import ecommerce.Exceptions.InternalServerException;
 import ecommerce.Exceptions.NotFoundException;
+import ecommerce.Exceptions.ValidationException;
 import java.sql.Connection;
+import java.util.ArrayList;
+import java.util.List;
 
 public class FinishPurchaseUseCase {
 
-  public void execute(int userId, Cart cart) throws NotFoundException, InternalServerException {
+  public void execute(int userId, Cart cart)
+      throws NotFoundException, InternalServerException, ValidationException {
 
     Connection con = null;
 
@@ -25,12 +29,18 @@ public class FinishPurchaseUseCase {
       ProductRepository productRepository = new ProductRepository(con);
       SaleRepository saleRepository = new SaleRepository(con);
 
+      List<SaleItem> saleItems = buildSaleItems(cart, productRepository);
+
+      double calculatedTotal = calculateTotal(saleItems);
+
+      validateCartTotal(calculatedTotal, cart.getTotal());
+
+      decreaseStock(saleItems, productRepository);
+
       Sale sale = new Sale();
       sale.setUserId(userId);
-
-      double total = processCartItems(cart, sale, productRepository);
-
-      sale.setTotal(total);
+      sale.setItems(saleItems);
+      sale.setTotal(calculatedTotal);
 
       saleRepository.createSale(sale);
 
@@ -39,6 +49,11 @@ public class FinishPurchaseUseCase {
       }
 
       con.commit();
+
+    } catch (ValidationException e) {
+
+      rollback(con);
+      throw e;
 
     } catch (NotFoundException e) {
 
@@ -56,10 +71,10 @@ public class FinishPurchaseUseCase {
     }
   }
 
-  private double processCartItems(Cart cart, Sale sale, ProductRepository productRepository)
-      throws NotFoundException, Exception {
+  private List<SaleItem> buildSaleItems(Cart cart, ProductRepository productRepository)
+      throws Exception {
 
-    double total = 0.0;
+    List<SaleItem> saleItems = new ArrayList<>();
 
     for (CartItem item : cart.getItems()) {
       Product cartProduct = item.getProduct();
@@ -70,25 +85,42 @@ public class FinishPurchaseUseCase {
         throw new NotFoundException("Product not found");
       }
 
-      if (product.getQuantidade() < item.getQuantity()) {
-        throw new NotFoundException("Insufficient stock");
-      }
+      saleItems.add(new SaleItem(product.getId(), product.getPreco(), item.getQuantity()));
+    }
 
-      SaleItem saleItem = new SaleItem(product.getId(), product.getPreco(), item.getQuantity());
+    return saleItems;
+  }
 
-      sale.getItems().add(saleItem);
+  private double calculateTotal(List<SaleItem> saleItems) {
 
-      total += product.getPreco() * item.getQuantity();
+    double total = 0.0;
 
+    for (SaleItem item : saleItems) {
+      total += item.getPrice() * item.getQuantity();
+    }
+
+    return total;
+  }
+
+  private void validateCartTotal(double calculatedTotal, double cartTotal)
+      throws ValidationException {
+
+    if (Math.abs(calculatedTotal - cartTotal) > 0.01) {
+      throw new ValidationException("Cart total does not match product prices");
+    }
+  }
+
+  private void decreaseStock(List<SaleItem> saleItems, ProductRepository productRepository)
+      throws Exception {
+
+    for (SaleItem item : saleItems) {
       boolean stockUpdated =
-          productRepository.decreaseProductStock(product.getId(), item.getQuantity());
+          productRepository.decreaseProductStock(item.getProductId(), item.getQuantity());
 
       if (!stockUpdated) {
         throw new NotFoundException("Insufficient stock");
       }
     }
-
-    return total;
   }
 
   private void rollback(Connection con) {
