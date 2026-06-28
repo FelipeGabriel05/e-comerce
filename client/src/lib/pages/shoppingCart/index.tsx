@@ -1,5 +1,5 @@
 import { Link as LinkRouter } from '@tanstack/react-router';
-import { ArrowLeft, Trash2 } from 'lucide-react';
+import { ArrowLeft, Minus, Plus, ShoppingCart, Trash2 } from 'lucide-react';
 import { useState } from 'react';
 
 import { Button } from '@/components/ui/button';
@@ -122,7 +122,7 @@ const CarrinhoPage = () => {
                           )
                         }
                       >
-                        -
+                        <Minus className="w-3 h-3" />
                       </Button>
                       <span className="w-6 text-center">{item.quantity}</span>
                       <Button
@@ -133,7 +133,7 @@ const CarrinhoPage = () => {
                           updateCart(item.product.id, item.quantity + 1)
                         }
                       >
-                        +
+                        <Plus className="w-3 h-3" />
                       </Button>
                     </div>
                   </TableCell>
@@ -178,6 +178,7 @@ const CarrinhoPage = () => {
             disabled={isSubmitting}
             className="mt-6 h-12 w-full bg-emerald-600 text-lg font-bold text-white hover:bg-emerald-500 disabled:opacity-50 disabled:cursor-not-allowed"
           >
+            <ShoppingCart className="w-5 h-5" />
             {isSubmitting ? 'Finalizando...' : 'Finalizar Compra'}
           </Button>
           <P className="mt-2 text-center text-sm text-white/60">
