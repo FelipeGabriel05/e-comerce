@@ -57,9 +57,15 @@ public class ProductRepository {
   }
 
   public List<Product> listAvailableProducts() {
-    try {
-      String query = ProductQueries.listAvailableProductsQuery;
+    return listProducts(ProductQueries.listAvailableProductsQuery);
+  }
 
+  public List<Product> listAllProducts() {
+    return listProducts(ProductQueries.listAllProductsQuery);
+  }
+
+  private List<Product> listProducts(String query) {
+    try {
       Statement stmt = con.createStatement();
       ResultSet rs = stmt.executeQuery(query);
 
