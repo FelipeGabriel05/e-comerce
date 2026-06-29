@@ -42,6 +42,7 @@ export const useCart = () => {
   return {
     cart,
     total: cart?.total ?? 0,
+    totalItems: cart?.items.reduce((sum, item) => sum + item.quantity, 0) ?? 0,
     addToCart: (productId: number, quantity = 1) =>
       addMutation.mutate({ productId, quantity }),
     updateCart: (productId: number, quantity: number) =>

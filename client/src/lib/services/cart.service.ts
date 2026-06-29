@@ -9,7 +9,7 @@ interface CartProduct {
   categoriaId: number;
 }
 
-interface CartItem {
+export interface CartItem {
   product: CartProduct;
   quantity: number;
   subtotal: number;
