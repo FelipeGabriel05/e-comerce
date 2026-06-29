@@ -8,7 +8,7 @@ import java.sql.Connection;
 
 public class DeleteSaleUseCase {
 
-  public void execute(int saleId) throws NotFoundException, InternalServerException {
+  public void execute(int saleId) throws NotFoundException, InternalServerException, Exception {
 
     try {
       Connection con = DBConnection.getConnection();
@@ -25,7 +25,7 @@ public class DeleteSaleUseCase {
       throw e;
 
     } catch (Exception e) {
-      throw new InternalServerException("Internal error while deleting sale");
+      throw e;
     }
   }
 }
