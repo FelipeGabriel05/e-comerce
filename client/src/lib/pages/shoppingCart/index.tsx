@@ -51,8 +51,6 @@ const CarrinhoPage = () => {
     return (
       <div className="flex justify-center py-10">
         <div className="w-full max-w-6xl rounded-xl bg-white/5 border border-white/10 backdrop-blur-md p-8">
-          {' '}
-          <H1 className="mb-4 text-white">Carrinho de Compras</H1>
           <LinkRouter
             to="/"
             className="mb-2 flex items-center gap-2 text-white/70 hover:text-white text-sm"
