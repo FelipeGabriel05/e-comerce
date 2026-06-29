@@ -17,18 +17,18 @@ public class AdminRolePermissionRequiredFilter implements Filter {
 
   private record Route(String method, String path) {}
 
-private static final List<Route> adminRoutes =
-    List.of(
-        new Route("POST", "/image/upload"),
-        new Route("POST", "/admin/category"),
-        new Route("POST", "/admin/products"),
-        new Route("GET", "/admin/products/*"),
-        new Route("DELETE", "/admin/category/*"),
-        new Route("DELETE", "/admin/products/*"),
-        new Route("PUT", "/admin/category/*"),
-        new Route("PUT", "/admin/products/*"),
-        new Route("DELETE", "/admin/sales/*"),
-        new Route("GET", "/admin/sales"));
+  private static final List<Route> adminRoutes =
+      List.of(
+          new Route("POST", "/image/upload"),
+          new Route("POST", "/admin/category"),
+          new Route("POST", "/admin/products"),
+          new Route("GET", "/admin/products/*"),
+          new Route("DELETE", "/admin/category/*"),
+          new Route("DELETE", "/admin/products/*"),
+          new Route("PUT", "/admin/category/*"),
+          new Route("PUT", "/admin/products/*"),
+          new Route("DELETE", "/admin/sales/*"),
+          new Route("GET", "/admin/sales"));
 
   @Override
   public void init(FilterConfig filterConfig) throws ServletException {}

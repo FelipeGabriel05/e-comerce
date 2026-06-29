@@ -15,8 +15,7 @@ public class SaleQueries {
   public static String deleteSaleItemsBySaleIdQuery =
       "DELETE FROM venda_produto WHERE venda_id = ?";
 
-  public static String deleteSaleByIdQuery =
-      "DELETE FROM venda WHERE id = ?";
+  public static String deleteSaleByIdQuery = "DELETE FROM venda WHERE id = ?";
 
   public static String selectSalesByUserIdQuery =
       "SELECT id, data_hora, usuario_id FROM venda WHERE usuario_id = ? ORDER BY data_hora DESC";
