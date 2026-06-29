@@ -8,7 +8,7 @@ import { useUserProfile } from '@/lib/hooks/use-user-profile';
 import { cn } from '@/lib/utils';
 
 export const Header = () => {
-  const { total } = useCart();
+  const { totalItems } = useCart();
   const { user } = useUserProfile();
 
   return (
@@ -68,9 +68,9 @@ export const Header = () => {
         >
           <ShoppingCart size={16} />
           Carrinho
-          {total > 0 && (
+          {totalItems > 0 && (
             <span className="absolute -right-2 -top-2 flex h-5 w-5 items-center justify-center rounded-full bg-violet-500 text-xs font-bold text-white">
-              {total}
+              {totalItems}
             </span>
           )}
         </LinkRouter>

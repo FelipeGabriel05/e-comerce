@@ -11,32 +11,33 @@ import javax.servlet.FilterConfig;
 import javax.servlet.ServletException;
 import javax.servlet.ServletRequest;
 import javax.servlet.ServletResponse;
-import javax.servlet.annotation.WebFilter;
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-@WebFilter("/*")
 public class AuthenticationRequiredFilter implements Filter {
 
   private record Route(String method, String path) {}
 
-  private static final List<Route> protectedRoutes =
-      List.of(
-          new Route("GET", "/me"),
-          new Route("PUT", "/users/*"),
-          new Route("DELETE", "/users/*"),
-          new Route("POST", "/image/upload"),
-          new Route("POST", "/sales"),
-          new Route("POST", "/admin/category"),
-          new Route("POST", "/admin/products"),
-          new Route("POST", "/logout"),
-          new Route("DELETE", "/admin/category/*"),
-          new Route("DELETE", "/admin/products/*"),
-          new Route("PUT", "/admin/category/*"),
-          new Route("PUT", "/admin/products/*"),
-          new Route("DELETE", "/admin/sales/*"),
-          new Route("POST", "/logout"));
+private static final List<Route> protectedRoutes =
+    List.of(
+        new Route("GET", "/me"),
+        new Route("PUT", "/users/*"),
+        new Route("DELETE", "/users/*"),
+        new Route("POST", "/image/upload"),
+        new Route("POST", "/sales"),
+        new Route("POST", "/admin/category"),
+        new Route("POST", "/admin/products"),
+        new Route("POST", "/logout"),
+        new Route("DELETE", "/admin/category/*"),
+        new Route("DELETE", "/admin/products/*"),
+        new Route("PUT", "/admin/category/*"),
+        new Route("PUT", "/admin/products/*"),
+        new Route("DELETE", "/admin/sales/*"),
+        new Route("POST", "/checkout"),
+        new Route("GET", "/admin/products/*"),
+        new Route("GET", "/sales"),
+        new Route("GET", "/admin/sales"));
 
   @Override
   public void init(FilterConfig filterConfig) throws ServletException {}

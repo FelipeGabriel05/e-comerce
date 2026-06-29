@@ -2,6 +2,7 @@ package ecommerce.Database.Repositories;
 
 import ecommerce.Database.Entites.Product;
 import ecommerce.Database.Queries.ProductQueries;
+import ecommerce.Exceptions.ProductInUseException;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -11,6 +12,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class ProductRepository {
+
+  private static final String SQLSTATE_FOREIGN_KEY_VIOLATION = "23503";
 
   private Connection con;
 
@@ -54,9 +57,15 @@ public class ProductRepository {
   }
 
   public List<Product> listAvailableProducts() {
-    try {
-      String query = ProductQueries.listAvailableProductsQuery;
+    return listProducts(ProductQueries.listAvailableProductsQuery);
+  }
 
+  public List<Product> listAllProducts() {
+    return listProducts(ProductQueries.listAllProductsQuery);
+  }
+
+  private List<Product> listProducts(String query) {
+    try {
       Statement stmt = con.createStatement();
       ResultSet rs = stmt.executeQuery(query);
 
@@ -131,7 +140,20 @@ public class ProductRepository {
     return productInput;
   }
 
-  public boolean deleteProduct(int id) throws Exception {
+  public boolean decreaseProductStock(int productId, int quantity) throws SQLException {
+
+    PreparedStatement ps = con.prepareStatement(ProductQueries.decreaseProductStockQuery);
+
+    ps.setInt(1, quantity);
+    ps.setInt(2, productId);
+    ps.setInt(3, quantity);
+
+    int rowsAffected = ps.executeUpdate();
+
+    return rowsAffected > 0;
+  }
+
+  public boolean deleteProduct(int id) throws ProductInUseException, Exception {
 
     String query = ProductQueries.deleteProductQuery;
 
@@ -143,6 +165,12 @@ public class ProductRepository {
 
       return rowsAffected > 0;
 
+    } catch (SQLException e) {
+      if (SQLSTATE_FOREIGN_KEY_VIOLATION.equals(e.getSQLState())) {
+        throw new ProductInUseException("Product is in use and cannot be deleted");
+      }
+      e.printStackTrace();
+      throw e;
     } catch (Exception e) {
       e.printStackTrace();
       throw e;

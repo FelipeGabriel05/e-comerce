@@ -2,86 +2,76 @@ package ecommerce.Http.Controller;
 
 import com.google.gson.Gson;
 import ecommerce.Database.Entites.Cart.Cart;
-import ecommerce.Database.Entites.Sale.Sale;
 import ecommerce.Database.Entites.User;
+import ecommerce.Exceptions.NotFoundException;
+import ecommerce.Exceptions.ValidationException;
 import ecommerce.Http.IO.Responses.JsonResponse;
-import ecommerce.UseCases.CreateSaleUseCase;
-import ecommerce.UseCases.ListCustomerSalesUseCase;
+import ecommerce.Http.Validators.HttpCheckoutValidators;
+import ecommerce.UseCases.FinishPurchaseUseCase;
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.util.Base64;
-import java.util.List;
-import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-@WebServlet("/sales")
-public class SaleController extends HttpServlet {
-  private static final long serialVersionUID = 1L;
-  private static final String CART_COOKIE_NAME = "cart";
-  private static final int EMPTY_COOKIE_MAX_AGE = 0;
+@WebServlet("/checkout")
+public class CheckoutController extends HttpServlet {
 
   private final Gson gson = new Gson();
 
+  private static final String CART_COOKIE_NAME = "cart";
+  private static final int EMPTY_COOKIE_MAX_AGE = 0;
+
+  @Override
   protected void doPost(HttpServletRequest request, HttpServletResponse response)
-      throws ServletException, IOException {
+      throws IOException {
+
     response.setContentType("application/json");
 
     try {
       User user = (User) request.getAttribute("user");
+
       Cart cart = getCartFromCookie(request);
 
-      if (cart == null || cart.getItems().isEmpty()) {
-        JsonResponse jsonRes =
-            new JsonResponse(HttpServletResponse.SC_BAD_REQUEST, "Cart is empty");
-        response.setStatus(jsonRes.getStatus());
-        response.getWriter().write(jsonRes.toJson());
-        return;
-      }
+      HttpCheckoutValidators validators = new HttpCheckoutValidators();
 
-      CreateSaleUseCase createSaleUseCase = new CreateSaleUseCase();
-      Sale createdSale = createSaleUseCase.execute(user.getId(), cart);
+      Cart validatedCart = validators.validateCheckout(cart);
+
+      FinishPurchaseUseCase useCase = new FinishPurchaseUseCase();
+
+      useCase.execute(user.getId(), validatedCart);
 
       clearCartCookie(response);
+
       JsonResponse jsonRes =
-          new JsonResponse(HttpServletResponse.SC_CREATED, "Sale created", createdSale);
+          new JsonResponse(HttpServletResponse.SC_OK, "Purchase finished successfully");
+
       response.setStatus(jsonRes.getStatus());
       response.getWriter().write(jsonRes.toJson());
+
+    } catch (ValidationException e) {
+
+      JsonResponse jsonRes = new JsonResponse(422, e.getMessage());
+
+      response.setStatus(jsonRes.getStatus());
+      response.getWriter().write(jsonRes.toJson());
+
+    } catch (NotFoundException e) {
+
+      JsonResponse jsonRes = new JsonResponse(HttpServletResponse.SC_NOT_FOUND, e.getMessage());
+
+      response.setStatus(jsonRes.getStatus());
+      response.getWriter().write(jsonRes.toJson());
+
     } catch (Exception e) {
+
       e.printStackTrace();
+
       JsonResponse jsonRes =
           new JsonResponse(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, e.getMessage());
-      response.setStatus(jsonRes.getStatus());
-      response.getWriter().write(jsonRes.toJson());
-    }
-  }
-
-  protected void doGet(HttpServletRequest request, HttpServletResponse response)
-      throws ServletException, IOException {
-
-    try {
-      response.setContentType("application/json");
-
-      User user = (User) request.getAttribute("user");
-
-      ListCustomerSalesUseCase useCase = new ListCustomerSalesUseCase();
-
-      List<Sale> sales = useCase.execute(user.getId());
-
-      JsonResponse jsonRes = new JsonResponse(HttpServletResponse.SC_OK, "Sales history", sales);
-
-      response.setStatus(jsonRes.getStatus());
-      response.getWriter().write(jsonRes.toJson());
-
-    } catch (Exception e) {
-
-      e.printStackTrace();
-
-      JsonResponse jsonRes =
-          new JsonResponse(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, "Internal server error");
 
       response.setStatus(jsonRes.getStatus());
       response.getWriter().write(jsonRes.toJson());
@@ -97,7 +87,9 @@ public class SaleController extends HttpServlet {
           try {
             String decoded =
                 new String(Base64.getDecoder().decode(cookie.getValue()), StandardCharsets.UTF_8);
+
             return gson.fromJson(decoded, Cart.class);
+
           } catch (Exception e) {
             return new Cart();
           }

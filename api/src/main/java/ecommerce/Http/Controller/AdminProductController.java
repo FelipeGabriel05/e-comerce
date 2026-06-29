@@ -2,14 +2,17 @@ package ecommerce.Http.Controller;
 
 import ecommerce.Database.Entites.Product;
 import ecommerce.Exceptions.NotFoundException;
+import ecommerce.Exceptions.ProductInUseException;
 import ecommerce.Exceptions.ValidationException;
 import ecommerce.Http.IO.PathVariableExtractor;
 import ecommerce.Http.IO.Responses.JsonResponse;
 import ecommerce.Http.Validators.HttpProductValidators;
 import ecommerce.UseCases.CreateProductUseCase;
 import ecommerce.UseCases.DeleteProductUseCase;
+import ecommerce.UseCases.ListProductsUseCase;
 import ecommerce.UseCases.UpdateProductUseCase;
 import java.io.IOException;
+import java.util.List;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.MultipartConfig;
 import javax.servlet.annotation.WebServlet;
@@ -24,6 +27,34 @@ public class AdminProductController extends HttpServlet {
   private static final long serialVersionUID = 1L;
 
   public static final int SC_UNPROCESSABLE_ENTITY = 422;
+
+  @Override
+  protected void doGet(HttpServletRequest request, HttpServletResponse response)
+      throws IOException {
+
+    response.setContentType("application/json");
+
+    try {
+      ListProductsUseCase useCase = new ListProductsUseCase();
+
+      String baseUrl =
+          request.getScheme() + "://" + request.getServerName() + ":" + request.getServerPort();
+
+      List<Product> products = useCase.execute(baseUrl, false);
+
+      JsonResponse jsonRes =
+          new JsonResponse(HttpServletResponse.SC_OK, "Products listed", products);
+      response.setStatus(jsonRes.getStatus());
+      response.getWriter().write(jsonRes.toJson());
+    } catch (Exception e) {
+      e.printStackTrace();
+
+      JsonResponse jsonRes =
+          new JsonResponse(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, e.getMessage());
+      response.setStatus(jsonRes.getStatus());
+      response.getWriter().write(jsonRes.toJson());
+    }
+  }
 
   protected void doPost(HttpServletRequest request, HttpServletResponse response)
       throws ServletException, IOException {
@@ -153,6 +184,13 @@ public class AdminProductController extends HttpServlet {
         response.setStatus(jsonRes.getStatus());
         response.getWriter().write(jsonRes.toJson());
       }
+
+    } catch (ProductInUseException e) {
+
+      JsonResponse jsonRes = new JsonResponse(HttpServletResponse.SC_CONFLICT, e.getMessage());
+
+      response.setStatus(jsonRes.getStatus());
+      response.getWriter().write(jsonRes.toJson());
 
     } catch (ValidationException e) {
 

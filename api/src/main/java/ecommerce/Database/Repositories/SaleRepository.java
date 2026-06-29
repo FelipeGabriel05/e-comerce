@@ -1,5 +1,6 @@
 package ecommerce.Database.Repositories;
 
+import ecommerce.Database.Entites.Product;
 import ecommerce.Database.Entites.Sale.Sale;
 import ecommerce.Database.Entites.Sale.SaleItem;
 import ecommerce.Database.Queries.SaleQueries;
@@ -8,6 +9,8 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.util.ArrayList;
+import java.util.List;
 
 public class SaleRepository {
 
@@ -100,6 +103,108 @@ public class SaleRepository {
       int rowsAffected = deleteSaleStmt.executeUpdate();
 
       return rowsAffected > 0;
+    }
+  }
+
+  public List<Sale> findSalesByUserId(int userId) {
+
+    List<Sale> sales = new ArrayList<>();
+
+    try {
+      PreparedStatement ps = con.prepareStatement(SaleQueries.selectSalesByUserIdQuery);
+
+      ps.setInt(1, userId);
+
+      ResultSet rs = ps.executeQuery();
+
+      while (rs.next()) {
+        Sale sale = new Sale();
+
+        sale.setId(rs.getInt("id"));
+        sale.setDataHora(rs.getTimestamp("data_hora").toString());
+        sale.setUserId(rs.getInt("usuario_id"));
+
+        List<SaleItem> items = findItemsBySaleId(sale.getId());
+        sale.setItems(items);
+
+        double total =
+            items.stream().mapToDouble(item -> item.getPrice() * item.getQuantity()).sum();
+        sale.setTotal(total);
+
+        sales.add(sale);
+      }
+
+      return sales;
+
+    } catch (SQLException e) {
+      throw new RuntimeException(e);
+    }
+  }
+
+  public List<Sale> findAllSales() throws SQLException {
+
+    List<Sale> sales = new ArrayList<>();
+
+    try {
+      PreparedStatement ps = con.prepareStatement(SaleQueries.selectAllSalesQuery);
+
+      ResultSet rs = ps.executeQuery();
+
+      while (rs.next()) {
+        Sale sale = new Sale();
+
+        sale.setId(rs.getInt("id"));
+        sale.setDataHora(rs.getTimestamp("data_hora").toString());
+        sale.setUserId(rs.getInt("usuario_id"));
+
+        List<SaleItem> items = findItemsBySaleId(sale.getId());
+        sale.setItems(items);
+
+        double total =
+            items.stream().mapToDouble(item -> item.getPrice() * item.getQuantity()).sum();
+        sale.setTotal(total);
+
+        sales.add(sale);
+      }
+
+      return sales;
+
+    } catch (SQLException e) {
+      throw e;
+    }
+  }
+
+  private List<SaleItem> findItemsBySaleId(int saleId) throws SQLException {
+
+    List<SaleItem> items = new ArrayList<>();
+
+    try {
+      PreparedStatement ps = con.prepareStatement(SaleQueries.selectSaleItemsBySaleIdQuery);
+
+      ps.setInt(1, saleId);
+
+      ResultSet rs = ps.executeQuery();
+
+      while (rs.next()) {
+        SaleItem item =
+            new SaleItem(rs.getInt("produto_id"), rs.getDouble("preco"), rs.getInt("quantidade"));
+
+        Product product = new Product();
+        product.setId(rs.getInt("produto_id"));
+        product.setDescricao(rs.getString("descricao"));
+        product.setPreco(rs.getDouble("preco"));
+        product.setFoto(rs.getString("foto"));
+        product.setCategoriaId(rs.getInt("categoria_id"));
+
+        item.setProduct(product);
+
+        items.add(item);
+      }
+
+      return items;
+
+    } catch (SQLException e) {
+      throw e;
     }
   }
 }

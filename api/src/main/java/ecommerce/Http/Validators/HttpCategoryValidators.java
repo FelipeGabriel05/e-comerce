@@ -59,7 +59,7 @@ public class HttpCategoryValidators {
     try {
       id = PathVariableExtractor.extractIntPathVariable(request, "/admin/category/:id", "id");
     } catch (Exception e) {
-      errors.add("Valid ID is riquired in URL");
+      errors.add("Valid ID is required in URL");
     }
 
     try {

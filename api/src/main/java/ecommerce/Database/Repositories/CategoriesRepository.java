@@ -2,14 +2,18 @@ package ecommerce.Database.Repositories;
 
 import ecommerce.Database.Entites.Category;
 import ecommerce.Database.Queries.CategoriesQueries;
+import ecommerce.Exceptions.CategoryInUseException;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
 
 public class CategoriesRepository {
+
+  private static final String SQLSTATE_FOREIGN_KEY_VIOLATION = "23503";
 
   private Connection con;
 
@@ -88,7 +92,7 @@ public class CategoriesRepository {
     }
   }
 
-  public boolean deleteCategory(int id) throws Exception {
+  public boolean deleteCategory(int id) throws CategoryInUseException, Exception {
 
     String query = CategoriesQueries.deleteCategoryQuery;
 
@@ -99,7 +103,12 @@ public class CategoriesRepository {
       int rowsAffected = ps.executeUpdate();
 
       return rowsAffected > 0;
-
+    } catch (SQLException e) {
+      if (SQLSTATE_FOREIGN_KEY_VIOLATION.equals(e.getSQLState())) {
+        throw new CategoryInUseException("Category is in use and cannot be deleted");
+      }
+      e.printStackTrace();
+      throw e;
     } catch (Exception e) {
       e.printStackTrace();
       throw e;
