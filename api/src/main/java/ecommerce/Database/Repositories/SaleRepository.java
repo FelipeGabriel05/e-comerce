@@ -85,4 +85,21 @@ public class SaleRepository {
       stmt.executeBatch();
     }
   }
+
+  public boolean deleteSaleById(int saleId) throws SQLException {
+
+    try (PreparedStatement deleteItemsStmt =
+            con.prepareStatement(SaleQueries.deleteSaleItemsBySaleIdQuery);
+        PreparedStatement deleteSaleStmt = con.prepareStatement(SaleQueries.deleteSaleByIdQuery)) {
+
+      deleteItemsStmt.setInt(1, saleId);
+      deleteItemsStmt.executeUpdate();
+
+      deleteSaleStmt.setInt(1, saleId);
+
+      int rowsAffected = deleteSaleStmt.executeUpdate();
+
+      return rowsAffected > 0;
+    }
+  }
 }
