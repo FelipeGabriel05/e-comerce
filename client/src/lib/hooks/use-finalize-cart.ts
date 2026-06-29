@@ -1,25 +1,26 @@
-import { useState } from 'react';
+import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { toast } from 'sonner';
 
 import { checkoutService } from '@/lib/services/checkout.services';
 
-export const useFinalizeCart = () => {
-  const [isSubmitting, setIsSubmitting] = useState(false);
+const CART_QUERY_KEY = ['cart'];
 
-  const finalizeCart = async () => {
-    setIsSubmitting(true);
-    try {
-      await checkoutService();
+export const useFinalizeCart = () => {
+  const queryClient = useQueryClient();
+
+  const mutation = useMutation({
+    mutationFn: checkoutService,
+    onSuccess: () => {
       toast.success('Compra finalizada com sucesso!');
-    } catch (_error) {
+      queryClient.invalidateQueries({ queryKey: CART_QUERY_KEY });
+    },
+    onError: () => {
       toast.error('Erro ao finalizar compra. Tente novamente.');
-    } finally {
-      setIsSubmitting(false);
-    }
-  };
+    },
+  });
 
   return {
-    finalizeCart,
-    isSubmitting,
+    finalizeCart: mutation.mutate,
+    isSubmitting: mutation.isPending,
   };
 };
