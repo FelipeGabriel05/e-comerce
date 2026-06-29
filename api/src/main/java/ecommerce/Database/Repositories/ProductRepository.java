@@ -140,6 +140,19 @@ public class ProductRepository {
     return productInput;
   }
 
+  public boolean decreaseProductStock(int productId, int quantity) throws SQLException {
+
+    PreparedStatement ps = con.prepareStatement(ProductQueries.decreaseProductStockQuery);
+
+    ps.setInt(1, quantity);
+    ps.setInt(2, productId);
+    ps.setInt(3, quantity);
+
+    int rowsAffected = ps.executeUpdate();
+
+    return rowsAffected > 0;
+  }
+
   public boolean deleteProduct(int id) throws ProductInUseException, Exception {
 
     String query = ProductQueries.deleteProductQuery;

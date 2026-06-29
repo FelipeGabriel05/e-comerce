@@ -33,6 +33,8 @@ public class AuthenticationRequiredFilter implements Filter {
           new Route("DELETE", "/admin/products/*"),
           new Route("PUT", "/admin/category/*"),
           new Route("PUT", "/admin/products/*"),
+          new Route("POST", "/checkout"),
+          new Route("GET", "/admin/products/*"),
           new Route("POST", "/logout"),
           new Route("GET", "/sales"),
           new Route("GET", "/admin/sales"));
