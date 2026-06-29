@@ -89,12 +89,28 @@ public class SaleRepository {
     }
   }
 
+  public boolean deleteSaleById(int saleId) throws SQLException {
+
+    try (PreparedStatement deleteItemsStmt =
+            con.prepareStatement(SaleQueries.deleteSaleItemsBySaleIdQuery);
+        PreparedStatement deleteSaleStmt = con.prepareStatement(SaleQueries.deleteSaleByIdQuery)) {
+
+      deleteItemsStmt.setInt(1, saleId);
+      deleteItemsStmt.executeUpdate();
+
+      deleteSaleStmt.setInt(1, saleId);
+
+      int rowsAffected = deleteSaleStmt.executeUpdate();
+
+      return rowsAffected > 0;
+    }
+  }
+
   public List<Sale> findSalesByUserId(int userId) {
 
     List<Sale> sales = new ArrayList<>();
 
     try {
-
       PreparedStatement ps = con.prepareStatement(SaleQueries.selectSalesByUserIdQuery);
 
       ps.setInt(1, userId);
@@ -130,7 +146,6 @@ public class SaleRepository {
     List<Sale> sales = new ArrayList<>();
 
     try {
-
       PreparedStatement ps = con.prepareStatement(SaleQueries.selectAllSalesQuery);
 
       ResultSet rs = ps.executeQuery();
@@ -164,7 +179,6 @@ public class SaleRepository {
     List<SaleItem> items = new ArrayList<>();
 
     try {
-
       PreparedStatement ps = con.prepareStatement(SaleQueries.selectSaleItemsBySaleIdQuery);
 
       ps.setInt(1, saleId);
