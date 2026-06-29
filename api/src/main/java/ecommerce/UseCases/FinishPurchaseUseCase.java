@@ -18,7 +18,7 @@ import java.util.List;
 public class FinishPurchaseUseCase {
 
   public void execute(int userId, Cart cart)
-      throws NotFoundException, InternalServerException, ValidationException {
+      throws NotFoundException, InternalServerException, ValidationException, Exception {
 
     Connection con = null;
 

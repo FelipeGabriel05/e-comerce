@@ -11,7 +11,6 @@ public class SaleQueries {
       "INSERT INTO venda_produto "
           + "(venda_id, produto_id, preco, quantidade) "
           + "VALUES (?, ?, ?, ?)";
-      "INSERT INTO venda_produto (venda_id, produto_id, preco, quantidade) VALUES (?, ?, ?, ?)";
 
   public static String selectSalesByUserIdQuery =
       "SELECT id, data_hora, usuario_id FROM venda WHERE usuario_id = ? ORDER BY data_hora DESC";
