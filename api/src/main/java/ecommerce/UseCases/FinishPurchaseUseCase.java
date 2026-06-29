@@ -63,7 +63,7 @@ public class FinishPurchaseUseCase {
     } catch (Exception e) {
 
       rollback(con);
-      throw new InternalServerException("Internal error while finishing purchase");
+      throw e;
 
     } finally {
 
