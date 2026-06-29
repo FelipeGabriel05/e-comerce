@@ -6,9 +6,11 @@ import ecommerce.Database.Entites.Sale.Sale;
 import ecommerce.Database.Entites.User;
 import ecommerce.Http.IO.Responses.JsonResponse;
 import ecommerce.UseCases.CreateSaleUseCase;
+import ecommerce.UseCases.ListCustomerSalesUseCase;
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.util.Base64;
+import java.util.List;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.Cookie;
@@ -52,6 +54,35 @@ public class SaleController extends HttpServlet {
       e.printStackTrace();
       JsonResponse jsonRes =
           new JsonResponse(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, e.getMessage());
+      response.setStatus(jsonRes.getStatus());
+      response.getWriter().write(jsonRes.toJson());
+    }
+  }
+
+  protected void doGet(HttpServletRequest request, HttpServletResponse response)
+      throws ServletException, IOException {
+
+    try {
+      response.setContentType("application/json");
+
+      User user = (User) request.getAttribute("user");
+
+      ListCustomerSalesUseCase useCase = new ListCustomerSalesUseCase();
+
+      List<Sale> sales = useCase.execute(user.getId());
+
+      JsonResponse jsonRes = new JsonResponse(HttpServletResponse.SC_OK, "Sales history", sales);
+
+      response.setStatus(jsonRes.getStatus());
+      response.getWriter().write(jsonRes.toJson());
+
+    } catch (Exception e) {
+
+      e.printStackTrace();
+
+      JsonResponse jsonRes =
+          new JsonResponse(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, "Internal server error");
+
       response.setStatus(jsonRes.getStatus());
       response.getWriter().write(jsonRes.toJson());
     }
