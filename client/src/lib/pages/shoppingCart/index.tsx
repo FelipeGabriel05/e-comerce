@@ -1,5 +1,12 @@
 import { Link as LinkRouter } from '@tanstack/react-router';
-import { ArrowLeft, Minus, Plus, ShoppingCart, Trash2 } from 'lucide-react';
+import {
+  AlertTriangle,
+  ArrowLeft,
+  Minus,
+  Plus,
+  ShoppingCart,
+  Trash2,
+} from 'lucide-react';
 import { useState } from 'react';
 
 import { Button } from '@/components/ui/button';
@@ -183,8 +190,9 @@ const CarrinhoPage = () => {
             <ShoppingCart className="w-5 h-5" />
             {isSubmitting ? 'Finalizando...' : 'Finalizar Compra'}
           </Button>
-          <P className="mt-2 text-center text-sm text-white/60">
-            ⚠ Requer sessão de usuário ativa (cliente logado)
+          <P className="mt-2 flex items-center justify-center gap-1 text-center text-sm text-white/60">
+            <AlertTriangle className="w-4 h-4" />
+            Requer sessão de usuário ativa (cliente logado)
           </P>
         </div>
       </div>
