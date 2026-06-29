@@ -23,7 +23,7 @@ public class FinishPurchaseUseCase {
     Connection con = null;
 
     try {
-      con = DBConnection.getConnection();
+      con = DBConnection.getNewConnection();
       con.setAutoCommit(false);
 
       ProductRepository productRepository = new ProductRepository(con);
@@ -67,7 +67,7 @@ public class FinishPurchaseUseCase {
 
     } finally {
 
-      enableAutoCommit(con);
+      DBConnection.closeConnection(con);
     }
   }
 
@@ -127,16 +127,6 @@ public class FinishPurchaseUseCase {
     try {
       if (con != null) {
         con.rollback();
-      }
-    } catch (Exception e) {
-      e.printStackTrace();
-    }
-  }
-
-  private void enableAutoCommit(Connection con) {
-    try {
-      if (con != null) {
-        con.setAutoCommit(true);
       }
     } catch (Exception e) {
       e.printStackTrace();

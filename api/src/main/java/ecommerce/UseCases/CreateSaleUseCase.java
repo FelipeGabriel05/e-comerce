@@ -7,6 +7,7 @@ import ecommerce.Database.Entites.Sale.Sale;
 import ecommerce.Database.Entites.Sale.SaleItem;
 import ecommerce.Database.Repositories.SaleRepository;
 import java.sql.Connection;
+import java.sql.SQLException;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
@@ -15,7 +16,7 @@ public class CreateSaleUseCase {
 
   public CreateSaleUseCase() {}
 
-  public Sale execute(int userId, Cart cart) {
+  public Sale execute(int userId, Cart cart) throws SQLException {
     Connection dbConnection = DBConnection.getConnection();
     SaleRepository saleRepository = new SaleRepository(dbConnection);
 
