@@ -1,6 +1,7 @@
 package ecommerce.Http.Controller;
 
 import ecommerce.Exceptions.NotFoundException;
+import ecommerce.Exceptions.ValidationException;
 import ecommerce.Http.IO.PathVariableExtractor;
 import ecommerce.Http.IO.Responses.JsonResponse;
 import ecommerce.UseCases.DeleteSaleUseCase;
@@ -32,6 +33,13 @@ public class AdminSaleController extends HttpServlet {
       response.setStatus(jsonRes.getStatus());
       response.getWriter().write(jsonRes.toJson());
 
+    } catch (ValidationException e) {
+
+      JsonResponse jsonRes = new JsonResponse(HttpServletResponse.SC_BAD_REQUEST, e.getMessage());
+
+      response.setStatus(jsonRes.getStatus());
+      response.getWriter().write(jsonRes.toJson());
+
     } catch (NotFoundException e) {
 
       JsonResponse jsonRes = new JsonResponse(HttpServletResponse.SC_NOT_FOUND, e.getMessage());
@@ -50,4 +58,4 @@ public class AdminSaleController extends HttpServlet {
       response.getWriter().write(jsonRes.toJson());
     }
   }
-}
+} 
