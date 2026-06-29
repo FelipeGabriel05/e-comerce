@@ -58,4 +58,4 @@ public class AdminSaleController extends HttpServlet {
       response.getWriter().write(jsonRes.toJson());
     }
   }
-} 
+}
