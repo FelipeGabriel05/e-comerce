@@ -11,7 +11,7 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-@WebServlet("admin/reports/sales-by-customer")
+@WebServlet("/admin/reports/sales-by-customer")
 public class AdminCustomerReportController extends HttpServlet {
 
   @Override
