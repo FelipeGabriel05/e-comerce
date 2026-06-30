@@ -6,9 +6,7 @@ import ecommerce.Http.IO.converter.DataArrayConverter;
 import ecommerce.UseCases.GetSalesByCustomerReportUseCase;
 import java.io.IOException;
 import java.time.LocalDate;
-import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeParseException;
-import java.time.format.ResolverStyle;
 import java.util.List;
 import javax.servlet.ServletException;
 import javax.servlet.ServletOutputStream;
@@ -20,26 +18,11 @@ import javax.servlet.http.HttpServletResponse;
 @WebServlet("/admin/reports/sales-by-customer/export")
 public class AdminCustomerReportExportController extends HttpServlet {
 
-  private static final DateTimeFormatter DATE_FORMATTER =
-      DateTimeFormatter.ofPattern("uuuu-MM-dd").withResolverStyle(ResolverStyle.STRICT);
-
-  private static final List<String> ALLOWED_FORMATS = List.of("pdf", "csv", "html");
-
   @Override
   protected void doGet(HttpServletRequest request, HttpServletResponse response)
       throws ServletException, IOException {
 
-    String startDate = request.getParameter("startDate");
-    String endDate = request.getParameter("endDate");
     String format = request.getParameter("format");
-
-    if (startDate == null || endDate == null || startDate.isEmpty() || endDate.isEmpty()) {
-      sendJsonError(
-          response,
-          HttpServletResponse.SC_BAD_REQUEST,
-          "Missing required parameters: startDate and endDate");
-      return;
-    }
 
     if (!isValidDate(startDate) || !isValidDate(endDate)) {
       sendJsonError(
