@@ -5,6 +5,10 @@ import ecommerce.Http.IO.Responses.JsonResponse;
 import ecommerce.Http.IO.converter.DataArrayConverter;
 import ecommerce.UseCases.GetSalesByCustomerReportUseCase;
 import java.io.IOException;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
+import java.time.format.DateTimeParseException;
+import java.time.format.ResolverStyle;
 import java.util.List;
 import javax.servlet.ServletException;
 import javax.servlet.ServletOutputStream;
@@ -15,6 +19,11 @@ import javax.servlet.http.HttpServletResponse;
 
 @WebServlet("/admin/reports/sales-by-customer/export")
 public class AdminCustomerReportExportController extends HttpServlet {
+
+  private static final DateTimeFormatter DATE_FORMATTER =
+      DateTimeFormatter.ofPattern("uuuu-MM-dd").withResolverStyle(ResolverStyle.STRICT);
+
+  private static final List<String> ALLOWED_FORMATS = List.of("pdf", "csv", "html");
 
   @Override
   protected void doGet(HttpServletRequest request, HttpServletResponse response)
@@ -29,6 +38,22 @@ public class AdminCustomerReportExportController extends HttpServlet {
           response,
           HttpServletResponse.SC_BAD_REQUEST,
           "Missing required parameters: startDate and endDate");
+      return;
+    }
+
+    if (!isValidDate(startDate) || !isValidDate(endDate)) {
+      sendJsonError(
+          response,
+          HttpServletResponse.SC_BAD_REQUEST,
+          "Parameters startDate and endDate must be in the format yyyy-MM-dd and be valid calendar dates.");
+      return;
+    }
+
+    if (format != null && !ALLOWED_FORMATS.contains(format.toLowerCase())) {
+      sendJsonError(
+          response,
+          HttpServletResponse.SC_BAD_REQUEST,
+          "Invalid format. Allowed values are: " + ALLOWED_FORMATS);
       return;
     }
 
@@ -72,6 +97,15 @@ public class AdminCustomerReportExportController extends HttpServlet {
     } catch (Exception e) {
       e.printStackTrace();
       sendJsonError(response, HttpServletResponse.SC_INTERNAL_SERVER_ERROR, e.getMessage());
+    }
+  }
+
+  private boolean isValidDate(String dateStr) {
+    try {
+      LocalDate.parse(dateStr, DATE_FORMATTER);
+      return true;
+    } catch (DateTimeParseException e) {
+      return false;
     }
   }
 
