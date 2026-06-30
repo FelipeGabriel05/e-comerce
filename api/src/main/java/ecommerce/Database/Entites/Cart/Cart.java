@@ -6,6 +6,8 @@ import java.util.Iterator;
 import java.util.List;
 
 public class Cart {
+  private static final int FREE_PRODUCT_MAX_QUANTITY = 1;
+
   private List<CartItem> items = new ArrayList<>();
   private double total = 0.0;
 
@@ -14,15 +16,21 @@ public class Cart {
   public void addItem(Product product, int quantity) {
     if (quantity <= 0) return;
 
+    boolean free = isFree(product);
+
     for (CartItem item : items) {
       if (item.getProduct().getId() == product.getId()) {
-        item.increaseQuantity(quantity);
+        if (free) {
+          item.setQuantity(FREE_PRODUCT_MAX_QUANTITY);
+        } else {
+          item.increaseQuantity(quantity);
+        }
         recalculateTotal();
         return;
       }
     }
 
-    items.add(new CartItem(product, quantity));
+    items.add(new CartItem(product, free ? FREE_PRODUCT_MAX_QUANTITY : quantity));
     recalculateTotal();
   }
 
@@ -30,6 +38,10 @@ public class Cart {
     if (quantity <= 0) {
       removeItem(product.getId());
       return;
+    }
+
+    if (isFree(product)) {
+      quantity = FREE_PRODUCT_MAX_QUANTITY;
     }
 
     for (CartItem item : items) {
@@ -73,5 +85,9 @@ public class Cart {
 
   public double getTotal() {
     return total;
+  }
+
+  private boolean isFree(Product product) {
+    return product.getPreco() <= 0;
   }
 }
