@@ -20,43 +20,10 @@ public class SaleRepository {
     this.con = dbConnection;
   }
 
-  public Sale createSale(Sale sale) {
-    RuntimeException failure = null;
-
-    try {
-      con.setAutoCommit(false);
-      insertSale(sale);
-      insertSaleItems(sale);
-      con.commit();
-      return sale;
-    } catch (RuntimeException e) {
-      failure = e;
-      try {
-        con.rollback();
-      } catch (SQLException rollbackEx) {
-        failure.addSuppressed(rollbackEx);
-      }
-      throw failure;
-    } catch (SQLException e) {
-      failure = new RuntimeException("Failed to create sale", e);
-      try {
-        con.rollback();
-      } catch (SQLException rollbackEx) {
-        failure.addSuppressed(rollbackEx);
-      }
-      throw failure;
-    } finally {
-      try {
-        con.setAutoCommit(true);
-      } catch (SQLException e) {
-        if (failure != null) {
-          failure.addSuppressed(e);
-          throw failure;
-        } else {
-          throw new RuntimeException("Failed to restore autoCommit", e);
-        }
-      }
-    }
+  public Sale createSale(Sale sale) throws SQLException {
+    insertSale(sale);
+    insertSaleItems(sale);
+    return sale;
   }
 
   private void insertSale(Sale saleInput) {
