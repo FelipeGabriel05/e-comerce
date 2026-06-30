@@ -16,7 +16,7 @@ public class HttpReportValidators {
 
   private static final List<String> ALLOWED_FORMATS = List.of("pdf", "csv", "html");
 
-  private void validateReportParams(HttpServletRequest request) throws ValidationException {
+  public void validateReportParams(HttpServletRequest request) throws ValidationException {
 
     List<String> errors = new ArrayList<>();
 
@@ -45,13 +45,13 @@ public class HttpReportValidators {
     }
   }
 
-  private void validateReportExportParams(HttpServletRequest request) throws ValidationException {
+  public void validateReportExportParams(HttpServletRequest request) throws ValidationException {
 
     validateReportParams(request);
 
     String format = request.getParameter("format");
 
-    if (format != null && format.isBlank()) {
+    if (format != null && !format.isBlank()) {
       if (!ALLOWED_FORMATS.contains(format.toLowerCase())) {
         throw new ValidationException("Invalid format. Allowed values are: " + ALLOWED_FORMATS);
       }
