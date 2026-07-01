@@ -3,6 +3,7 @@ package ecommerce.Http.Controller;
 import ecommerce.Database.Entites.Sale.OutOfStockProductReportDTO;
 import ecommerce.Exceptions.ValidationException;
 import ecommerce.Http.IO.Responses.JsonResponse;
+import ecommerce.Http.Validators.HttpReportValidators;
 import ecommerce.UseCases.ListOutOfStockProductsUseCase;
 import java.io.IOException;
 import java.util.List;
@@ -19,7 +20,11 @@ public class AdminOutOfStockProductsReportController extends HttpServlet {
       throws ServletException, IOException {
     response.setContentType("application/json");
 
+    HttpReportValidators validators = new HttpReportValidators();
+
     try {
+
+      validators.validateReportParams(request);
 
       ListOutOfStockProductsUseCase useCase = new ListOutOfStockProductsUseCase();
       List<OutOfStockProductReportDTO> report = useCase.execute();

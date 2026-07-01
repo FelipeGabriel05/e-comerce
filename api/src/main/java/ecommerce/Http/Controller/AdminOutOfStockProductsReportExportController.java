@@ -4,6 +4,7 @@ import ecommerce.Database.Entites.Sale.OutOfStockProductReportDTO;
 import ecommerce.Exceptions.ValidationException;
 import ecommerce.Http.IO.Responses.JsonResponse;
 import ecommerce.Http.IO.converter.DataArrayConverter;
+import ecommerce.Http.Validators.HttpReportValidators;
 import ecommerce.UseCases.ListOutOfStockProductsUseCase;
 import java.io.IOException;
 import java.util.List;
@@ -20,7 +21,11 @@ public class AdminOutOfStockProductsReportExportController extends HttpServlet {
   protected void doGet(HttpServletRequest request, HttpServletResponse response)
       throws ServletException, IOException {
 
+    HttpReportValidators validators = new HttpReportValidators();
+
     try {
+      validators.validateReportExportParams(request);
+
       String format = request.getParameter("format");
 
       String mimetype = "application/pdf";
