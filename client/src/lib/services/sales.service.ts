@@ -34,3 +34,13 @@ export async function fetchSalesService(): Promise<Array<Sale>> {
   const response = await api.get<SalesResponse>('/sales');
   return response.data.data;
 }
+
+export const fetchSale = async (): Promise<Array<Sale>> => {
+  const response = await api.get<SalesResponse>('/admin/sales');
+  return response.data.data;
+};
+
+export async function deleteSaleService(id: number) {
+  const response = await api.delete(`/admin/sales/${id}`);
+  return response.data;
+}

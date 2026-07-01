@@ -1,0 +1,38 @@
+import { TableCell, TableRow } from '@/components/ui/table';
+import { useShopping } from '@/lib/hooks/use-report-shopping-client';
+import type { Compras } from '@/lib/services/report-shopping.services';
+
+import { AdminCrudPage } from '../../components/admin-crud-page';
+import { ExportReportForm } from '../forms/export-report-form';
+
+const COLUMNS = [
+  { label: 'ID' },
+  { label: 'Nome do cliente' },
+  { label: 'Quantidade de compras' },
+];
+
+const ComprasCLiente = () => {
+  const { shopping, isLoading } = useShopping();
+
+  return (
+    <AdminCrudPage<Compras>
+      title="Total compras por cliente"
+      items={shopping}
+      isLoading={isLoading}
+      columns={COLUMNS}
+      renderRow={renderRow}
+      renderForm={(_, onClose) => <ExportReportForm onClose={onClose} />}
+      getFormTitle={() => 'Exportar relatório'}
+    />
+  );
+};
+
+const renderRow = (Compras: Compras) => (
+  <TableRow key={Compras.id}>
+    <TableCell className="font-medium">{Compras.id}</TableCell>
+    <TableCell>{Compras.nomeCliente}</TableCell>
+    <TableCell>{Compras.qtdCompras}</TableCell>
+  </TableRow>
+);
+
+export default ComprasCLiente;
