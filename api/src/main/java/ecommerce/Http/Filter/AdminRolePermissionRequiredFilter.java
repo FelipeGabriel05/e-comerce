@@ -28,7 +28,9 @@ public class AdminRolePermissionRequiredFilter implements Filter {
           new Route("PUT", "/admin/category/*"),
           new Route("PUT", "/admin/products/*"),
           new Route("DELETE", "/admin/sales/*"),
-          new Route("GET", "/admin/sales"));
+          new Route("GET", "/admin/sales"),
+          new Route("GET", "/admin/reports/sale-by-customer"),
+          new Route("GET", "/admin/reports/sale-by-customer/export"));
 
   @Override
   public void init(FilterConfig filterConfig) throws ServletException {}
