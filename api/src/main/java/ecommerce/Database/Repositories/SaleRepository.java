@@ -2,6 +2,7 @@ package ecommerce.Database.Repositories;
 
 import ecommerce.Database.Entites.Product;
 import ecommerce.Database.Entites.Sale.CustomerReportDTO;
+import ecommerce.Database.Entites.Sale.DailySalesReportDTO;
 import ecommerce.Database.Entites.Sale.Sale;
 import ecommerce.Database.Entites.Sale.SaleItem;
 import ecommerce.Database.Queries.SaleQueries;
@@ -205,4 +206,35 @@ public class SaleRepository {
       throw e;
     }
   }
+
+  public List<DailySalesReportDTO> getDailySalesReport(String startDate, String endDate)
+      throws SQLException {
+
+    List<DailySalesReportDTO> report = new ArrayList<>();
+
+    try (PreparedStatement ps =
+        con.prepareStatement(SaleQueries.selectDailySalesReportQuery)) {
+      ps.setString(1, startDate);
+      ps.setString(2, endDate);
+
+      try (ResultSet rs = ps.executeQuery()) {
+        while (rs.next()) {
+
+          String date = rs.getDate("venda_data").toString();
+          int totalOrders = rs.getInt("qtd_pedidos");
+          double totalRevenue = rs.getDouble("faturamento_diario");
+
+          DailySalesReportDTO itemReport =
+              new DailySalesReportDTO(date, totalOrders, totalRevenue);
+          report.add(itemReport);
+        }
+      }
+
+      return report;
+
+    } catch (SQLException e) {
+      throw e;
+    }
+  }
+
 }
