@@ -1,7 +1,7 @@
 import { useQuery } from '@tanstack/react-query';
 
-import type { Valor } from '../services/valor-dia.services';
-import { fetchDaily } from '../services/valor-dia.services';
+import type { Valor } from '../services/report-daily.services';
+import { fetchDaily } from '../services/report-daily.services';
 
 const DAILY_QUERY_KEY = ['stock'];
 

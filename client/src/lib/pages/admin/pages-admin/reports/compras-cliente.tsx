@@ -1,8 +1,8 @@
 import { TableCell, TableRow } from '@/components/ui/table';
-import { useShopping } from '@/lib/hooks/use-shopping-client';
-import type { Compras } from '@/lib/services/compras.services';
+import { useShopping } from '@/lib/hooks/use-report-shopping-client';
+import type { Compras } from '@/lib/services/report-shopping.services';
 
-import { AdminCrudPage } from '../components/admin-crud-page';
+import { AdminCrudPage } from '../../components/admin-crud-page';
 
 const COLUMNS = [
   { label: 'ID' },

@@ -1,7 +1,7 @@
 import { useQuery } from '@tanstack/react-query';
 
-import type { Compras } from '../services/compras.services';
-import { fetchCompras } from '../services/compras.services';
+import type { Compras } from '../services/report-shopping.services';
+import { fetchCompras } from '../services/report-shopping.services';
 
 const SHOPPING_QUERY_KEY = ['shopping'];
 

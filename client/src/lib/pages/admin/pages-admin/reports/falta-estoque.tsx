@@ -1,8 +1,8 @@
 import { TableCell, TableRow } from '@/components/ui/table';
-import { useStock } from '@/lib/hooks/use-stock';
-import type { faltaEstoque } from '@/lib/services/falta-estoque.service';
+import { useStock } from '@/lib/hooks/use-report-stock';
+import type { faltaEstoque } from '@/lib/services/report-stock.service';
 
-import { AdminCrudPage } from '../components/admin-crud-page';
+import { AdminCrudPage } from '../../components/admin-crud-page';
 
 const COLUMNS = [{ label: 'ID' }, { label: 'Descrição' }, { label: 'Preço' }];
 

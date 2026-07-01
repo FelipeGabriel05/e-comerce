@@ -1,8 +1,8 @@
 import { TableCell, TableRow } from '@/components/ui/table';
-import { useDaily } from '@/lib/hooks/use-daily-rate';
-import type { Valor } from '@/lib/services/valor-dia.services';
+import { useDaily } from '@/lib/hooks/use-report-daily-rate';
+import type { Valor } from '@/lib/services/report-daily.services';
 
-import { AdminCrudPage } from '../components/admin-crud-page';
+import { AdminCrudPage } from '../../components/admin-crud-page';
 
 const COLUMNS = [
   { label: 'ID' },
