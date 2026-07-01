@@ -1,6 +1,7 @@
 package ecommerce.Database.Repositories;
 
 import ecommerce.Database.Entites.Product;
+import ecommerce.Database.Entites.Sale.OutOfStockProductReportDTO;
 import ecommerce.Database.Queries.ProductQueries;
 import ecommerce.Exceptions.ProductInUseException;
 import java.sql.Connection;
@@ -175,5 +176,27 @@ public class ProductRepository {
       e.printStackTrace();
       throw e;
     }
+  }
+
+  public List<OutOfStockProductReportDTO> listOutOfStockProducts() throws SQLException {
+
+    List<OutOfStockProductReportDTO> products = new ArrayList<>();
+
+    PreparedStatement ps = con.prepareStatement(ProductQueries.selectOutOfStockProductsQuery);
+
+    ResultSet rs = ps.executeQuery();
+
+    while (rs.next()) {
+      products.add(
+          new OutOfStockProductReportDTO(
+              rs.getInt("id"),
+              rs.getString("descricao"),
+              rs.getDouble("preco"),
+              rs.getString("foto"),
+              rs.getInt("quantidade"),
+              rs.getInt("categoria_id")));
+    }
+
+    return products;
   }
 }
