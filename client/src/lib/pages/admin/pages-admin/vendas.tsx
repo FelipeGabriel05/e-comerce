@@ -10,6 +10,7 @@ import { AdminCrudPage } from '../components/admin-crud-page';
 const COLUMNS = [
   { label: 'ID' },
   { label: 'Data e hora' },
+  { label: 'ID de usuário' },
   { label: 'Total' },
   { label: 'Ações', className: 'text-right' },
 ];
@@ -44,6 +45,7 @@ const renderRow = (
   <TableRow key={venda.id}>
     <TableCell className="font-medium">{venda.id}</TableCell>
     <TableCell>{venda.dataHora}</TableCell>
+    <TableCell>{venda.userId}</TableCell>
     <TableCell>{venda.total}</TableCell>
     <TableCell>
       <div className="flex justify-end gap-2">
