@@ -27,16 +27,23 @@ public class HttpReportValidators {
       throw new ValidationException("Missing required parameters: startDate and endDate");
     }
 
+    LocalDate parsedStartDate = null;
+    LocalDate parsedEndDate = null;
+
     try {
-      LocalDate.parse(startDate, DATE_FORMATTER);
+      parsedStartDate = LocalDate.parse(startDate, DATE_FORMATTER);
     } catch (DateTimeParseException e) {
       errors.add("Parameter 'startDate' must be a valid calendar date in yyyy-MM-dd format");
     }
 
     try {
-      LocalDate.parse(endDate, DATE_FORMATTER);
+      parsedEndDate = LocalDate.parse(endDate, DATE_FORMATTER);
     } catch (DateTimeParseException e) {
       errors.add("Parameter 'endDate' must be a valid calendar date in yyyy-MM-dd format");
+    }
+
+    if (parsedStartDate != null && parsedEndDate != null && parsedStartDate.isAfter(parsedEndDate)) {
+      errors.add("Parameter 'startDate' must not be after 'endDate'");
     }
 
     String errorMessage = String.join(", ", errors);
