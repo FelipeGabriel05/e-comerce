@@ -20,4 +20,9 @@ public class ProductQueries {
   public static String decreaseProductStockQuery =
       "UPDATE produto SET quantidade = quantidade - ? WHERE id = ? AND quantidade >= ?";
   public static String deleteProductQuery = "DELETE FROM produto WHERE id = ?";
+
+  public static String selectOutOfStockProductsQuery =
+      "SELECT id, descricao, preco, foto, quantidade, categoria_id "
+          + "FROM produto "
+          + "WHERE quantidade = 0";
 }
