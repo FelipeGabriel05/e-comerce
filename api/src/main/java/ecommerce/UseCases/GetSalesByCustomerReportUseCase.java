@@ -17,7 +17,7 @@ public class GetSalesByCustomerReportUseCase {
     SaleRepository saleRepository = new SaleRepository(dbConnection);
 
     if (startDate.length() == 10) startDate += " 00:00:00";
-    if (endDate.length() == 10) endDate += " 23:59:59";
+    if (endDate.length() == 10) endDate += " 23:59:59.999999";
 
     return saleRepository.getSalesByCustomerReport(startDate, endDate);
   }
