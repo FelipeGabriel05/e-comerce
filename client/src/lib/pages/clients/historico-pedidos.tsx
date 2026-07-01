@@ -1,6 +1,13 @@
 import { Link as LinkRouter } from '@tanstack/react-router';
 import { ArrowLeft } from 'lucide-react';
+import { useState } from 'react';
 
+import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+} from '@/components/ui/dialog';
 import {
   Table,
   TableBody,
@@ -11,6 +18,8 @@ import {
 } from '@/components/ui/table';
 import { H1, P } from '@/components/ui/typography';
 import { useSales } from '@/lib/hooks/use-sales';
+import type { Sale } from '@/lib/services/sales.service';
+import { linkify } from '@/lib/utils/linkify';
 
 const currencyFormatter = new Intl.NumberFormat('pt-BR', {
   style: 'currency',
@@ -24,6 +33,7 @@ const formatDate = (dateStr: string) =>
 
 const HistoricoPedidosPage = () => {
   const { sales, isLoading } = useSales();
+  const [selectedSale, setSelectedSale] = useState<Sale | null>(null);
 
   return (
     <div className="flex justify-center py-10">
@@ -57,23 +67,31 @@ const HistoricoPedidosPage = () => {
             <Table>
               <TableHeader>
                 <TableRow>
-                  <TableHead>Data</TableHead>
-                  <TableHead>Nº do Pedido</TableHead>
-                  <TableHead>Status</TableHead>
-                  <TableHead className="text-right">Total Geral</TableHead>
+                  <TableHead className="px-6 py-4">Data</TableHead>
+                  <TableHead className="px-6 py-4">Nº do Pedido</TableHead>
+                  <TableHead className="px-6 py-4">Status</TableHead>
+                  <TableHead className="px-6 py-4 text-right">
+                    Total Geral
+                  </TableHead>
                 </TableRow>
               </TableHeader>
               <TableBody>
                 {sales.map((sale) => (
-                  <TableRow key={sale.id}>
-                    <TableCell>{formatDate(sale.dataHora)}</TableCell>
-                    <TableCell>{sale.id}</TableCell>
-                    <TableCell>
+                  <TableRow
+                    key={sale.id}
+                    className="cursor-pointer hover:bg-white/5"
+                    onClick={() => setSelectedSale(sale)}
+                  >
+                    <TableCell className="px-6 py-4">
+                      {formatDate(sale.dataHora)}
+                    </TableCell>
+                    <TableCell className="px-6 py-4">{sale.id}</TableCell>
+                    <TableCell className="px-6 py-4">
                       <span className="rounded-full bg-emerald-600/20 px-2 py-1 text-xs font-medium text-emerald-400">
                         Entregue
                       </span>
                     </TableCell>
-                    <TableCell className="text-right">
+                    <TableCell className="px-6 py-4 text-right">
                       {formatCurrency(sale.total)}
                     </TableCell>
                   </TableRow>
@@ -83,6 +101,49 @@ const HistoricoPedidosPage = () => {
           )}
         </div>
       </div>
+
+      {selectedSale && (
+        <Dialog open onOpenChange={(open) => !open && setSelectedSale(null)}>
+          <DialogContent className="sm:max-w-lg">
+            <DialogHeader>
+              <DialogTitle>Pedido #{selectedSale.id}</DialogTitle>
+            </DialogHeader>
+            <Table>
+              <TableHeader>
+                <TableRow>
+                  <TableHead>Produto</TableHead>
+                  <TableHead>Qtd</TableHead>
+                  <TableHead className="text-right">Preço</TableHead>
+                </TableRow>
+              </TableHeader>
+              <TableBody>
+                {selectedSale.items.map((item) => (
+                  <TableRow key={item.productId}>
+                    <TableCell className="flex items-center gap-3">
+                      {item.product?.foto ? (
+                        <img
+                          src={linkify(item.product.foto)}
+                          alt={item.product.descricao}
+                          className="h-10 w-10 rounded-md object-cover"
+                        />
+                      ) : (
+                        <div className="flex h-10 w-10 items-center justify-center rounded-md bg-white/10 text-white/30 text-xs">
+                          Sem foto
+                        </div>
+                      )}
+                      {item.product?.descricao ?? `Produto #${item.productId}`}
+                    </TableCell>
+                    <TableCell>{item.quantity}</TableCell>
+                    <TableCell className="text-right">
+                      {formatCurrency(item.price)}
+                    </TableCell>
+                  </TableRow>
+                ))}
+              </TableBody>
+            </Table>
+          </DialogContent>
+        </Dialog>
+      )}
     </div>
   );
 };

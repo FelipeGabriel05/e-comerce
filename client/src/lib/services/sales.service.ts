@@ -1,9 +1,19 @@
 import { api } from './constants';
 
+interface SaleProduct {
+  id: number;
+  descricao: string;
+  preco: number;
+  foto: string;
+  quantidade: number;
+  categoriaId: number;
+}
+
 interface SaleItem {
   productId: number;
   price: number;
   quantity: number;
+  product: SaleProduct;
 }
 
 export interface Sale {
