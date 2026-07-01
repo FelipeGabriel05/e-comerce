@@ -38,8 +38,8 @@ public class AuthenticationRequiredFilter implements Filter {
           new Route("GET", "/admin/products/*"),
           new Route("GET", "/sales"),
           new Route("GET", "/admin/sales"),
-          new Route("GET", "/admin/reports/sale-by-customer"),
-          new Route("GET", "/admin/reports/sale-by-customer/export"),
+          new Route("GET", "/admin/reports/sales-by-customer"),
+          new Route("GET", "/admin/reports/sales-by-customer/export"),
           new Route("GET", "/admin/reports/daily-sales"),
           new Route("GET", "/admin/reports/daily-sales/export"));
 
