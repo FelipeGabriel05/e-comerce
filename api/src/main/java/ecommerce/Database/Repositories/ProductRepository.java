@@ -182,19 +182,21 @@ public class ProductRepository {
 
     List<OutOfStockProductReportDTO> products = new ArrayList<>();
 
-    PreparedStatement ps = con.prepareStatement(ProductQueries.selectOutOfStockProductsQuery);
+    try (PreparedStatement ps =
+        con.prepareStatement(ProductQueries.selectOutOfStockProductsQuery)) {
 
-    ResultSet rs = ps.executeQuery();
-
-    while (rs.next()) {
-      products.add(
-          new OutOfStockProductReportDTO(
-              rs.getInt("id"),
-              rs.getString("descricao"),
-              rs.getDouble("preco"),
-              rs.getString("foto"),
-              rs.getInt("quantidade"),
-              rs.getInt("categoria_id")));
+      try (ResultSet rs = ps.executeQuery()) {
+        while (rs.next()) {
+          products.add(
+              new OutOfStockProductReportDTO(
+                  rs.getInt("id"),
+                  rs.getString("descricao"),
+                  rs.getDouble("preco"),
+                  rs.getString("foto"),
+                  rs.getInt("quantidade"),
+                  rs.getInt("categoria_id")));
+        }
+      }
     }
 
     return products;

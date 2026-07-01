@@ -20,12 +20,7 @@ public class AdminOutOfStockProductsReportExportController extends HttpServlet {
   protected void doGet(HttpServletRequest request, HttpServletResponse response)
       throws ServletException, IOException {
 
-    HttpReportValidators validators = new HttpReportValidators();
     try {
-      validators.validateReportExportParams(request);
-
-      String startDate = request.getParameter("startDate");
-      String endDate = request.getParameter("endDate");
       String format = request.getParameter("format");
 
       String mimetype = "application/pdf";
@@ -50,8 +45,7 @@ public class AdminOutOfStockProductsReportExportController extends HttpServlet {
       }
 
       ListOutOfStockProductsUseCase useCase = new ListOutOfStockProductsUseCase();
-
-      List<OutOfStockProductReportDTO> reportData = useCase.execute(startDate, endDate);
+      List<OutOfStockProductReportDTO> reportData = useCase.execute();
 
       byte[] bytes =
           DataArrayConverter.convert(reportData, OutOfStockProductReportDTO.class, mimetype);
@@ -67,21 +61,19 @@ public class AdminOutOfStockProductsReportExportController extends HttpServlet {
       }
 
     } catch (ValidationException e) {
-      response.setContentType("application/json");
-      response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
-      response
-          .getWriter()
-          .write(new JsonResponse(HttpServletResponse.SC_BAD_REQUEST, e.getMessage()).toJson());
+      sendJsonError(response, HttpServletResponse.SC_BAD_REQUEST, e.getMessage());
 
     } catch (Exception e) {
       e.printStackTrace();
-      response.setContentType("application/json");
-      response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
-      response
-          .getWriter()
-          .write(
-              new JsonResponse(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, e.getMessage())
-                  .toJson());
+      sendJsonError(response, HttpServletResponse.SC_INTERNAL_SERVER_ERROR, e.getMessage());
     }
+  }
+
+  private void sendJsonError(HttpServletResponse response, int status, String message)
+      throws IOException {
+    response.setContentType("application/json");
+    JsonResponse jsonRes = new JsonResponse(status, message);
+    response.setStatus(jsonRes.getStatus());
+    response.getWriter().write(jsonRes.toJson());
   }
 }

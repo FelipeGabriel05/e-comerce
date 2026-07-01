@@ -17,18 +17,12 @@ public class AdminOutOfStockProductsReportController extends HttpServlet {
 
   protected void doGet(HttpServletRequest request, HttpServletResponse response)
       throws ServletException, IOException {
-
     response.setContentType("application/json");
-    HttpReportValidators validators = new HttpReportValidators();
+
     try {
 
-      validators.validateReportParams(request);
-
-      String startDate = request.getParameter("startDate");
-      String endDate = request.getParameter("endDate");
-
       ListOutOfStockProductsUseCase useCase = new ListOutOfStockProductsUseCase();
-      List<OutOfStockProductReportDTO> report = useCase.execute(startDate, endDate);
+      List<OutOfStockProductReportDTO> report = useCase.execute();
 
       JsonResponse jsonRes =
           new JsonResponse(HttpServletResponse.SC_OK, "Report generated successfully", report);
@@ -37,20 +31,19 @@ public class AdminOutOfStockProductsReportController extends HttpServlet {
       response.getWriter().write(jsonRes.toJson());
 
     } catch (ValidationException e) {
-      e.printStackTrace();
-      response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
-      response
-          .getWriter()
-          .write(new JsonResponse(HttpServletResponse.SC_BAD_REQUEST, e.getMessage()).toJson());
+      sendJsonError(response, HttpServletResponse.SC_BAD_REQUEST, e.getMessage());
 
     } catch (Exception e) {
       e.printStackTrace();
-      response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
-      response
-          .getWriter()
-          .write(
-              new JsonResponse(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, e.getMessage())
-                  .toJson());
+      sendJsonError(response, HttpServletResponse.SC_INTERNAL_SERVER_ERROR, e.getMessage());
     }
+  }
+
+  private void sendJsonError(HttpServletResponse response, int status, String message)
+      throws IOException {
+    response.setContentType("application/json");
+    JsonResponse jsonRes = new JsonResponse(status, message);
+    response.setStatus(jsonRes.getStatus());
+    response.getWriter().write(jsonRes.toJson());
   }
 }

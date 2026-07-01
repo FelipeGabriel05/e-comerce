@@ -5,6 +5,7 @@ import ecommerce.Database.Entites.Sale.OutOfStockProductReportDTO;
 import ecommerce.Database.Repositories.ProductRepository;
 import ecommerce.Exceptions.InternalServerException;
 import java.sql.Connection;
+import java.sql.SQLException;
 import java.util.List;
 
 public class ListOutOfStockProductsUseCase {
@@ -18,8 +19,8 @@ public class ListOutOfStockProductsUseCase {
 
       return repository.listOutOfStockProducts();
 
-    } catch (Exception e) {
-      throw e;
+    } catch (SQLException e) {
+      throw new InternalServerException(e.getMessage());
     }
   }
 }
