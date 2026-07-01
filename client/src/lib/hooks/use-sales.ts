@@ -4,16 +4,17 @@ import { toast } from 'sonner';
 import type { Sale } from '../services/sales.service';
 import {
   deleteSaleService,
+  fetchSale,
   fetchSalesService,
 } from '../services/sales.service';
 
 const SALES_QUERY_KEY = ['sales'];
 
-export const useSales = () => {
+export const useSalesAdm = () => {
   const queryClient = useQueryClient();
   const { data, isLoading } = useQuery<Array<Sale>>({
     queryKey: SALES_QUERY_KEY,
-    queryFn: fetchSalesService,
+    queryFn: fetchSale,
   });
 
   const deleteMutation = useMutation({
@@ -30,5 +31,17 @@ export const useSales = () => {
     isLoading,
     deleteSale: deleteMutation.mutate,
     isPending: deleteMutation.isPending,
+  };
+};
+
+export const useSales = () => {
+  const { data: sales, isLoading } = useQuery<Array<Sale>>({
+    queryKey: SALES_QUERY_KEY,
+    queryFn: async () => fetchSalesService(),
+  });
+
+  return {
+    sales: sales ?? [],
+    isLoading,
   };
 };

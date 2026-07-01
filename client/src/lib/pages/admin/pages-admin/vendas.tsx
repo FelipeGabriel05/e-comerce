@@ -2,7 +2,7 @@ import { Trash2 } from 'lucide-react';
 
 import { Button } from '@/components/ui/button';
 import { TableCell, TableRow } from '@/components/ui/table';
-import { useSales } from '@/lib/hooks/use-sales';
+import { useSalesAdm } from '@/lib/hooks/use-sales';
 import type { Sale } from '@/lib/services/sales.service';
 
 import { AdminCrudPage } from '../components/admin-crud-page';
@@ -15,7 +15,7 @@ const COLUMNS = [
 ];
 
 const Vendas = () => {
-  const { sales, isLoading, deleteSale } = useSales();
+  const { sales, isLoading, deleteSale } = useSalesAdm();
 
   return (
     <AdminCrudPage<Sale>
