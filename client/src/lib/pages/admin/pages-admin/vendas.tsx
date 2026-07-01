@@ -10,6 +10,7 @@ import { AdminCrudPage } from '../components/admin-crud-page';
 const COLUMNS = [
   { label: 'ID' },
   { label: 'Data e hora' },
+  { label: 'Total' },
   { label: 'Ações', className: 'text-right' },
 ];
 
@@ -24,7 +25,7 @@ const Vendas = () => {
       columns={COLUMNS}
       renderRow={renderRow}
       getDeleteDescription={getDeleteDescription}
-      onDelete={(categoria) => deleteSale(categoria.id)}
+      onDelete={(venda) => deleteSale(venda.id)}
     />
   );
 };
@@ -37,18 +38,22 @@ const getDeleteDescription = (venda: Sale) => (
 
 const renderRow = (
   venda: Sale,
+  _onEdit: ((item: Sale) => void) | undefined,
   onDelete: ((item: Sale) => void) | undefined,
 ) => (
   <TableRow key={venda.id}>
     <TableCell className="font-medium">{venda.id}</TableCell>
     <TableCell>{venda.dataHora}</TableCell>
+    <TableCell>{venda.total}</TableCell>
     <TableCell>
       <div className="flex justify-end gap-2">
         {onDelete && (
           <Button
             size="icon"
             variant="destructive"
-            onClick={() => onDelete(venda)}
+            onClick={() => {
+              onDelete(venda);
+            }}
             title="Excluir"
           >
             <Trash2 className="w-4 h-4" />

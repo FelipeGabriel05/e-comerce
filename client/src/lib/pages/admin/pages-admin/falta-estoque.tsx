@@ -1,13 +1,31 @@
-import Layout from '../layout-sidebar';
+import { TableCell, TableRow } from '@/components/ui/table';
+import { useStock } from '@/lib/hooks/use-stock';
+import type { faltaEstoque } from '@/lib/services/falta-estoque.service';
+
+import { AdminCrudPage } from '../components/admin-crud-page';
+
+const COLUMNS = [{ label: 'ID' }, { label: 'Descrição' }, { label: 'Preço' }];
 
 const FaltaEstoque = () => {
+  const { stock, isLoading } = useStock();
+
   return (
-    <Layout>
-      <div>
-        <h1>Essa é a Falta em estoque</h1>
-      </div>
-    </Layout>
+    <AdminCrudPage<faltaEstoque>
+      title="Total compras por cliente"
+      items={stock}
+      isLoading={isLoading}
+      columns={COLUMNS}
+      renderRow={renderRow}
+    />
   );
 };
+
+const renderRow = (estoque: faltaEstoque) => (
+  <TableRow key={estoque.id}>
+    <TableCell className="font-medium">{estoque.id}</TableCell>
+    <TableCell>{estoque.descricao}</TableCell>
+    <TableCell>{estoque.preco}</TableCell>
+  </TableRow>
+);
 
 export default FaltaEstoque;
