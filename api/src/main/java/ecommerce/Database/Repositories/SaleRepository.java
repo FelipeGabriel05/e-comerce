@@ -212,8 +212,7 @@ public class SaleRepository {
 
     List<DailySalesReportDTO> report = new ArrayList<>();
 
-    try (PreparedStatement ps =
-        con.prepareStatement(SaleQueries.selectDailySalesReportQuery)) {
+    try (PreparedStatement ps = con.prepareStatement(SaleQueries.selectDailySalesReportQuery)) {
       ps.setString(1, startDate);
       ps.setString(2, endDate);
 
@@ -224,8 +223,7 @@ public class SaleRepository {
           int totalOrders = rs.getInt("qtd_pedidos");
           double totalRevenue = rs.getDouble("faturamento_diario");
 
-          DailySalesReportDTO itemReport =
-              new DailySalesReportDTO(date, totalOrders, totalRevenue);
+          DailySalesReportDTO itemReport = new DailySalesReportDTO(date, totalOrders, totalRevenue);
           report.add(itemReport);
         }
       }
@@ -236,5 +234,4 @@ public class SaleRepository {
       throw e;
     }
   }
-
 }
