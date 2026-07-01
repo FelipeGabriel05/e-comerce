@@ -3,6 +3,7 @@ import { useShopping } from '@/lib/hooks/use-report-shopping-client';
 import type { Compras } from '@/lib/services/report-shopping.services';
 
 import { AdminCrudPage } from '../../components/admin-crud-page';
+import { ExportReportForm } from '../forms/export-report-form';
 
 const COLUMNS = [
   { label: 'ID' },
@@ -20,6 +21,8 @@ const ComprasCLiente = () => {
       isLoading={isLoading}
       columns={COLUMNS}
       renderRow={renderRow}
+      renderForm={(_, onClose) => <ExportReportForm onClose={onClose} />}
+      getFormTitle={() => 'Exportar relatório'}
     />
   );
 };
