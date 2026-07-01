@@ -42,7 +42,9 @@ public class HttpReportValidators {
       errors.add("Parameter 'endDate' must be a valid calendar date in yyyy-MM-dd format");
     }
 
-    if (parsedStartDate != null && parsedEndDate != null && parsedStartDate.isAfter(parsedEndDate)) {
+    if (parsedStartDate != null
+        && parsedEndDate != null
+        && parsedStartDate.isAfter(parsedEndDate)) {
       errors.add("Parameter 'startDate' must not be after 'endDate'");
     }
 
