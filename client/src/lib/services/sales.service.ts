@@ -1,6 +1,6 @@
 import { api } from './constants';
 
-export interface SaleItem {
+interface SaleItem {
   productId: number;
   price: number;
   quantity: number;
