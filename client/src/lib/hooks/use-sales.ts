@@ -2,7 +2,10 @@ import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { toast } from 'sonner';
 
 import type { Sale } from '../services/sales.service';
-import { deleteSaleService, fetchSales } from '../services/sales.service';
+import {
+  deleteSaleService,
+  fetchSalesService,
+} from '../services/sales.service';
 
 const SALES_QUERY_KEY = ['sales'];
 
@@ -10,7 +13,7 @@ export const useSales = () => {
   const queryClient = useQueryClient();
   const { data, isLoading } = useQuery<Array<Sale>>({
     queryKey: SALES_QUERY_KEY,
-    queryFn: fetchSales,
+    queryFn: fetchSalesService,
   });
 
   const deleteMutation = useMutation({

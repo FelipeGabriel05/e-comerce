@@ -23,16 +23,7 @@ import { H1, P } from '@/components/ui/typography';
 import { useCart } from '@/lib/hooks/use-cart';
 import { useFinalizeCart } from '@/lib/hooks/use-finalize-cart';
 import type { CartItem } from '@/lib/services/cart.service';
-
-function linkify(foto: string): string {
-  if (!foto) return '';
-  if (foto.startsWith('http://') || foto.startsWith('https://')) {
-    return foto;
-  }
-  const base = import.meta.env.VITE_API_BASE_URL;
-  const path = foto.startsWith('/') ? foto : `/${foto}`;
-  return `${base}/image${path}`;
-}
+import { linkify } from '@/lib/utils/linkify';
 
 const currencyFormatter = new Intl.NumberFormat('pt-BR', {
   style: 'currency',
