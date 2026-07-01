@@ -3,43 +3,70 @@ package ecommerce.Http.Controller;
 import ecommerce.Database.Entites.Sale.DailySalesReportDTO;
 import ecommerce.Exceptions.ValidationException;
 import ecommerce.Http.IO.Responses.JsonResponse;
+import ecommerce.Http.IO.converter.DataArrayConverter;
 import ecommerce.Http.Validators.HttpReportValidators;
 import ecommerce.UseCases.GetDailySalesReportUseCase;
 import java.io.IOException;
 import java.util.List;
 import javax.servlet.ServletException;
+import javax.servlet.ServletOutputStream;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-@WebServlet("/admin/reports/daily-sales")
-public class AdminDailySalesReportController extends HttpServlet {
+@WebServlet("/admin/reports/daily-sales/export")
+public class AdminDailySalesReportExportController extends HttpServlet {
 
   protected void doGet(HttpServletRequest request, HttpServletResponse response)
       throws ServletException, IOException {
-    response.setContentType("application/json");
 
     HttpReportValidators validators = new HttpReportValidators();
 
     try {
-
-      validators.validateReportParams(request);
+      validators.validateReportExportParams(request);
 
       String startDate = request.getParameter("startDate");
       String endDate = request.getParameter("endDate");
+      String format = request.getParameter("format");
+
+      String mimetype = "application/pdf";
+      String extension = "pdf";
+
+      if (format != null) {
+        switch (format.toLowerCase()) {
+          case "csv":
+            mimetype = "text/plain";
+            extension = "csv";
+            break;
+          case "html":
+            mimetype = "text/html";
+            extension = "html";
+            break;
+          case "pdf":
+          default:
+            mimetype = "application/pdf";
+            extension = "pdf";
+            break;
+        }
+      }
 
       GetDailySalesReportUseCase useCase = new GetDailySalesReportUseCase();
-      List<DailySalesReportDTO> report = useCase.execute(startDate, endDate);
+      List<DailySalesReportDTO> reportData = useCase.execute(startDate, endDate);
 
-      JsonResponse jsonRes =
-          new JsonResponse(HttpServletResponse.SC_OK, "Report generated successfully", report);
+      byte[] bytes = DataArrayConverter.convert(reportData, DailySalesReportDTO.class, mimetype);
 
-      response.setStatus(jsonRes.getStatus());
-      response.getWriter().write(jsonRes.toJson());
+      response.setContentType(mimetype);
+      response.setContentLength(bytes.length);
+      response.setHeader(
+          "Content-Disposition", "attachment; filename=\"daily_sales_report." + extension + "\"");
+
+      try (ServletOutputStream out = response.getOutputStream()) {
+        out.write(bytes);
+      }
 
     } catch (ValidationException e) {
-      e.printStackTrace();
+      response.setContentType("application/json");
       response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
       response
           .getWriter()
@@ -47,6 +74,7 @@ public class AdminDailySalesReportController extends HttpServlet {
 
     } catch (Exception e) {
       e.printStackTrace();
+      response.setContentType("application/json");
       response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
       response
           .getWriter()
