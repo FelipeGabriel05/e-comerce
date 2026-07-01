@@ -1,6 +1,7 @@
 package ecommerce.Http.Controller;
 
 import ecommerce.Database.Entites.Sale.OutOfStockProductReportDTO;
+import ecommerce.Exceptions.ValidationException;
 import ecommerce.Http.IO.Responses.JsonResponse;
 import ecommerce.Http.IO.converter.DataArrayConverter;
 import ecommerce.UseCases.ListOutOfStockProductsUseCase;
@@ -19,7 +20,12 @@ public class AdminOutOfStockProductsReportExportController extends HttpServlet {
   protected void doGet(HttpServletRequest request, HttpServletResponse response)
       throws ServletException, IOException {
 
+    HttpReportValidators validators = new HttpReportValidators();
     try {
+      validators.validateReportExportParams(request);
+
+      String startDate = request.getParameter("startDate");
+      String endDate = request.getParameter("endDate");
       String format = request.getParameter("format");
 
       String mimetype = "application/pdf";
@@ -45,7 +51,7 @@ public class AdminOutOfStockProductsReportExportController extends HttpServlet {
 
       ListOutOfStockProductsUseCase useCase = new ListOutOfStockProductsUseCase();
 
-      List<OutOfStockProductReportDTO> reportData = useCase.execute();
+      List<OutOfStockProductReportDTO> reportData = useCase.execute(startDate, endDate);
 
       byte[] bytes =
           DataArrayConverter.convert(reportData, OutOfStockProductReportDTO.class, mimetype);
@@ -60,9 +66,15 @@ public class AdminOutOfStockProductsReportExportController extends HttpServlet {
         out.write(bytes);
       }
 
+    } catch (ValidationException e) {
+      response.setContentType("application/json");
+      response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
+      response
+          .getWriter()
+          .write(new JsonResponse(HttpServletResponse.SC_BAD_REQUEST, e.getMessage()).toJson());
+
     } catch (Exception e) {
       e.printStackTrace();
-
       response.setContentType("application/json");
       response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
       response

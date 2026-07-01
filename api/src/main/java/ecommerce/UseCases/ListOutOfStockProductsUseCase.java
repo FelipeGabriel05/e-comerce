@@ -19,9 +19,7 @@ public class ListOutOfStockProductsUseCase {
       return repository.listOutOfStockProducts();
 
     } catch (Exception e) {
-      e.printStackTrace();
-
-      throw new InternalServerException("Internal error while generating out of stock report");
+      throw e;
     }
   }
 }
